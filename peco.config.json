@@ -1,0 +1,19 @@
+{
+  "Keymap": {
+    "C-j": "peco.SelectDown",
+    "C-k": "peco.SelectUp",
+    "C-q": "peco.Finish",
+    "C-l": "peco.ScrollPageUp",
+    "BS": "peco.ScrollPageDown",
+    "C-t": "peco.ToggleSelection"
+  },
+  "Layout": "bottom-up",
+  "Prompt": "[peco]",
+  "Style": {
+    "Basic": ["on_default", "default"],
+    "SavedSelection": ["bold", "on_yellow", "white"],
+    "Selected": ["on_cyan", "default"],
+    "Query": ["yellow"],
+    "Matched": ["black", "on_yellow"]
+  }
+}

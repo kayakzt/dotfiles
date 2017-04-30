@@ -1,0 +1,225 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]] # enable to do git operation in vim
+repo = 'tpope/vim-fugitive'
+
+[[plugins]] # show status line
+repo = 'vim-airline/vim-airline'
+depends = ['tagbar', 'vim-fugitive']
+hook_add = '''
+let g:airline_powerline_fonts = 0
+set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+'''
+# source ~/.config/nvim/plugins/airline.rc.vim
+
+#[[plugins]] # for airline color theme
+#repo = 'vim-airline/vim-airline-themes'
+#depends = 'vim-airline'
+#hook_add = '''
+#let g:airline_theme='luna'
+#'''
+
+[[plugins]] # get recent buffer in denite.vim
+repo = 'Shougo/neomru.vim'
+
+[[plugins]] # get yank history in denite.vim
+repo = 'Shougo/neoyank.vim'
+on_if = 1
+on_event = 'TextYankPost'
+on_source = ['denite.nvim']
+# on_path = '.*'
+
+[[plugins]] # for file search + open
+repo = 'Shougo/denite.nvim'
+depends = ['neomru.vim', 'neoyank.vim']
+on_event = 'BufRead'
+hook_add = '''
+nmap <silent> <C-u><C-t> :<C-u>Denite filetype -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-f> :<C-u>Denite file_rec -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-l> :<C-u>Denite line -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-g> :<C-u>Denite grep -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-]> :<C-u>DeniteCursorWord grep -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-j> :<C-u>Denite jump -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-u> :<C-u>Denite file_mru -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-y> :<C-u>Denite neoyank -highlight-mode-insert=Search<CR>
+nmap <silent> <C-u><C-r> :<C-u>Denite -resume<CR>
+'''
+hook_post_source = '''
+call denite#custom#var('file_rec', 'command',
+      \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+
+call denite#custom#var('grep', 'command', ['ag'])
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'final_opts', [])
+call denite#custom#var('grep', 'separator', [])
+call denite#custom#var('grep', 'default_opts',
+      \ ['--nocolor', '--nogroup'])
+'''
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+
+
+# Syntax
+
+[[plugins]]
+repo = 'octol/vim-cpp-enhanced-highlight'
+on_ft = 'cpp'
+hook_add = '''
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+'''
+
+[[plugins]] # Html5
+repo  = 'othree/html5.vim'
+on_ft = 'html'
+
+[[plugins]]
+repo = 'digitaltoad/vim-pug'
+on_ft = 'pug'
+
+[[plugins]]
+repo = 'hail2u/vim-css3-syntax'
+on_ft = 'css'
+
+#[[plugins]]
+#repo = 'stephenway/postcss.vim'
+#on_ft = 'css'
+
+[[plugins]]
+repo = 'jelera/vim-javascript-syntax'
+on_ft = 'js'
+
+[[plugins]]
+repo = 'StanAngeloff/php.vim'
+on_ft = 'php'
+hook_add = '''
+function! PhpSyntaxOverride()
+  hi! def link phpDocTags  phpDefine
+  hi! def link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END
+'''
+
+# go-lang syntax will load at lint section.
+
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = 'rust'
+
+[[plugins]]
+repo = 'rhysd/rust-doc.vim'
+on_ft = 'rust'
+
+[[plugins]]
+repo = 'LaTeX-Box-Team/LaTeX-Box'
+on_ft = ['tex', 'latex']
+
+[[plugins]]
+repo = 'elzr/vim-json'
+on_ft = 'json'
+hook_add = '''
+let g:vim_json_syntax_conceal = 0
+'''
+
+[[plugins]]
+repo  = 'cespare/vim-toml'
+on_ft = 'toml'
+
+[[plugins]]
+repo = 'rcmdnk/vim-markdown'
+on_ft = ['markdown','mkd', 'md', ]
+hook_add = '''
+let g:vim_markdown_math = 1
+let g:vim_markdown_frontmatter = 1
+'''
+
+[[plugins]]
+repo = 'stephpy/vim-yaml'
+on_ft = ['yml', 'yaml']
+
+[[plugins]]
+repo = 'pearofducks/ansible-vim'
+on_ft = ['yml', 'yaml']
+
+[[plugins]]
+repo = 'Shougo/neco-syntax'
+on_ft = 'vim'
+
+[[plugins]]
+repo = 'vim-jp/autofmt'
+
+
+# Colors
+
+#[[plugins]]
+#repo = 'mhartington/oceanic-next'
+#hook_add = '''
+#if (has("termguicolors"))
+# set termguicolors
+#endif
+#syntax enable
+#au MyAutoCmd VimEnter * nested colorscheme OceanicNext
+#'''
+
+[[plugins]]
+repo = 'joshdick/onedark.vim'
+hook_add = '''
+let g:onedark_termcolors=256
+colorscheme onedark
+let g:airline_theme='onedark'
+syntax enable
+'''
+
+# Others
+
+[[plugins]] # indent based folding and motion
+repo = 'pseewald/vim-anyfold'
+hook_add = '''
+filetype plugin indent on
+syntax on
+let anyfold_activate=1
+set foldlevel=20
+hi Folded term=NONE cterm=NONE
+'''
+
+[[plugins]] # accelerate up-down moving
+repo = 'rhysd/accelerated-jk'
+hook_add = '''
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
+'''
+
+[[plugins]] # showing file tree
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+let NERDTreeShowHidden = 1
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+'''
+
+[[plugins]] # making NERDTree feel like a true panel
+repo = 'jistr/vim-nerdtree-tabs'
+depends = ['nerdtree']
+hook_add = '''
+if argc() == 0
+  let g:nerdtree_tabs_open_on_console_startup = 1
+end
+'''
+
+[[plugins]] # enhance text object
+repo = 'tpope/vim-surround'
+
+[[plugins]] # highlights trailing whitespace
+repo = 'bronson/vim-trailing-whitespace'
+hook_add = '''
+" delete white_space at end of line when file was saved.
+autocmd BufWritePre * :FixWhitespace
+'''

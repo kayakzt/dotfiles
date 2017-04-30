@@ -1,0 +1,304 @@
+#
+# .zshrc
+#
+# This script depends on following script/directory
+#
+# * cdr [$HOME/.cache/shell/]
+# * enchancd [$HOME/.cache/shell/enhancd/]
+# * peco [/usr/local/bin/peco]
+# * zplug [$HOME/.zplug/]
+# * go [$HOME/go]
+# * cargo [$HOME/.cargo/bin]
+# * nvm [$HOME/.nvm/]
+# * rbenv [$HOME/.rbenv/]
+#
+
+
+#
+# Initial Settings
+#
+
+# autoload -Uz promptinit
+autoload -U colors && colors
+export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+
+
+# Keybindings
+bindkey -e
+
+# cdr Settings
+# autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+# add-zsh-hook chpwd chpwd_recent_dirs
+# zstyle ':completion:*' recent-dirs-insert both
+# zstyle ':chpwd:*' recent-dirs-max 500
+# zstyle ':chpwd:*' recent-dirs-default true
+# zstyle ':chpwd:*' recent-dirs-file "$HOME/.cache/shell/chpwd-recent-dirs"
+# zstyle ':chpwd:*' recent-dirs-pushd true
+
+
+#
+# Prompt Settings
+#
+
+# vcs_info Settings
+autoload -Uz vcs_info
+precmd () { vcs_info }
+setopt prompt_subst
+
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{green}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{magenta}±"
+zstyle ':vcs_info:*' formats "%F{cyan}(⭠%b%c%u%F{cyan})%f"
+zstyle ':vcs_info:*' actionformats '[%b|%a]'
+
+# prompt
+PROMPT="%B%{$fg[green]%}• %{$fg[yellow]%}• %{$fg[red]%}• %b%{$reset_color%}"
+RPROMPT="%{$fg[white]%}[%~]%{$reset_color%}"
+RPROMPT=$RPROMPT'${vcs_info_msg_0_}'
+
+
+#
+# Completion Settings
+#
+
+# autoload -U compinit; compinit
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' format '%B%F{blue}%d%f%b'
+zstyle ':completion:*' group-name ''
+# zstyle ':completion:*' menu select=2
+zstyle ':completion:*:default' menu select=2
+eval "$(dircolors -b)"
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+
+zstyle ':completion:*' keep-prefix
+zstyle ':completion:*' recent-dirs-insert both
+
+zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
+
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path $HOME/.cache/shell
+
+setopt auto_param_slash      # ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
+setopt mark_dirs             # ファイル名の展開でディレクトリにマッチした場合 末尾に / を付加
+setopt list_types            # 補完候補一覧でファイルの種別を識別マーク表示 (訳注:ls -F の記号)
+setopt auto_menu             # 補完キー連打で順に補完候補を自動で補完
+setopt auto_param_keys       # カッコの対応などを自動的に補完
+setopt interactive_comments  # コマンドラインでも # 以降をコメントと見なす
+setopt magic_equal_subst     # コマンドラインの引数で --prefix=/usr などの = 以降でも補完できる
+
+setopt complete_in_word      # 語の途中でもカーソル位置で補完
+setopt always_last_prompt    # カーソル位置は保持したままファイル名一覧を順次その場で表示
+
+setopt extended_glob  # 拡張グロブで補完(~とか^とか。例えばless *.txt~memo.txt ならmemo.txt 以外の *.txt にマッチ)
+setopt globdots # 明確なドットの指定なしで.から始まるファイルをマッチ
+
+bindkey "^I" menu-complete   # 展開する前に補完候補を出させる(Ctrl-iで補完)
+
+
+#
+# peco functions
+#
+
+function peco-select-history() {
+    # historyを番号なし、逆順、最初から表示。
+    # 順番を保持して重複を削除。
+    # カーソルの左側の文字列をクエリにしてpecoを起動
+    # \nを改行に変換
+    BUFFER="$(history -nr 1 | peco --select-1 --query "$LBUFFER" | sed 's/\\n/\n/')"
+    CURSOR=$#BUFFER             # カーソルを文末に移動
+    zle -R -c                   # refresh
+}
+zle -N peco-select-history
+bindkey '^R' peco-select-history
+
+# function peco-cdr () {
+#     local selected_dir="$(cdr -l | sed 's/^[0-9]\+ \+//' | peco --select-1 --prompt="cdr >" --query "$LBUFFER")"
+#     if [ -n "$selected_dir" ]; then
+#         BUFFER="cd ${selected_dir}"
+#        zle accept-line
+#     fi
+# }
+# zle -N peco-cdr
+# bindkey '^[r' peco-cdr
+
+function kill-peco() {
+    for pid in `ps aux | peco | awk '{ print $2 }'`
+    do
+        kill $pid
+        echo "Killed ${pid}"
+    done
+}
+
+
+#
+# Aliase
+#
+
+alias reload_zsh='source ~/.zshrc'
+
+alias '..'='cd ..'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias cdh='cd $HOME'
+
+alias -g @g='| grep'
+alias -g @l='| less'
+alias -g @h='| head'
+alias -g @t='| tail'
+alias -g @s='| sed'
+alias -g @c='| cat'
+alias -g @p='| peco'
+alias -g @em='| emojify'
+
+alias ls='ls --color'
+alias la='ls --color -lahF'
+alias ll='ls --color -lhF'
+
+alias al='ag --pager "less -R"'
+alias agh='ag --hidden'
+alias alh='ag --pager "less -R" --hidden'
+
+function searchfile() {
+  local filepath="$(find . | peco --prompt 'PATH>')"
+  [ -z "$filepath" ] && return
+  if [ -n "$LBUFFER" ]; then
+    BUFFER="$LBUFFER$filepath"
+  else
+    if [ -d "$filepath" ]; then
+      BUFFER="cd $filepath"
+    else
+      BUFFER="$EDITOR $filepath"
+    fi
+  fi
+  CURSOR=$#BUFFER
+}
+
+zle -N searchfile
+bindkey '^[s' searchfile
+
+alias nv='nvim'
+
+# ghq & hub alias (with peco)
+alias cdg='cd $(ghq root)/$(ghq list | peco)'
+alias ghq-cd='cd $(ghq root)/$(ghq list | peco)'
+alias hub-browse='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+
+alias apt-update='sudo apt-get update \
+                    && sudo apt-get upgrade \
+                    && sudo apt-get dist-upgrade \
+                    && sudo apt-get autoclean \
+                    && sudo apt-get autoremove'
+alias apt-update-yes='sudo apt-get update \
+                    && sudo apt-get upgrade -y \
+                    && sudo apt-get dist-upgrade -y \
+                    && sudo apt-get autoclean -y \
+                    && sudo apt-get autoremove -y'
+alias pip-update-all-system='pip freeze --local \
+                    | grep -v "^\-e" \
+                    | cut -d = -f 1 \
+                    | xargs sudo pip install -U'
+alias pip3-update-all-system='pip3 freeze --local \
+                    | grep -v "^\-e" \
+                    | cut -d = -f 1 \
+                    | xargs sudo pip3 install -U'
+alias pip-update-all='pip freeze --local \
+                    | grep -v "^\-e" \
+                    | cut -d = -f 1 \
+                    | xargs  pip install -U'
+
+# auto unzip function
+function auto_unzip() {
+  case $1 in
+    *.tar.gz|*.tgz) tar xzvf $1;;
+    *.tar.xz) tar Jxvf $1;;
+    *.zip) unzip $1;;
+    *.lzh) lha e $1;;
+    *.tar.bz2|*.tbz) tar xjvf $1;;
+    *.tar.Z) tar zxvf $1;;
+    *.gz) gzip -d $1;;
+    *.bz2) bzip2 -dc $1;;
+    *.Z) uncompress $1;;
+    *.tar) tar xvf $1;;
+    *.arj) unarj $1;;
+  esac
+}
+alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=auto_unzip
+
+#
+# Package Manager
+#
+
+# zplug
+export ZPLUG_HOME=~/.zplug
+if [ ! -d $ZPLUG_HOME ]; then
+  git clone https://github.com/zplug/zplug $ZPLUG_HOME
+fi
+
+if [ -f $ZPLUG_HOME/init.zsh ]; then
+  source $ZPLUG_HOME/init.zsh
+
+  # Variables
+  export ENHANCD_DIR="$HOME/.cache/shell/enhancd"
+  export ENHANCD_FILTER="peco:fzf:fzy"
+  export ENHANCD_COMMAND="cd"
+  export ENHANCD_HYPHEN_ARG="ls"
+  export ENHANCD_DOT_ARG="up"
+  export EMOJI_CLI_KEYBIND="^[em"
+  export EMOJI_CLI_FILTER="peco:fzf"
+
+  # Plugins
+  # zplug "~/.zsh", from:local
+  zplug "zsh-users/zsh-completions", depth:1
+  zplug "zsh-users/zsh-syntax-highlighting", defer:2
+  zplug "b4b4r07/enhancd", use:init.sh
+  zplug "b4b4r07/emoji-cli"
+  zplug "mrowa44/emojify", as:command
+  # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+    # Install plugins if there are plugins that have not been installed
+  if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+      echo; zplug install
+    fi
+  fi
+  # Then, source plugins and add commands to $PATH
+  zplug load
+fi
+
+
+#
+# Other Settings
+#
+
+setopt no_beep
+setopt transient_rprompt
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+
+# X forwarding Settings
+if [ -n "$SSH_CONNECTION" ] ; then
+  export LANG=ja_JP.UTF-8
+  export DefaultIMModule=fcitx
+  export GTK_IM_MODULE=fcitx
+  export XMODIFIERS="@im=fcitx"
+  export QT_IM_MODULE=fcitx
+  export fcitx_ENABLE_SYNC_MODE=1
+  export NO_AT_BRIDGE=1
+  if test `ps auxw | grep $USER | grep -v grep | grep "fcitx -d" 2> /dev/null | wc -l` -eq 0;
+  then
+    fcitx -d > /dev/null 2>&1 &
+  fi
+fi
