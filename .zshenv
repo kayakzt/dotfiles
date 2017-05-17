@@ -1,20 +1,26 @@
 # Environment Variables
+export path=(/usr/local/bin(N-/) $HOME/bin(N-/) $path)
 
-export path=(/usr/local/bin(N-/) $path)
-
-export GOROOT=/usr/local/go
+# goenv & go
+export GOENV_ROOT=$HOME/.goenv
 export GOPATH=$HOME
-export path=($GOROOT/bin(N-/) $GOPATH/bin(N-/) $path)
+export path=($GOENV_ROOT/bin(N-/) $path)
+if command -v goenv > /dev/null; then
+  eval "$(goenv init -)"
+fi
 
+# rustup & rust
 export path=($HOME/.cargo/bin(N-/) $path)
-# export PATH=$PATH:"$HOME/.cargo/bin:$PATH"
-export RUST_SRC_PATH=$HOME/src/rust-lang.org/rustc-1.17.0-src
+export RUST_ROOT=$(rustc --print sysroot)
+export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
 
 export NVM_DIR=$HOME/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # This loads nvm
 
 export path=($HOME/.rbenv/bin(N-/) $path)
-eval "$(rbenv init -)"
+if command -v rbenv > /dev/null; then
+  eval "$(rbenv init - --no-rehash)"
+fi
 
 export EDITOR=nvim
 
@@ -22,8 +28,8 @@ export path=(/usr/lib/git-core/(N-/) $path)
 
 # History Settings
 HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.zsh_history
+SAVEHIST=10000
+HISTFILE=${HOME}/.zsh_history
 setopt histignorealldups
 setopt EXTENDED_HISTORY
 setopt share_history

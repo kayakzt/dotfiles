@@ -47,11 +47,13 @@ on_ft = 'php'
 [[plugins]] # golang completion
 repo = 'zchee/deoplete-go'
 build = 'make'
+depends = ['deoplete.nvim']
 on_ft = 'go'
 hook_add = '''
 let g:deoplete#sources#go#align_class = 1
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 let g:deoplete#sources#go#package_dot = 1
+let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
 '''
 
 [[plugins]]
@@ -59,7 +61,10 @@ repo = 'racer-rust/vim-racer'
 on_ft = 'rust'
 hook_add = '''
 set hidden
-let g:racer_cmd = "$HOME/.cargo/bin/rustfmt"
+let g:racer_cmd = "$HOME/.cargo/bin/racer"
+let g:rustfmt_autosave = 1
+let g:rustfmt_command = "$HOME/.cargo/bin/rustfmt"
+let g:rust_doc#downloaded_rust_doc_dir = $RUST_ROOT
 '''
 
 [[plugins]] # Auto close parentheses
@@ -77,13 +82,12 @@ hook_add = '''
 let g:quickrun_config = get(g:, 'quickrun_config', {})
 let g:quickrun_config._ = {
       \ 'runner'    : 'vimproc',
-      \ 'runner/vimproc/updatetime' : 60,
+      \ 'runner/vimproc/updatetime' : 40,
       \ 'outputter' : 'error',
       \ 'outputter/error/success' : 'buffer',
       \ 'outputter/error/error'   : 'quickfix',
       \ 'outputter/buffer/split'  : ':rightbelow 8sp',
       \ 'outputter/buffer/close_on_empty' : 1,
-      \ 'hook/time/enable' : 1,
       \ }
 " q: close quickfix
 au FileType qf nnoremap <silent><buffer>q :quit<CR>
@@ -97,24 +101,29 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 
 # Lint
 
-[[plugins]] # lint provider
-repo = 'neomake/neomake'
-hook_add = '''
-autocmd! BufWritePost * Neomake
-let g:neomake_open_list = 2
-
-" Python Lint using flake8
-let g:neomake_python_enabled_makers = ['python', 'flake8']
-let g:neomake_python_flake8_maker = {
-    \ 'args': ['--ignore=E111,E114,E501',  '--format=default'],
-    \ 'errorformat':
-        \ '%E%f:%l: could not compile,%-Z%p^,' .
-        \ '%A%f:%l:%c: %t%n %m,' .
-        \ '%A%f:%l: %t%n %m,' .
-        \ '%-G%.%#',
-    \ 'postprocess': function('neomake#makers#ft#python#Flake8EntryProcess')
-    \ }
-'''
+# [[plugins]] # lint provider
+# repo = 'neomake/neomake'
+# hook_add = '''
+# autocmd! BufWritePost * Neomake
+# let g:neomake_open_list = 2
+#
+# " Python Lint using flake8
+# let g:neomake_python_enabled_makers = ['python', 'flake8']
+# let g:neomake_python_flake8_maker = {
+#     \ 'args': ['--ignore=E111,E114,E501',  '--format=default'],
+#     \ 'errorformat':
+#         \ '%E%f:%l: could not compile,%-Z%p^,' .
+#         \ '%A%f:%l:%c: %t%n %m,' .
+#         \ '%A%f:%l: %t%n %m,' .
+#         \ '%-G%.%#',
+#     \ 'postprocess': function('neomake#makers#ft#python#Flake8EntryProcess')
+#     \ }
+# " Rust Lint using clippy
+# augroup NeomakeRustConfig
+#   autocmd!
+#   autocmd BufWritePost *.rs Neomake! clippy
+# augroup END
+# '''
 
 [[plugins]]
 repo = 'hynek/vim-python-pep8-indent'
@@ -132,7 +141,7 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 
 let g:go_fmt_command = 'goimports'
-"let s:goargs = go#package#ImportPath(expand('%:p:h'))
+" let s:goargs = go#package#ImportPath(expand('%:p:h'))
 let g:neomake_go_errcheck_maker = {
   \ 'args': ['-abspath'],
   \ 'append_file': 0,
@@ -187,50 +196,22 @@ let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'tagbar', 'denite']
 "IndentGuidesEnable
 '''
 
-[[plugins]] # EditorConfig
-repo = 'editorconfig/editorconfig-vim'
-on_path = '.*'
-
 [[plugins]] # auto insert space around '=' & ','
 repo = 'kana/vim-smartchr'
 on_i = 1
 hook_add = '''
-inoremap <expr> = smartchr#loop(' = ', ' == ', '=')
+inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' != ')
 inoremap <expr> , smartchr#loop(',', ', ', ' => ')
+" inoremap <expr> : smartchr#loop(':', ': ', ' := ')
 '''
 
-[[plugins]] # to showing git status in NERDTree
-repo = 'Xuyuanp/nerdtree-git-plugin'
-hook_add = '''
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
-    \ "Unknown"   : "?"
-    \ }
-'''
 
-[[plugins]] # show tag structure in file
-repo = 'majutsushi/tagbar'
-hook_add = '''
-let g:tagbar_width = 30
-let g:tagbar_autoshowtag = 1
-'''
-
-[[plugins]] # vim alignment plugin
-repo = 'junegunn/vim-easy-align'
-hook_add = '''
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-'''
+# [[plugins]] # show tag structure in file
+# repo = 'majutsushi/tagbar'
+# hook_add = '''
+# let g:tagbar_width = 30
+# let g:tagbar_autoshowtag = 1
+# '''
 
 [[plugins]] # comment out / decomment plugin
 repo = 'tyru/caw.vim'
@@ -266,6 +247,10 @@ repo = 'Shougo/vinarise.vim'
 on_cmd = 'Vinarise'
 hook_add = 'let g:vinarise_enable_auto_detect = 1'
 
+[[plugins]] # Calendar plugin for vim
+repo = 'itchyny/calendar.vim'
+on_cmd = 'Calendar'
+
 [[plugins]] # for sorting python file import line, command ':ImpSort!'
 repo = 'tweekmonster/impsort.vim'
 on_cmd = 'ImpSort'
@@ -274,6 +259,16 @@ hook_source = 'let g:impsort_highlight_imported = 0'
 [[plugins]] # for url open in browser & search word
 repo = 'tyru/open-browser.vim'
 on_map = ['<Plug>(openbrowser-smart-search)']
+hook_add = '''
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
+'''
+
+[[plugins]] # for realtime preview for Markdown Documents
+repo = 'kannokanno/previm'
+# on_cmd = 'PrevimOpen'
+on_ft = 'md'
+depends = ['open-browser.vim']
 
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
@@ -281,3 +276,4 @@ on_ft = 'help'
 hook_add = '''
 set helplang=ja,en
 '''
+

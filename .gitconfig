@@ -13,6 +13,7 @@
   summary = status -u -s
   graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Creset• %<(75,trunc)%s (%cN, %ar) %Cred%d' --date-order
   history = log -10 --format=format:'%Cgreen%h %Creset• %s (%cN, %ar)'
+  logline = log --pretty=oneline --stat
   branchout = checkout -b
   new-branch = checkout -b
   tags = tag
@@ -33,10 +34,12 @@
   contributors = shortlog -s -n --no-merges
   filetrail = log --follow -p -w
   mergetrail = log --ancestry-path --merges
+  prune = fetch --prune
 [blame]
   date = relative
 [push]
   default = current
+  followTags = true
 [core]
   editor = nvim
   precomposeunicode = true
@@ -44,7 +47,7 @@
   conflictstyle = diff3
 [diff]
   compactionHeuristic = true
-[credential]
-  helper = /usr/share/doc/git/contrib/credential/gnome-keyring/git-credential-gnome-keyring
+[github]
+  user = kaya-kzt
 [ghq]
   root = ~/src

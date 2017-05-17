@@ -16,6 +16,8 @@ if !&compatible
   set nocompatible
 endif
 
+let g:python_host_skip_check = 1
+
 " reset augroup
 augroup MyAutoCmd
   autocmd!
@@ -32,7 +34,6 @@ if !isdirectory(s:dein_repo_dir)
 endif
 let &runtimepath = s:dein_repo_dir .",". &runtimepath
 " プラグイン読み込み＆キャッシュ作成
-" let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
 let s:toml = '~/.config/nvim/dein.toml'
 let s:toml_lazy = '~/.config/nvim/dein_lazy.toml'
 if dein#load_state(s:dein_dir)
@@ -50,6 +51,22 @@ endif
 
 " }}}
 
+" Rename function
+command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
+
+" Open junk file."{{{
+command! -nargs=0 JunkFile call s:open_junk_file()
+function! s:open_junk_file()
+  let l:junk_dir = $HOME . '/.vim_junk'. strftime('/%Y/%m')
+  if !isdirectory(l:junk_dir)
+    call mkdir(l:junk_dir, 'p')
+  endif
+
+  let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+  if l:filename != ''
+    execute 'edit ' . l:filename
+  endif
+endfunction"}}}
 
 
 " vim settings
@@ -95,7 +112,8 @@ set autoindent
 set smartindent
 
 " Integration with OS
-set clipboard=unnamed,unnamedplus
+" set clipboard=unnamed,unnamedplus
+set clipboard^=unnamedplus
 set mouse=a
 set shellslash
 "set wildmenu wildmode=list:longest,full
@@ -103,8 +121,14 @@ set history=10000
 set visualbell t_vb=
 set noerrorbells
 
+"for Japanese Input
+set ttimeout
+set ttimeoutlen=100
 
 " KeyBindings
+nnoremap Q gq
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
 
 " for japanese input
 

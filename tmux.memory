@@ -1,0 +1,4 @@
+#!/bin/bash -e
+
+usage=$( free | awk 'NR==2{printf("%02.1f",$3/$2*100)}' )
+echo ${usage}%

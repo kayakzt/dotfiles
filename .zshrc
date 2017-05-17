@@ -22,9 +22,14 @@
 autoload -U colors && colors
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
+# autocompile
+if [ ! -f ~/.zshrc.zwc -o ~/.zshrc -nt ~/.zshrc.zwc ]; then
+  zcompile ~/.zshrc
+fi
 
 # Keybindings
 bindkey -e
+setopt IGNOREEOF # prevent ctrl+d shell exit
 
 # cdr Settings
 # autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
@@ -114,7 +119,7 @@ function peco-select-history() {
     # 順番を保持して重複を削除。
     # カーソルの左側の文字列をクエリにしてpecoを起動
     # \nを改行に変換
-    BUFFER="$(history -nr 1 | peco --select-1 --query "$LBUFFER" | sed 's/\\n/\n/')"
+    BUFFER="$(history -nr 1 | peco --select-1 --query "$LBUFFER" --prompt "[history]" | sed 's/\\n/\n/')"
     CURSOR=$#BUFFER             # カーソルを文末に移動
     zle -R -c                   # refresh
 }
@@ -132,13 +137,47 @@ bindkey '^R' peco-select-history
 # bindkey '^[r' peco-cdr
 
 function kill-peco() {
-    for pid in `ps aux | peco | awk '{ print $2 }'`
+    for pid in `ps aux | peco --prompt '[kill?]' | awk '{ print $2 }'`
     do
         kill $pid
         echo "Killed ${pid}"
     done
 }
 
+function github-star-import() {
+  # git, curl, jq, peco, ghq required
+  if [ -n "$1" ]; then
+    user_id=$1
+  elif [ -n "$(git config --get github.user)" ]; then
+    user_id=$(git config --get github.user)
+  elif [ -n "$(git config --get user.name)" ]; then
+    user_id=$(git config --get user.name)
+  else
+    echo "usage: github-star-import [<user_id>]"
+    return 0
+  fi
+
+  urls=$(curl -s https://api.github.com/users/$user_id/starred\?per_page\=1000 | jq '.[] | .ssh_url' | awk '{gsub("\"", "");print $0;}')
+  echo $urls | peco | ghq import
+}
+
+function search() {
+  local filepath="$(find . | peco --prompt '[search]')"
+  [ -z "$filepath" ] && return
+  if [ -n "$LBUFFER" ]; then
+    BUFFER="$LBUFFER$filepath"
+  else
+    if [ -d "$filepath" ]; then
+      BUFFER="cd $filepath"
+    else
+      BUFFER="$EDITOR $filepath"
+    fi
+  fi
+  CURSOR=$#BUFFER
+}
+
+zle -N search
+bindkey '^[s' search
 
 #
 # Aliase
@@ -153,7 +192,7 @@ alias -g .....='../../../..'
 alias cdh='cd $HOME'
 
 alias -g @g='| grep'
-alias -g @l='| less'
+alias -g @l='| less -R'
 alias -g @h='| head'
 alias -g @t='| tail'
 alias -g @s='| sed'
@@ -169,30 +208,13 @@ alias al='ag --pager "less -R"'
 alias agh='ag --hidden'
 alias alh='ag --pager "less -R" --hidden'
 
-function searchfile() {
-  local filepath="$(find . | peco --prompt 'PATH>')"
-  [ -z "$filepath" ] && return
-  if [ -n "$LBUFFER" ]; then
-    BUFFER="$LBUFFER$filepath"
-  else
-    if [ -d "$filepath" ]; then
-      BUFFER="cd $filepath"
-    else
-      BUFFER="$EDITOR $filepath"
-    fi
-  fi
-  CURSOR=$#BUFFER
-}
-
-zle -N searchfile
-bindkey '^[s' searchfile
-
+alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
 
 # ghq & hub alias (with peco)
-alias cdg='cd $(ghq root)/$(ghq list | peco)'
-alias ghq-cd='cd $(ghq root)/$(ghq list | peco)'
-alias hub-browse='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+alias cdg='cd $(ghq root)/$(ghq list | peco --prompt "[ghq src]")'
+alias ghq-cd='cd $(ghq root)/$(ghq list | peco --prompt "[ghq src]")'
+alias hub-browse='hub browse $(ghq list | peco --prompt "[browse src]" | cut -d "/" -f 2,3)'
 
 alias apt-update='sudo apt-get update \
                     && sudo apt-get upgrade \
@@ -241,6 +263,7 @@ alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=auto_unzip
 
 # zplug
 export ZPLUG_HOME=~/.zplug
+export ZPLUG_CACHE_DIR=~/.cache/zplug
 if [ ! -d $ZPLUG_HOME ]; then
   git clone https://github.com/zplug/zplug $ZPLUG_HOME
 fi
@@ -249,7 +272,7 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   source $ZPLUG_HOME/init.zsh
 
   # Variables
-  export ENHANCD_DIR="$HOME/.cache/shell/enhancd"
+  export ENHANCD_DIR="$HOME/.config/shell/enhancd"
   export ENHANCD_FILTER="peco:fzf:fzy"
   export ENHANCD_COMMAND="cd"
   export ENHANCD_HYPHEN_ARG="ls"
@@ -264,7 +287,7 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   zplug "b4b4r07/enhancd", use:init.sh
   zplug "b4b4r07/emoji-cli"
   zplug "mrowa44/emojify", as:command
-  # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+  zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
     # Install plugins if there are plugins that have not been installed
   if ! zplug check --verbose; then
@@ -302,3 +325,4 @@ if [ -n "$SSH_CONNECTION" ] ; then
     fcitx -d > /dev/null 2>&1 &
   fi
 fi
+
