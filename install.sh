@@ -7,7 +7,7 @@
 # Option
 #   -m : minimum install
 #   -r : rootless install
-#   -c : on cloud machine
+#   -c : for cui environment install
 #
 # Dependent Package
 #   * bash
@@ -130,7 +130,7 @@ if $FLG_R; then
   echo -n $(colored $yellow "rootless, ")
 fi
 if $FLG_C; then
-  echo -n $(colored $yellow "on cloud, ")
+  echo -n $(colored $yellow "cui, ")
 fi
 echo " "
 
@@ -192,12 +192,9 @@ fi
 # Ubuntu setting changes
 #
 
-if [ $OSNAME = "ubuntu" ] && ! $FLG_R; then
+if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
   echo "$password" | sudo -S echo ""
   # env LANGUAGE=C LC_MESSAGES=C xdg-user-dirs-gtk-update
-  if [ -e /usr/share/lightdm/lightdm.conf.d/50-no-guest.conf ]; then
-    sudo sh -c 'printf "[SeatDefaults]\nallow-guest=false\n" >/usr/share/lightdm/lightdm.conf.d/50-no-guest.conf'
-  fi
   if type "gsettings" > /dev/null 2>&1
   then
     gsettings set org.gnome.nautilus.preferences always-use-location-entry true
@@ -205,7 +202,22 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R; then
   sudo sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/g' /etc/systemd/system.conf
 
   sudo apt-get install -y $(check-language-support -l ja)
-  im-config -n fcitx
+
+  if $UBUNTU_VERSION = "xenial"; then
+    im-config -n fcitx
+
+    if [ -e /usr/share/lightdm/lightdm.conf.d/50-no-guest.conf ]; then
+      sudo sh -c 'printf "[SeatDefaults]\nallow-guest=false\n" >/usr/share/lightdm/lightdm.conf.d/50-no-guest.conf'
+    fi
+  else
+    sudo apt-get install -y gnome-tweak-tool
+
+    if type "gsettings" > /dev/null 2>&1
+    then
+      gsettings set org.gnome.mutter auto-maximize false
+      gsettings set org.gnome.shell.app-switcher current-workspace-only true
+    fi
+  fi
 
   # Firewall setup
   sudo ufw default DENY
@@ -231,7 +243,6 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     libappindicator1 \
     software-properties-common \
     wget \
-    curl \
     git \
     zsh \
     xclip \
@@ -248,7 +259,6 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
 
 elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
   yum install -y wget \
-    curl \
     git \
     zsh \
     xclip \
@@ -310,14 +320,14 @@ install_tmux() {
 # zsh install
 install_zsh() {
   mkdir $HOME/local
-  wget "http://sourceforge.net/projects/zsh/files/zsh/5.3.1/zsh-5.3.1.tar.gz/download"
+  wget "http://sourceforge.net/projects/zsh/files/zsh/5.4.2/zsh-5.4.2.tar.gz/download"
   tar xzvf download
-  cd zsh-5.3.1
+  cd zsh-5.4.2
   ./configure --prefix=$HOME/local --enable-multibyte --enable-locale
   make
   make install
   cd $WORKING_DIR
-  rm -rf zsh-5.3.1
+  rm -rf zsh-5.4.2
 }
 
 if ! $FLG_R; then
@@ -342,13 +352,13 @@ if ! $FLG_R && ! $FLG_M; then
   fi
 
   # pip default package update & package install
-  sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs sudo pip install -U
-  sudo pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs sudo pip3 install -U
+  sudo -H pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs sudo -H pip install -U
+  sudo -H pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs sudo -H pip3 install -U
 
-  sudo pip install flake8 \
+  sudo -H pip install flake8 \
     wheel \
     jedi
-  sudo pip3 install flake8 \
+  sudo -H pip3 install flake8 \
     wheel \
     jedi \
     numpy \
@@ -469,10 +479,6 @@ if [ ! -e $HOME/.cache/shell/enhancd ]; then
     run mkdir -p $HOME/.config/shell/enhancd
 fi
 
-# zplug install
-# curl -sL zplug.sh/installer | zsh
-curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh| zsh
-
 # neovim setup
 if [ ! -e $HOME/.config/nvim ]; then
     run mkdir -p $HOME/.config/nvim
@@ -503,20 +509,6 @@ run ln -snf $DOT_PATH/.editorconfig $HOME/.editorconfig
 
 
 #
-# install package for VM
-#
-
-if [ $OSNAME = "ubuntu" ] && $FLG_C; then
-  echo "$password" | sudo -S echo ""
-  sudo apt-get install -y linux-tools-virtual-lts-${UBUNTU_VERSION} \
-  linux-cloud-tools-virtual-lts-${UBUNTU_VERSION} \
-  linux-tools-virtual \
-  linux-cloud-tools-virtual
-  # cat /var/log/boot.log | grep Hyper
-fi
-
-
-#
 # Manual Processing for complete setup
 #
 
@@ -526,10 +518,15 @@ cat <<-EOF
 There are some steps to finish setup.
 
 * for System
-1. import mozc.keymap.txt using mozc tool.
+1. import mozc.keymap.txt for using mozc tool.
 2. change terminal color refered to terminal.color.txt.
 3. launch Tweak-Tool, change Theme & Font (Noto Kai 11pt).
 4. launch Tweak-Tool, set Gnome Extentions.
+[option] if your host is on virtual, you should install below:
+  * linux-tools-virtual
+  * linux-cloud-tools-virtual
+  * linux-tools-virtual-lts-{your os version}
+  * linux-cloud-tools-virtual-lts-{your os version}
 
 * for zsh
 1. change default shell to zsh(chsh with no sudo).

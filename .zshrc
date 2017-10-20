@@ -180,7 +180,7 @@ zle -N search
 bindkey '^[s' search
 
 #
-# Aliase
+# Alias
 #
 
 alias reload_zsh='source ~/.zshrc'
@@ -196,7 +196,7 @@ alias -g @l='| less -R'
 alias -g @h='| head'
 alias -g @t='| tail'
 alias -g @s='| sed'
-alias -g @c='| cat'
+alias -g @c='| less -XF'
 alias -g @p='| peco'
 alias -g @em='| emojify'
 
@@ -210,6 +210,9 @@ alias alh='ag --pager "less -R" --hidden'
 
 alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
+
+alias di='dicto'
+alias de='dicto -e'
 
 # ghq & hub alias (with peco)
 alias cdg='cd $(ghq root)/$(ghq list | peco --prompt "[ghq src]")'
@@ -229,11 +232,11 @@ alias apt-update-yes='sudo apt-get update \
 alias pip-update-all-system='pip freeze --local \
                     | grep -v "^\-e" \
                     | cut -d = -f 1 \
-                    | xargs sudo pip install -U'
+                    | xargs sudo pip -H install -U'
 alias pip3-update-all-system='pip3 freeze --local \
                     | grep -v "^\-e" \
                     | cut -d = -f 1 \
-                    | xargs sudo pip3 install -U'
+                    | xargs sudo -H pip3 install -U'
 alias pip-update-all='pip freeze --local \
                     | grep -v "^\-e" \
                     | cut -d = -f 1 \
@@ -278,7 +281,7 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   export ENHANCD_HYPHEN_ARG="ls"
   export ENHANCD_DOT_ARG="up"
   export EMOJI_CLI_KEYBIND="^[em"
-  export EMOJI_CLI_FILTER="peco:fzf"
+  export EMOJI_CLI_FILTER="peco:fzf:fzy"
 
   # Plugins
   # zplug "~/.zsh", from:local
@@ -287,7 +290,7 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   zplug "b4b4r07/enhancd", use:init.sh
   zplug "b4b4r07/emoji-cli"
   zplug "mrowa44/emojify", as:command
-  zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+  # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
     # Install plugins if there are plugins that have not been installed
   if ! zplug check --verbose; then
@@ -326,3 +329,5 @@ if [ -n "$SSH_CONNECTION" ] ; then
   fi
 fi
 
+# if nice error ocured
+# unsetopt BG_NICE

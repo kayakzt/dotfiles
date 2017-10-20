@@ -11,7 +11,9 @@ fi
 
 # rustup & rust
 export path=($HOME/.cargo/bin(N-/) $path)
-export RUST_ROOT=$(rustc --print sysroot)
+if command -v rustc > /dev/null; then
+  export RUST_ROOT=$(rustc --print sysroot)
+fi
 export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
 
 export NVM_DIR=$HOME/.nvm
@@ -23,6 +25,7 @@ if command -v rbenv > /dev/null; then
 fi
 
 export EDITOR=nvim
+export PAGER=less
 
 export path=(/usr/lib/git-core/(N-/) $path)
 

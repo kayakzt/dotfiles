@@ -45,6 +45,7 @@
   precomposeunicode = true
 [merge]
   conflictstyle = diff3
+  tool = vimdiff
 [diff]
   compactionHeuristic = true
 [github]

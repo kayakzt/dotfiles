@@ -268,21 +268,27 @@ nmap j <Plug>(accelerated_jk_gj)
 nmap k <Plug>(accelerated_jk_gk)
 '''
 
-[[plugins]] # showing file tree
-repo = 'scrooloose/nerdtree'
+
+[[plugins]] # file manager for vim
+repo = 'cocopon/vaffle.vim'
 hook_add = '''
-let NERDTreeShowHidden = 1
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 '''
 
-[[plugins]] # making NERDTree feel like a true panel
-repo = 'jistr/vim-nerdtree-tabs'
-depends = ['nerdtree']
-hook_add = '''
-" if argc() == 0
-"   let g:nerdtree_tabs_open_on_console_startup = 1
-" end
-'''
+# [[plugins]] # showing file tree
+# repo = 'scrooloose/nerdtree'
+# hook_add = '''
+# let NERDTreeShowHidden = 1
+# autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+# '''
+#
+# [[plugins]] # making NERDTree feel like a true panel
+# repo = 'jistr/vim-nerdtree-tabs'
+# depends = ['nerdtree']
+# hook_add = '''
+# " if argc() == 0
+# "   let g:nerdtree_tabs_open_on_console_startup = 1
+# " end
+# '''
 
 # [[plugins]] # to showing git status in NERDTree
 # repo = 'Xuyuanp/nerdtree-git-plugin'
