@@ -154,12 +154,12 @@ git clone ${DOT_REPO} ${DOT_PATH}
 
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
   echo "$password" | sudo -S echo ""
-  sudo add-apt-repository -y ppa:git-core/ppa
-  sudo apt-add-repository -y ppa:ansible/ansible
-  sudo add-apt-repository -y ppa:snwh/pulp
-  sudo add-apt-repository -y ppa:tista/adapta
-  sudo apt-add-repository -y ppa:eosrei/fonts
-  sudo add-apt-repository -y ppa:neovim-ppa/stable
+  sudo -E add-apt-repository -y ppa:git-core/ppa
+  sudo -E add-apt-repository -y ppa:ansible/ansible
+  sudo -E add-apt-repository -y ppa:snwh/pulp
+  sudo -E add-apt-repository -y ppa:tista/adapta
+  sudo -E add-apt-repository -y ppa:eosrei/fonts
+  sudo -E add-apt-repository -y ppa:neovim-ppa/stable
 fi
 
 if ( [ $OSNAME = "centos" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
@@ -425,7 +425,7 @@ if ! $FLG_R && ! $FLG_M; then
   # nvm use --lts
 
   # rbenv setup
-  git clone git://github.com/sstephenson/rbenv.git $HOME/.rbenv
+  git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
   git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
   export PATH=$PATH:$HOME/.rbenv/bin
   eval "$(rbenv init -)"
