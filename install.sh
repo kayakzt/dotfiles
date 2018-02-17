@@ -203,7 +203,7 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
 
   sudo apt-get install -y $(check-language-support -l ja)
 
-  if $UBUNTU_VERSION = "xenial"; then
+  if $UBUNTU_VERSION="xenial"; then
     im-config -n fcitx
 
     if [ -e /usr/share/lightdm/lightdm.conf.d/50-no-guest.conf ]; then
@@ -411,6 +411,8 @@ if ! $FLG_R && ! $FLG_M; then
   rustup install stable
   rustup default stable
   rustup component add rust-src
+  cargo install cargo-update
+  cargo install cargo-script
 
   # nvm setup
   # run curl -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash

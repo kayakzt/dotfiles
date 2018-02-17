@@ -56,7 +56,7 @@ let g:deoplete#sources#go#package_dot = 1
 let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
 '''
 
-[[plugins]]
+[[plugins]] # rust standard library completion
 repo = 'racer-rust/vim-racer'
 on_ft = 'rust'
 hook_add = '''
@@ -101,6 +101,7 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 
 # Lint
 
+# Neomake -> ALE
 # [[plugins]] # lint provider
 # repo = 'neomake/neomake'
 # hook_add = '''
