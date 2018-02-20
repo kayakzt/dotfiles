@@ -402,8 +402,10 @@ if ! $FLG_R && ! $FLG_M; then
   curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain nightly
   # ru ncurl -L https://static.rust-lang.org/rustup.sh | sudo sh
   export PATH=$PATH:$HOME/.cargo/bin
-  cargo install --git "https://github.com/phildawes/racer.git"
-  cargo install --git "https://github.com/rust-lang-nursery/rustfmt.git"
+  # cargo install --git "https://github.com/phildawes/racer.git"
+  # cargo install --git "https://github.com/rust-lang-nursery/rustfmt.git"
+  cargo install racer
+  cargo install rustfmt
 
   rustup component add rust-src
 
