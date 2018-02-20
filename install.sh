@@ -405,7 +405,7 @@ if ! $FLG_R && ! $FLG_M; then
   # cargo install --git "https://github.com/phildawes/racer.git"
   # cargo install --git "https://github.com/rust-lang-nursery/rustfmt.git"
   cargo install racer
-  cargo install rustfmt
+  # cargo install rustfmt
 
   rustup component add rust-src
 
