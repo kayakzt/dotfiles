@@ -271,6 +271,10 @@ repo = 'kannokanno/previm'
 on_ft = 'md'
 depends = ['open-browser.vim']
 
+[[plugins]] # Continuously updated session files
+repo = 'tpope/vim-obsession'
+on_cmd = 'Obsession'
+
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
 on_ft = 'help'
