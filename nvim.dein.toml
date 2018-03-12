@@ -50,11 +50,11 @@ nnoremap <silent> [denite]f :Denite file_rec -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]l :Denite line -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]g :Denite grep -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]] :DeniteCursorWord grep -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]b :Denite buffer<CR>
+nnoremap <silent> [denite]b :Denite buffer -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]j :Denite jump -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]h :Denite file_mru -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]y :Denite neoyank -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]e :Denite emoji<CR>
+nnoremap <silent> [denite]e :Denite emoji -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]u :Denite -resume<CR>
 '''
 hook_post_source = '''
