@@ -232,7 +232,7 @@ alias apt-update-yes='sudo apt-get update \
 alias pip-update-all-system='pip freeze --local \
                     | grep -v "^\-e" \
                     | cut -d = -f 1 \
-                    | xargs sudo pip -H install -U'
+                    | xargs sudo -H pip install -U'
 alias pip3-update-all-system='pip3 freeze --local \
                     | grep -v "^\-e" \
                     | cut -d = -f 1 \
@@ -240,7 +240,7 @@ alias pip3-update-all-system='pip3 freeze --local \
 alias pip-update-all='pip freeze --local \
                     | grep -v "^\-e" \
                     | cut -d = -f 1 \
-                    | xargs  pip install -U'
+                    | xargs pip install -U'
 
 # auto unzip function
 function auto_unzip() {

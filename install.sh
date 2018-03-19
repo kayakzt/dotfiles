@@ -247,6 +247,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     zsh \
     xclip \
     xsel \
+    gawk \
     python3-venv \
     ansible \
     openssh-server \
