@@ -447,7 +447,6 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   echo "$password" | sudo -S echo ""
   # Paper-Icon & Adapta-Gtk-Theme
   sudo apt-get install -y paper-icon-theme \
-  paper-gtk-theme \
   paper-cursor-theme \
   adapta-gtk-theme
 
