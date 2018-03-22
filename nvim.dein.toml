@@ -1,5 +1,12 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
+hook_add = '''
+command! DeinUpdate  call s:dein_update()
+function! s:dein_update()
+  call dein#update()
+  Denite dein_log:!
+endfunction
+'''
 
 [[plugins]] # enable to do git operation in vim
 repo = 'tpope/vim-fugitive'
