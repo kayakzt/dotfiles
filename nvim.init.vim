@@ -121,6 +121,9 @@ set history=10000
 set visualbell t_vb=
 set noerrorbells
 
+" Highlight
+hi Cursorline guibg=gray13
+
 "for Japanese Input
 set ttimeout
 set ttimeoutlen=100
