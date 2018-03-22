@@ -353,13 +353,13 @@ if ! $FLG_R && ! $FLG_M; then
   fi
 
   # pip default package update & package install
-  sudo -H pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs sudo -H pip install -U
-  sudo -H pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs sudo -H pip3 install -U
+  pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs pip install -U --user
+  pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs pip3 install -U --user
 
-  sudo -H pip install flake8 \
+  pip install --user flake8 \
     wheel \
     jedi
-  sudo -H pip3 install flake8 \
+  pip3 install --user flake8 \
     wheel \
     jedi \
     numpy \
