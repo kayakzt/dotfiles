@@ -68,6 +68,9 @@ function! s:open_junk_file()
   endif
 endfunction"}}}
 
+" 縦分割版gf <C-w>+fで横分割, <C-w>+gfで新しいタブに開く
+nnoremap gs :vertical wincmd f<CR>
+
 
 " vim settings
 
