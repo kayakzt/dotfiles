@@ -71,6 +71,8 @@ endfunction"}}}
 
 " vim settings
 
+set encoding=utf8
+
 " Display
 " syntax on
 set number

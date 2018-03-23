@@ -69,7 +69,6 @@ nnoremap <silent> [denite]j :Denite jump -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]m :Denite file_mru -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]y :Denite neoyank -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]e :Denite emoji -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]h :Denite help -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]u :Denite -resume<CR>
 '''
 
@@ -350,6 +349,13 @@ depends = ['open-browser.vim']
 [[plugins]] # Continuously updated session files
 repo = 'tpope/vim-obsession'
 on_cmd = 'Obsession'
+
+[[plugins]] # call :Template to get template each file types
+repo = 'mattn/sonictemplate-vim'
+on_cmd = 'Template'
+
+[[plugins]] # set useful key mapping to '[' and ']'
+repo = 'tpope/vim-unimpaired'
 
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
