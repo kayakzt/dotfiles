@@ -1,3 +1,79 @@
+[[plugins]] # get recent buffer in denite.vim
+repo = 'Shougo/neomru.vim'
+on_source = ['denite.nvim']
+
+[[plugins]] # get yank history in denite.vim
+repo = 'Shougo/neoyank.vim'
+on_if = 1
+on_event = 'TextYankPost'
+on_source = ['denite.nvim']
+# on_path = '.*'
+
+[[plugins]] # vim emoji support
+repo = 'junegunn/vim-emoji'
+
+[[plugins]] # vim emoji support for denite
+repo = 'pocari/vim-denite-emoji'
+depends = ['vim-emoji','denite.nvim']
+
+[[plugins]] # for file search + open
+repo = 'Shougo/denite.nvim'
+# depends = ['neomru.vim', 'neoyank.vim']
+hook_source = '''
+if executable('rg')
+  call denite#custom#var('file_rec', 'command',
+        \ ['rg', '--files', '--glob', '!.git'])
+  call denite#custom#var('grep', 'command', ['rg', '--threads', '1'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'final_opts', [])
+  call denite#custom#var('grep', 'separator', ['--'])
+  call denite#custom#var('grep', 'default_opts',
+        \ ['--vimgrep', '--no-heading'])
+else
+  call denite#custom#var('file_rec', 'command',
+        \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+  call denite#custom#var('grep', 'command', ['ag'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'final_opts', [])
+  call denite#custom#var('grep', 'separator', [])
+  call denite#custom#var('grep', 'default_opts',
+        \ ['--nocolor', '--nogroup'])
+endif
+
+call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+call denite#custom#var('file_rec/git', 'command',
+      \ ['git', 'ls-files', '-co', '--exclude-standard'])
+
+call denite#custom#option('default', {
+      \ 'auto_accel': v:true,
+      \ 'prompt': '>',
+      \ 'source_names': 'short',
+      \ })
+
+call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+      \ [ '.git/', '.ropeproject/', '__pycache__/',
+      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
+'''
+hook_add = '''
+nnoremap [denite] <Nop>
+nmap <Space>u [denite]
+nnoremap <silent> [denite]t :Denite filetype -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]f :Denite file_rec -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]v :Denite file_rec/git -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]l :Denite line -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]g :Denite grep -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]c :Denite change -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]] :DeniteCursorWord grep -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]b :Denite buffer -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]j :Denite jump -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]m :Denite file_mru -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]y :Denite neoyank -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]e :Denite emoji -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]h :Denite help -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]u :Denite -resume<CR>
+'''
+
+
 [[plugins]] # completion provider for nvim
 repo = 'Shougo/deoplete.nvim'
 if = 'has("nvim")'

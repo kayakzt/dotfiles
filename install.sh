@@ -246,7 +246,6 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     git \
     zsh \
     xclip \
-    xsel \
     gawk \
     python3-venv \
     ansible \
@@ -416,6 +415,7 @@ if ! $FLG_R && ! $FLG_M; then
   rustup component add rust-src
   cargo install cargo-update
   cargo install cargo-script
+  cargo install ripgrep
 
   # nvm setup
   # run curl -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash

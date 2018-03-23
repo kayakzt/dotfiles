@@ -28,61 +28,9 @@ let g:airline#extensions#tabline#enabled = 1
 #let g:airline_theme='luna'
 #'''
 
-[[plugins]] # get recent buffer in denite.vim
-repo = 'Shougo/neomru.vim'
-
-[[plugins]] # get yank history in denite.vim
-repo = 'Shougo/neoyank.vim'
-on_if = 1
-on_event = 'TextYankPost'
-on_source = ['denite.nvim']
-# on_path = '.*'
-
-[[plugins]] # vim emoji support
-repo = 'junegunn/vim-emoji'
-
-[[plugins]] # vim emoji support for denite
-repo = 'pocari/vim-denite-emoji'
-depends = ['vim-emoji']
-
-[[plugins]] # for file search + open
-repo = 'Shougo/denite.nvim'
-depends = ['neomru.vim', 'neoyank.vim']
-on_event = 'BufRead'
-hook_add = '''
-nnoremap [denite] <Nop>
-nmap <Space>u [denite]
-nnoremap <silent> [denite]t :Denite filetype -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]f :Denite file_rec -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]l :Denite line -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]g :Denite grep -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]] :DeniteCursorWord grep -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]b :Denite buffer -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]j :Denite jump -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]h :Denite file_mru -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]y :Denite neoyank -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]e :Denite emoji -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]u :Denite -resume<CR>
-'''
-hook_post_source = '''
-call denite#custom#var('file_rec', 'command',
-      \ ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
-
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'final_opts', [])
-call denite#custom#var('grep', 'separator', [])
-call denite#custom#var('grep', 'default_opts',
-      \ ['--nocolor', '--nogroup'])
-call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-      \ [ '.git/', '.ropeproject/', '__pycache__/',
-      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
-'''
-
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
 build = 'make'
-
 
 # Syntax
 

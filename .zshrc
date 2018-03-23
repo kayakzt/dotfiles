@@ -208,6 +208,8 @@ alias al='ag --pager "less -R"'
 alias agh='ag --hidden'
 alias alh='ag --pager "less -R" --hidden'
 
+alias ripl='(){rg -p $@ | less -R}'
+
 alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
 
