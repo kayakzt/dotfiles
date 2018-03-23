@@ -354,9 +354,6 @@ on_cmd = 'Obsession'
 repo = 'mattn/sonictemplate-vim'
 on_cmd = 'Template'
 
-[[plugins]] # set useful key mapping to '[' and ']'
-repo = 'tpope/vim-unimpaired'
-
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
 on_ft = 'help'
