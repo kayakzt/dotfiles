@@ -276,9 +276,16 @@ let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'tagbar', 'denite']
 repo = 'kana/vim-smartchr'
 on_i = 1
 hook_add = '''
-inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' != ')
-inoremap <expr> , smartchr#loop(',', ', ', ' => ')
-inoremap <expr> : smartchr#loop(':', ': ', ' := ')
+inoremap <buffer> <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
+inoremap <buffer> <expr> , smartchr#loop(',', ', ', ' => ')
+inoremap <buffer> <expr> : smartchr#loop(':', ': ', ' := ')
+inoremap <buffer> <expr> ! smartchr#loop('!', '!!', ' != ')
+inoremap <buffer> <expr> + smartchr#loop('+', ' + ')
+inoremap <buffer> <expr> - smartchr#loop('-', '--', ' - ')
+inoremap <buffer> <expr> * smartchr#loop('*', ' * ')
+inoremap <buffer> <expr> / smartchr#loop('/', ' / ')
+inoremap <buffer> <expr> & smartchr#loop('&', ' & ', ' && ')
+" inoremap <buffer> <expr> | smartchr#loop('|', ' | ', ' || ')
 '''
 
 
