@@ -162,7 +162,7 @@ function github-star-import() {
 }
 
 function search() {
-  local filepath="$(find . | peco --prompt '[search]')"
+  local filepath="$(rg --hidden --files | peco --prompt '[search]')"
   [ -z "$filepath" ] && return
   if [ -n "$LBUFFER" ]; then
     BUFFER="$LBUFFER$filepath"
