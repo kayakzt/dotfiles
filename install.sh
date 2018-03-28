@@ -154,6 +154,8 @@ git clone ${DOT_REPO} ${DOT_PATH}
 
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
   echo "$password" | sudo -S echo ""
+  # change apt repository, archive.ubuntu.jp -> JAIST
+  sudo sed -i.bak -e "s%http://[^ ]\+%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
   sudo -E add-apt-repository -y ppa:git-core/ppa
   sudo -E add-apt-repository -y ppa:ansible/ansible
   sudo -E add-apt-repository -y ppa:snwh/pulp
