@@ -210,6 +210,10 @@ alias alh='ag --pager "less -R" --hidden'
 
 alias ripl='(){rg -p $@ | less -R}'
 
+alias -g glb='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
+alias dps='docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.RunningFor}}"'
+alias dex='docker exec -it `dps | peco | cut -f 1` /bin/bash'
+
 alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
 
