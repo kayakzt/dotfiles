@@ -156,11 +156,14 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
   echo "$password" | sudo -S echo ""
   # change apt repository, archive.ubuntu.jp -> JAIST
   sudo sed -i.bak -e "s%http://[^ ]\+%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
+
+  # add ppa repositories
+  sudo apt install software-properties-common
   sudo -E add-apt-repository -y ppa:git-core/ppa
   sudo -E add-apt-repository -y ppa:ansible/ansible
   sudo -E add-apt-repository -y ppa:snwh/pulp
   sudo -E add-apt-repository -y ppa:tista/adapta
-  sudo -E add-apt-repository -y ppa:eosrei/fonts
+  # sudo -E add-apt-repository -y ppa:eosrei/fonts
   sudo -E add-apt-repository -y ppa:neovim-ppa/stable
 fi
 
@@ -212,7 +215,7 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
       sudo sh -c 'printf "[SeatDefaults]\nallow-guest=false\n" >/usr/share/lightdm/lightdm.conf.d/50-no-guest.conf'
     fi
   else
-    sudo apt-get install -y gnome-tweak-tool
+    sudo apt-get install -y gnome-tweaks chrome-gnome-shell
 
     if type "gsettings" > /dev/null 2>&1
     then
@@ -256,8 +259,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     jq \
     exuberant-ctags \
     python-dev python-pip python3-dev python3-pip neovim \
-    gufw \
-    fonts-emojione-svginot
+    gufw
 
 elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
   yum install -y wget \
