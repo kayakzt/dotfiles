@@ -207,6 +207,7 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
   sudo sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/g' /etc/systemd/system.conf
 
   sudo apt-get install -y $(check-language-support -l ja)
+  sudo apt-get install -y fcitx fcitx-mozc
 
   if $UBUNTU_VERSION="xenial"; then
     im-config -n fcitx
@@ -240,13 +241,13 @@ fi
 # preapre bin, src directories in $HOME
 run mkdir -p $HOME/bin
 run mkdir -p $HOME/src
+run mkdir -p $HOME/go
 
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
   echo "$password" | sudo -S echo ""
   sudo apt install -y build-essential \
     libssl-dev libreadline-dev zlib1g-dev \
     libappindicator1 \
-    software-properties-common \
     wget \
     git \
     zsh \
@@ -381,7 +382,7 @@ if ! $FLG_R && ! $FLG_M; then
   echo "$password" | sudo -S echo ""
   export GOENV_ROOT=$HOME/.goenv
   git clone https://github.com/syndbg/goenv.git ~/.goenv
-  export GOPATH=$HOME
+  export GOPATH=$HOME/go
   export PATH=$PATH:$GOENV_ROOT/bin
   eval "$(goenv init -)"
   GO_VERSION=$(goenv install -l | tail -n 1 | tr -d ' ')

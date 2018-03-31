@@ -223,7 +223,7 @@ alias de='dicto -e'
 # ghq & hub alias (with peco)
 alias cdg='cd $(ghq root)/$(ghq list | peco --prompt "[ghq src]")'
 alias ghq-cd='cd $(ghq root)/$(ghq list | peco --prompt "[ghq src]")'
-alias hub-browse='hub browse $(ghq list | peco --prompt "[browse src]" | cut -d "/" -f 2,3)'
+alias hubb='hub browse $(ghq list | peco --prompt "[browse src]" | cut -d "/" -f 2,3)'
 
 alias apt-update='sudo apt-get update \
                     && sudo apt-get upgrade \
