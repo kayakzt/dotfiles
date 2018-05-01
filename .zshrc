@@ -318,7 +318,6 @@ setopt pushd_ignore_dups
 
 # X forwarding Settings
 if [ -n "$SSH_CONNECTION" ] ; then
-  export LANG=ja_JP.UTF-8
   export DefaultIMModule=fcitx
   export GTK_IM_MODULE=fcitx
   export XMODIFIERS="@im=fcitx"

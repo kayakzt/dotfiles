@@ -14,7 +14,8 @@ repo = 'junegunn/vim-emoji'
 
 [[plugins]] # vim emoji support for denite
 repo = 'pocari/vim-denite-emoji'
-depends = ['vim-emoji','denite.nvim']
+depends = ['vim-emoji']
+on_source = ['denite.nvim']
 
 [[plugins]] # for file search + open
 repo = 'Shougo/denite.nvim'
