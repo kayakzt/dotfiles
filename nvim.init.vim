@@ -84,7 +84,7 @@ set cursorline
 set showmatch
 set list
 set listchars=tab:¦_,trail:-,nbsp:%,eol:↲,extends:❯,precedes:❮
-set showbreak=↪
+" set showbreak=↪
 
 " Cursor
 "set backspace=indent,eol,start

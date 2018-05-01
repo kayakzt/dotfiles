@@ -450,6 +450,7 @@ fi
 #
 
 if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
+  run mkdir -p $HOME/.themes
   echo "$password" | sudo -S echo ""
   # Paper-Icon & Adapta-Gtk-Theme
   sudo apt-get install -y paper-icon-theme \
