@@ -392,7 +392,7 @@ if ! $FLG_R && ! $FLG_M; then
   goenv global $GO_VERSION
   go get github.com/motemen/ghq
   go get github.com/github/hub
-  go get github.com/nsf/gocode # for deoplete-go
+  go get github.com/mdempsky/gocode # for deoplete-go
 
   # glide install
   GLIDE_VERSION=$(curl -sI https://github.com/Masterminds/glide/releases/latest | awk -F'/' '/^Location:/{print $NF}')
