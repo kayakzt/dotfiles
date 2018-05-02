@@ -253,6 +253,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     zsh \
     xclip \
     gawk \
+    terminator \
     python3-venv \
     ansible \
     openssh-server \
@@ -267,7 +268,8 @@ elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
     git \
     zsh \
     xclip \
-    xsel \
+    gawk \
+    terminator \
     python3-dev \
     ansible \
     openssh-server \
@@ -475,7 +477,7 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   if [ ! -e $HOME/.config/gtk-3.0 ]; then
       run mkdir $HOME/.config/gtk-3.0
   fi
-  printf "[Settings]\ngtk-theme-name = Adapta\ngtk-icon-theme-name = Paper\n" \
+  printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Paper\n" \
   > $HOME/.config/gtk-3.0/settings.ini
 fi
 
@@ -501,6 +503,9 @@ fi
 if [ ! -e $CONF_PATH/peco ]; then
     run mkdir $CONF_PATH/peco
 fi
+if [ ! -e $CONF_PATH/terminator ]; then
+    run mkdir $CONF_PATH/terminator
+fi
 
 # set symbolic link
 run ln -snf $DOT_PATH/.zshenv $HOME/.zshenv
@@ -516,6 +521,7 @@ run ln -snf $DOT_PATH/nvim.dein.toml $CONF_PATH/nvim/dein.toml
 run ln -snf $DOT_PATH/nvim.dein_lazy.toml $CONF_PATH/nvim/dein_lazy.toml
 run ln -snf $DOT_PATH/peco.config.json $CONF_PATH/peco/config.json
 run ln -snf $DOT_PATH/.editorconfig $HOME/.editorconfig
+run ln -snf $DOT_PATH/terminator_config $CONF_PATH/terminator/config
 
 
 #
@@ -529,9 +535,9 @@ There are some steps to finish setup.
 
 * for System
 1. import mozc.keymap.txt for using mozc tool.
-2. change terminal color refered to terminal.color.txt.
-3. launch Tweak-Tool, change Theme & Font (Noto Kai 11pt).
-4. launch Tweak-Tool, set Gnome Extentions.
+2. change terminal color refered to terminal.color.txt (if u don't use a terminator).
+3. launch Tweak-Tool, change Theme & Font (Roboto 10pt).
+4. launch Tweak-Tool, set Gnome Extentions (see gnome_extentions.txt).
 [option] if your host is on virtual, you should install below:
   * linux-tools-virtual
   * linux-cloud-tools-virtual
