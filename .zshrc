@@ -53,7 +53,7 @@ setopt prompt_subst
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' stagedstr "%F{green}!"
 zstyle ':vcs_info:git:*' unstagedstr "%F{magenta}±"
-zstyle ':vcs_info:*' formats "%F{cyan}(%b%c%u%F{cyan})%f"
+zstyle ':vcs_info:*' formats "%F{cyan} (%b%c%u%F{cyan})%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
 # prompt
