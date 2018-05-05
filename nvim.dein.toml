@@ -273,6 +273,9 @@ repo = 'tpope/vim-surround'
 repo = 'h1mesuke/vim-alignta'
 on_cmd = 'Alignta'
 
+[[plugins]] # plugin for GoDecls command in vim-go
+repo = 'ctrlpvim/ctrlp.vim'
+
 [[plugins]] # highlights trailing whitespace
 repo = 'bronson/vim-trailing-whitespace'
 hook_add = '''
