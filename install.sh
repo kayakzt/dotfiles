@@ -238,10 +238,10 @@ fi
 # Basic Apps install
 #
 
-# preapre bin, src directories in $HOME
-run mkdir -p $HOME/bin
-run mkdir -p $HOME/src
-run mkdir -p $HOME/go
+# preapre bin, src directories
+run mkdir -p $HOME/dev
+run mkdir -p $HOME/dev/bin
+run mkdir -p $HOME/dev/src
 
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
   echo "$password" | sudo -S echo ""
@@ -284,8 +284,8 @@ install_peco() {
   echo $PECO_VERSION
   run wget https://github.com/peco/peco/releases/download/${PECO_VERSION}/peco_linux_amd64.tar.gz
   tar -zxvf peco_linux_amd64.tar.gz
-  mv peco_linux_amd64/peco $HOME/bin/peco
-  chmod u+x $HOME/bin/peco
+  mv peco_linux_amd64/peco $HOME/dev/bin/peco
+  chmod u+x $HOME/dev/bin/peco
   run rm peco_linux_amd64.tar.gz
   run rm -rf peco_linux_amd64
 }
@@ -327,14 +327,14 @@ install_tmux() {
 # zsh install
 install_zsh() {
   mkdir $HOME/local
-  wget "http://sourceforge.net/projects/zsh/files/zsh/5.4.2/zsh-5.4.2.tar.gz/download"
+  wget "http://sourceforge.net/projects/zsh/files/zsh/5.5.1/zsh-5.5.1.tar.gz/download"
   tar xzvf download
-  cd zsh-5.4.2
+  cd zsh-5.5.1
   ./configure --prefix=$HOME/local --enable-multibyte --enable-locale
   make
   make install
   cd $WORKING_DIR
-  rm -rf zsh-5.4.2
+  rm -rf zsh-5.5.1
 }
 
 if ! $FLG_R; then
@@ -384,7 +384,7 @@ if ! $FLG_R && ! $FLG_M; then
   echo "$password" | sudo -S echo ""
   export GOENV_ROOT=$HOME/.goenv
   git clone https://github.com/syndbg/goenv.git ~/.goenv
-  export GOPATH=$HOME/go
+  export GOPATH=$HOME/dev
   export PATH=$PATH:$GOENV_ROOT/bin
   eval "$(goenv init -)"
   GO_VERSION=$(goenv install -l | tail -n 1 | tr -d ' ')
@@ -399,8 +399,8 @@ if ! $FLG_R && ! $FLG_M; then
   GLIDE_VERSION=`echo ${GLIDE_VERSION%\%*} | sed -e "s/[\r\n]\+//g"`
   run wget https://github.com/Masterminds/glide/releases/download/"$GLIDE_VERSION"/glide-"$GLIDE_VERSION"-linux-amd64.tar.gz
   tar -zxvf glide-"$GLIDE_VERSION"-linux-amd64.tar.gz
-  mv linux-amd64/glide $HOME/bin/glide
-  chmod u+x $HOME/bin/glide
+  mv linux-amd64/glide $HOME/dev/bin/glide
+  chmod u+x $HOME/dev/bin/glide
   run rm glide-"$GLIDE_VERSION"-linux-amd64.tar.gz
   run rm -rf linux-amd64
 
@@ -512,8 +512,8 @@ run ln -snf $DOT_PATH/.zshenv $HOME/.zshenv
 run ln -snf $DOT_PATH/.zshrc $HOME/.zshrc
 run ln -snf $DOT_PATH/.zsh_logout $HOME/.zsh_logout
 run ln -snf $DOT_PATH/tmux.conf $HOME/.tmux.conf
-run ln -snf $DOT_PATH/tmux.memory $HOME/bin/tmux.memory
-run ln -snf $DOT_PATH/tmux.loadaverage $HOME/bin/tmux.loadaverage
+run ln -snf $DOT_PATH/tmux.memory $HOME/dev/bin/tmux.memory
+run ln -snf $DOT_PATH/tmux.loadaverage $HOME/dev/bin/tmux.loadaverage
 run ln -snf $DOT_PATH/.gitconfig $HOME/.gitconfig
 run ln -snf $DOT_PATH/fonts.conf $CONF_PATH/fontconfig/fonts.conf
 run ln -snf $DOT_PATH/nvim.init.vim $CONF_PATH/nvim/init.vim

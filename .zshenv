@@ -1,9 +1,9 @@
 # Environment Variables
-export path=(/usr/local/bin(N-/) $HOME/bin(N-/) $path)
+# export path=(/usr/local/bin(N-/) $HOME/bin(N-/) $path)
 
 # goenv & go
 export GOENV_ROOT=$HOME/.goenv
-export GOPATH=$HOME/go
+export GOPATH=$HOME/dev
 export path=($GOENV_ROOT/bin(N-/) $GOPATH/bin(N-/) $path)
 if command -v goenv > /dev/null; then
   eval "$(goenv init -)"
