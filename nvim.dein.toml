@@ -143,6 +143,9 @@ repo = 'vim-jp/autofmt'
 repo = 'joshdick/onedark.vim'
 hook_add = '''
 let g:onedark_termcolors=256
+let g:onedark_color_overrides = {
+\ "comment_grey": {"gui": "#67727D", "cterm": "59", "cterm16" : "15"}
+\}
 colorscheme onedark
 let g:airline_theme='onedark'
 syntax enable
