@@ -1,10 +1,13 @@
 [global_config]
   focus = mouse
+  title_font = Ricty Diminished 11
+  title_use_system_font = False
 [keybindings]
 [layouts]
   [[default]]
     [[[child1]]]
       parent = window0
+      profile = kaya
       type = Terminal
     [[[window0]]]
       parent = ""
