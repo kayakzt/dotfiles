@@ -459,6 +459,9 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   paper-cursor-theme \
   adapta-gtk-theme
 
+  git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant-master
+  git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody-master
+
   # set customized noto sans cjk jp (Noto Sans CJK JP Kai)
   wget https://ja.osdn.net/downloads/users/9/9930/NSCJKaR.tar.xz
   tar xavf NSCJKaR.tar.xz && rm NSCJKaR.tar.xz
@@ -477,7 +480,7 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   if [ ! -e $HOME/.config/gtk-3.0 ]; then
       run mkdir $HOME/.config/gtk-3.0
   fi
-  printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Paper\n" \
+  printf "[Settings]\ngtk-theme-name = Ant-master\ngtk-icon-theme-name = Paper\n" \
   > $HOME/.config/gtk-3.0/settings.ini
 fi
 
