@@ -165,6 +165,8 @@ let g:quickrun_config._ = {
       \ 'outputter/buffer/split'  : ':rightbelow 8sp',
       \ 'outputter/buffer/close_on_empty' : 1,
       \ }
+let g:quickrun_config["python"] = {"command": "python3"}
+
 " q: close quickfix
 au FileType qf nnoremap <silent><buffer>q :quit<CR>
 " \r: save and execute quickrun
@@ -263,7 +265,6 @@ autocmd MyAutoCmd InsertEnter * :PreciousSwitch
 autocmd MyAutoCmd InsertLeave * :PreciousReset
 '''
 
-
 # Other
 
 [[plugins]] # for visualize indent
@@ -280,18 +281,17 @@ let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'tagbar', 'denite']
 repo = 'kana/vim-smartchr'
 on_i = 1
 hook_add = '''
-inoremap <buffer> <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
-inoremap <buffer> <expr> , smartchr#loop(',', ', ', ' => ')
-inoremap <buffer> <expr> : smartchr#loop(':', ': ', ' := ')
-inoremap <buffer> <expr> ! smartchr#loop('!', '!!', ' != ')
-inoremap <buffer> <expr> + smartchr#loop('+', ' + ')
-inoremap <buffer> <expr> - smartchr#loop('-', '--', ' - ')
-inoremap <buffer> <expr> * smartchr#loop('*', ' * ')
-inoremap <buffer> <expr> / smartchr#loop('/', ' / ')
-inoremap <buffer> <expr> & smartchr#loop('&', ' & ', ' && ')
-" inoremap <buffer> <expr> | smartchr#loop('|', ' | ', ' || ')
+inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
+inoremap <expr> , smartchr#loop(',', ', ', ' => ')
+inoremap <expr> : smartchr#loop(':', ': ', ' := ')
+inoremap <expr> ! smartchr#loop('!', '!!', ' != ')
+inoremap <expr> + smartchr#loop('+', ' + ')
+inoremap <expr> - smartchr#loop('-', '--', ' - ')
+inoremap <expr> * smartchr#loop('*', ' * ')
+inoremap <expr> / smartchr#loop('/', ' / ')
+inoremap <expr> & smartchr#loop('&', ' & ', ' && ')
+" inoremap <expr> | smartchr#loop('|', ' | ', ' || ')
 '''
-
 
 # [[plugins]] # show tag structure in file
 # repo = 'majutsushi/tagbar'
