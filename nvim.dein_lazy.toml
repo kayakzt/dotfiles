@@ -77,7 +77,7 @@ nnoremap <silent> [denite]u :Denite -resume<CR>
 [[plugins]] # completion provider for nvim
 repo = 'Shougo/deoplete.nvim'
 if = 'has("nvim")'
-on_i = 1
+on_event = 'InsertEnter'
 hook_source = '''
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_delay = 0
@@ -145,7 +145,7 @@ let g:rust_doc#downloaded_rust_doc_dir = $RUST_ROOT
 
 [[plugins]] # Auto close parentheses
 repo = 'cohama/lexima.vim'
-on_i = 1
+on_event = 'InsertEnter'
 hook_add = '''
 "call lexima#add_rule({'char': '$', 'input_after': '$', 'filetype': 'latex'})
 "call lexima#add_rule({'char': '$', 'at': '\%#\$', 'leave': 1, 'filetype': 'latex'})
@@ -234,7 +234,7 @@ let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
 
 [[plugins]] # Emmet
 repo = 'mattn/emmet-vim'
-on_i = 1
+on_event = 'InsertEnter'
 hook_source = '''
 let g:user_emmet_mode = 'i'
 let g:user_emmet_leader_key='<C-E>' # <C-E-,>
@@ -269,6 +269,7 @@ autocmd MyAutoCmd InsertLeave * :PreciousReset
 
 [[plugins]] # for visualize indent
 repo = 'nathanaelkane/vim-indent-guides'
+on_event = 'InsertEnter'
 hook_add = '''
 let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 1
@@ -279,7 +280,7 @@ let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'tagbar', 'denite']
 
 [[plugins]] # auto insert space around '=' & ','
 repo = 'kana/vim-smartchr'
-on_i = 1
+on_event = 'InsertEnter'
 hook_add = '''
 inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
 inoremap <expr> , smartchr#loop(',', ', ', ' => ')

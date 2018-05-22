@@ -7,7 +7,7 @@
   [[default]]
     [[[child1]]]
       parent = window0
-      profile = kaya
+      profile = default
       type = Terminal
     [[[window0]]]
       parent = ""
@@ -16,12 +16,14 @@
 [profiles]
   [[default]]
     background_color = "#122329"
+    backspace_binding = automatic
     cursor_color = "#aaaaaa"
-    delete_binding = ascii-del
+    delete_binding = automatic
     font = Ricty Diminished 12
     foreground_color = "#dadada"
     palette = "#1b2d33:#e1321a:#75b925:#ffc005:#308fed:#e2255f:#2aa7e7:#bdcdd2:#5d5d5d:#df2b16:#7bc91f:#ffd00a:#2e96e1:#ea4192:#4bb8fd:#f2f2f2"
-    scrollback_lines = 10000
+    scrollback_lines = 20000
+    scrollbar_position = hidden
     show_titlebar = False
     use_system_font = False
   [[kaya]]
