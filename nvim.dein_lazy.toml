@@ -105,6 +105,7 @@ xmap <C-e> <Plug>(neosnippet_expand_target)
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
+let g:neosnippet#snippets_directory = '~/.config/dotfiles/snippets'
 '''
 on_i  = 1
 on_ft = ['snippet']
