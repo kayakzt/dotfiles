@@ -214,6 +214,11 @@ alias -g glb='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/
 alias dps='docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.RunningFor}}"'
 alias dex='docker exec -it `dps | peco | cut -f 1` /bin/bash'
 
+alias termi='terminator -l medium'
+alias termis='terminator -l small'
+alias termim='terminator -l medium'
+alias termil='terminator -l large'
+
 alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
 

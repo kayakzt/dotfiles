@@ -7,11 +7,39 @@
   [[default]]
     [[[child1]]]
       parent = window0
-      profile = default
+      profile = kaya
       type = Terminal
     [[[window0]]]
       parent = ""
+      size = 720, 470
       type = Window
+  [[large]]
+    [[[child0]]]
+      parent = ""
+      size = 1280, 687
+      type = Window
+    [[[terminal1]]]
+      parent = child0
+      profile = kaya
+      type = Terminal
+  [[medium]]
+    [[[child0]]]
+      parent = ""
+      size = 960, 540
+      type = Window
+    [[[terminal1]]]
+      parent = child0
+      profile = kaya
+      type = Terminal
+  [[small]]
+    [[[child0]]]
+      parent = ""
+      size = 640, 290
+      type = Window
+    [[[terminal1]]]
+      parent = child0
+      profile = kaya
+      type = Terminal
 [plugins]
 [profiles]
   [[default]]
@@ -34,5 +62,6 @@
     foreground_color = "#dadada"
     palette = "#1b2d33:#e1321a:#75b925:#ffc005:#308fed:#e2255f:#2aa7e7:#bdcdd2:#5d5d5d:#df2b16:#7bc91f:#ffd00a:#2e96e1:#ea4192:#4bb8fd:#f2f2f2"
     scrollback_lines = 8192
+    scrollbar_position = hidden
     show_titlebar = False
     use_system_font = False
