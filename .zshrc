@@ -54,7 +54,7 @@ zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' stagedstr "%F{green}!"
 zstyle ':vcs_info:git:*' unstagedstr "%F{magenta}±"
 zstyle ':vcs_info:*' formats "%F{cyan} (%b%c%u%F{cyan})%f"
-zstyle ':vcs_info:*' actionformats '[%b|%a]'
+zstyle ':vcs_info:*' actionformats '%F{cyan} [%b|%F{magenta}%a%F{cyan}]'
 
 # prompt
 PROMPT="%B%{$fg[green]%}• %{$fg[yellow]%}• %{$fg[red]%}• %b%{$reset_color%}"
