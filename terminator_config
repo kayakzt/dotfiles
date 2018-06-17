@@ -11,12 +11,12 @@
       type = Terminal
     [[[window0]]]
       parent = ""
-      size = 720, 470
+      size = 720, 472
       type = Window
   [[large]]
     [[[child0]]]
       parent = ""
-      size = 1280, 687
+      size = 1280, 688
       type = Window
     [[[terminal1]]]
       parent = child0
@@ -25,7 +25,7 @@
   [[medium]]
     [[[child0]]]
       parent = ""
-      size = 960, 540
+      size = 960, 542
       type = Window
     [[[terminal1]]]
       parent = child0
