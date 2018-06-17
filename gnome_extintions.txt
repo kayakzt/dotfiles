@@ -3,10 +3,10 @@ Applications menu [preinstall]
 Dash to dock
 Dynamic panel transparency
 Frippery move clock
-Input method panel
+// Input method panel
 Openweather
 Places status indicator [preinstall]
 Removable drive menu [preinstall]
-Topicons Plus
+// Topicons Plus
 User themes [preinstall]
 Workspace indicator [preinstall]
