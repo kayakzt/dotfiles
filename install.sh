@@ -461,7 +461,7 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody-master
 
   # set customized noto sans cjk jp (Noto Sans CJK JP Kai)
-  wget https://ja.osdn.net/downloads/users/9/9930/NSCJKaR.tar.xz
+  wget https://ja.osdn.net/downloads/users/17/17406/NSCJKaR.tar.xz/
   tar xavf NSCJKaR.tar.xz && rm NSCJKaR.tar.xz
   # wget https://ja.osdn.net/downloads/users/10/10745/fonts.conf && \
   run mkdir -p ~/.local/share/fonts/
