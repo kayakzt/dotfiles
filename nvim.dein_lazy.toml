@@ -374,8 +374,8 @@ vmap gx <Plug>(openbrowser-smart-search)
 '''
 
 [[plugins]] # for realtime preview for Markdown Documents
-repo = 'kannokanno/previm'
-# on_cmd = 'PrevimOpen'
+repo = 'previm/previm'
+on_cmd = 'PrevimOpen'
 on_ft = 'md'
 depends = ['open-browser.vim']
 
