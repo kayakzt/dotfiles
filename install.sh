@@ -406,22 +406,20 @@ if ! $FLG_R && ! $FLG_M; then
 
   # rustup (stable channel) setup
   echo "$password" | sudo -S echo ""
-  curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain nightly
+  curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain stable
   # ru ncurl -L https://static.rust-lang.org/rustup.sh | sudo sh
   export PATH=$PATH:$HOME/.cargo/bin
-  # cargo install --git "https://github.com/phildawes/racer.git"
-  # cargo install --git "https://github.com/rust-lang-nursery/rustfmt.git"
-  cargo install racer
   # cargo install rustfmt
 
-  rustup component add rust-src
+  # rustup component add rust-src
 
   # install rust stable channnel & default use
-  rustup install stable
-  rustup default stable
+  # rustup install stable
+  # rustup default stable
   rustup component add rust-src
   cargo install cargo-update
   cargo install cargo-script
+  cargo install racer
   cargo install ripgrep
 
   # nvm setup
