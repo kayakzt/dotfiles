@@ -1,5 +1,12 @@
 # Environment Variables
-# export path=(/usr/local/bin(N-/) $HOME/bin(N-/) $path)
+
+# # proxy settings
+# export http_proxy=
+# export https_proxy=$http_proxy
+# export HTTP_PROXY=$http_proxy
+# exrpot HTTPS_PEOXY=$http_proxy
+# export no_proxy=
+# export NO_PROXY=$no_proxy
 
 # goenv & go
 export GOENV_ROOT=$HOME/.goenv
@@ -44,5 +51,3 @@ setopt hist_save_no_dups
 setopt hist_no_store
 setopt hist_expand
 setopt inc_append_history
-# bindkey "^R" history-incremental-search-backward
-# bindkey "^S" history-incremental-search-forward

@@ -3,7 +3,7 @@
 #
 # This script depends on following script/directory
 #
-# * cdr [$HOME/.cache/shell/]
+# # * cdr [$HOME/.cache/shell/]
 # * enchancd [$HOME/.cache/shell/enhancd/]
 # * peco [/usr/local/bin/peco]
 # * zplug [$HOME/.zplug/]
@@ -161,6 +161,7 @@ function github-star-import() {
   echo $urls | peco | ghq import
 }
 
+# This fuction depends on ripgrep
 function search() {
   local filepath="$(rg --hidden --files | peco --prompt '[search]')"
   [ -z "$filepath" ] && return
@@ -210,7 +211,7 @@ alias alh='ag --pager "less -R" --hidden'
 
 alias ripl='(){rg -p $@ | less -R}'
 
-alias -g glb='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
+alias -g gbl='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
 alias dps='docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.RunningFor}}"'
 alias dex='docker exec -it `dps | peco | cut -f 1` /bin/bash'
 
@@ -323,16 +324,17 @@ setopt pushd_ignore_dups
 
 # X forwarding Settings
 if [ -n "$SSH_CONNECTION" ] ; then
-  export DefaultIMModule=fcitx
-  export GTK_IM_MODULE=fcitx
-  export XMODIFIERS="@im=fcitx"
-  export QT_IM_MODULE=fcitx
-  export fcitx_ENABLE_SYNC_MODE=1
-  export NO_AT_BRIDGE=1
-  if test `ps auxw | grep $USER | grep -v grep | grep "fcitx -d" 2> /dev/null | wc -l` -eq 0;
-  then
-    fcitx -d > /dev/null 2>&1 &
-  fi
+  export DefaultIMModule=ibus
+  export GTK_IM_MODULE=ibus
+  export XMODIFIERS="@im=ibus"
+  export QT_IM_MODULE=ibus
+  export IBUS_ENABLE_SYNC_MODE=1
+  # export NO_AT_BRIDGE=1
+  # if test `ps auxw | grep $USER | grep -v grep | grep "fcitx -d" 2> /dev/null | wc -l` -eq 0;
+  # then
+  #   fcitx -d > /dev/null 2>&1 &
+  # fi
+  ibus-daemon -d -x
 fi
 
 # if nice error ocured

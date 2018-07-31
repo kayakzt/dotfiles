@@ -162,7 +162,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
   sudo -E add-apt-repository -y ppa:git-core/ppa
   sudo -E add-apt-repository -y ppa:ansible/ansible
   sudo -E add-apt-repository -y ppa:snwh/pulp
-  sudo -E add-apt-repository -y ppa:tista/adapta
+  # sudo -E add-apt-repository -y ppa:tista/adapta
   # sudo -E add-apt-repository -y ppa:eosrei/fonts
   sudo -E add-apt-repository -y ppa:neovim-ppa/stable
 fi
@@ -207,22 +207,15 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
   sudo sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/g' /etc/systemd/system.conf
 
   sudo apt-get install -y $(check-language-support -l ja)
-  sudo apt-get install -y fcitx fcitx-mozc
+  # install fcitx if you need
+  # sudo apt-get install -y fcitx fcitx-mozc
 
-  if $UBUNTU_VERSION="xenial"; then
-    im-config -n fcitx
+  sudo apt-get install -y gnome-tweaks chrome-gnome-shell
 
-    if [ -e /usr/share/lightdm/lightdm.conf.d/50-no-guest.conf ]; then
-      sudo sh -c 'printf "[SeatDefaults]\nallow-guest=false\n" >/usr/share/lightdm/lightdm.conf.d/50-no-guest.conf'
-    fi
-  else
-    sudo apt-get install -y gnome-tweaks chrome-gnome-shell
-
-    if type "gsettings" > /dev/null 2>&1
-    then
-      gsettings set org.gnome.mutter auto-maximize false
-      gsettings set org.gnome.shell.app-switcher current-workspace-only true
-    fi
+  if type "gsettings" > /dev/null 2>&1
+  then
+    gsettings set org.gnome.mutter auto-maximize false
+    gsettings set org.gnome.shell.app-switcher current-workspace-only true
   fi
 
   # Firewall setup
@@ -406,20 +399,18 @@ if ! $FLG_R && ! $FLG_M; then
 
   # rustup (stable channel) setup
   echo "$password" | sudo -S echo ""
-  curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain stable
+  curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain nightly
   # ru ncurl -L https://static.rust-lang.org/rustup.sh | sudo sh
   export PATH=$PATH:$HOME/.cargo/bin
+  cargo install racer # racer must be installed under the nightly channel
   # cargo install rustfmt
 
-  # rustup component add rust-src
-
   # install rust stable channnel & default use
-  # rustup install stable
-  # rustup default stable
+  rustup toolchain install stable
+  rustup default stable
   rustup component add rust-src
   cargo install cargo-update
   cargo install cargo-script
-  cargo install racer
   cargo install ripgrep
 
   # nvm setup
@@ -454,11 +445,22 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   echo "$password" | sudo -S echo ""
   # Paper-Icon & Adapta-Gtk-Theme
   sudo apt-get install -y paper-icon-theme \
-  paper-cursor-theme \
-  adapta-gtk-theme
+  paper-cursor-theme
 
-  git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant-master
-  git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody-master
+  git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant
+  git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody
+  git clone https://github.com/EliverLara/Ant-Dracula.git ~/.themes/Ant-Dracula
+
+  # install fonts
+  sudo apt-get install -y fonts-ipafont \
+    fonts-ipafont-gothic \
+    fonts-ipafont-mincho \
+    fonts-noto-cjk \
+    fonts-noto-color-emoji \
+    fonts-roboto \
+    fonts-takao \
+    fonts-takao-gothic \
+    fonts-takao-mincho
 
   # set customized noto sans cjk jp (Noto Sans CJK JP Kai)
   wget https://ja.osdn.net/downloads/users/17/17406/NSCJKaR.tar.xz
