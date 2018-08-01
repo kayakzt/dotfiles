@@ -326,15 +326,17 @@ setopt pushd_ignore_dups
 if [ -n "$SSH_CONNECTION" ] ; then
   export DefaultIMModule=ibus
   export GTK_IM_MODULE=ibus
-  export XMODIFIERS="@im=ibus"
   export QT_IM_MODULE=ibus
-  export IBUS_ENABLE_SYNC_MODE=1
+  # export IBUS_ENABLE_SYNC_MODE=1
   # export NO_AT_BRIDGE=1
   # if test `ps auxw | grep $USER | grep -v grep | grep "fcitx -d" 2> /dev/null | wc -l` -eq 0;
   # then
   #   fcitx -d > /dev/null 2>&1 &
   # fi
-  ibus-daemon -d -x
+  if [ -z "$XMODIFIERS" ]; then
+    export XMODIFIERS=@im=ibus
+    ibus-daemon -drx
+  fi
 fi
 
 # if nice error ocured

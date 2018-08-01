@@ -40,6 +40,8 @@ Precomposition	Ctrl Space	CancelAndIMEOff
 DirectInput	Ctrl Space	IMEOn
 Conversion	Ctrl Space	CancelAndIMEOff
 Composition	Ctrl Space	CancelAndIMEOff
+Composition	Ctrl Space	Convert
+Conversion	Ctrl Space	ConvertNext
 Composition	Ctrl u	ConvertToHiragana
 Conversion	Ctrl u	ConvertToHiragana
 Prediction	Ctrl Up	ConvertPrev
