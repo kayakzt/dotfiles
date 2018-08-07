@@ -480,7 +480,7 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   if [ ! -e $HOME/.config/gtk-3.0 ]; then
       run mkdir $HOME/.config/gtk-3.0
   fi
-  printf "[Settings]\ngtk-theme-name = Ant-master\ngtk-icon-theme-name = Paper\n" \
+  printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Paper\n" \
   > $HOME/.config/gtk-3.0/settings.ini
 fi
 

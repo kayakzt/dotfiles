@@ -44,9 +44,7 @@
 [profiles]
   [[default]]
     background_color = "#122329"
-    backspace_binding = automatic
     cursor_color = "#aaaaaa"
-    delete_binding = automatic
     font = Ricty Diminished 12
     foreground_color = "#dadada"
     palette = "#1b2d33:#e1321a:#75b925:#ffc005:#308fed:#e2255f:#2aa7e7:#bdcdd2:#5d5d5d:#df2b16:#7bc91f:#ffd00a:#2e96e1:#ea4192:#4bb8fd:#f2f2f2"
@@ -57,7 +55,6 @@
   [[kaya]]
     background_color = "#122329"
     cursor_color = "#aaaaaa"
-    delete_binding = ascii-del
     font = Ricty Diminished 12
     foreground_color = "#dadada"
     palette = "#1b2d33:#e1321a:#75b925:#ffc005:#308fed:#e2255f:#2aa7e7:#bdcdd2:#5d5d5d:#df2b16:#7bc91f:#ffd00a:#2e96e1:#ea4192:#4bb8fd:#f2f2f2"
