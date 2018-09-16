@@ -10,6 +10,16 @@ endfunction
 
 [[plugins]] # enable to do git operation in vim
 repo = 'tpope/vim-fugitive'
+hook_add = '''
+nnoremap [fugitive]  <Nop>
+nmap <space>g [fugitive]
+nnoremap <silent> [fugitive]s :Gstatus<CR><C-w>T
+nnoremap <silent> [fugitive]a :Gwrite<CR>
+nnoremap <silent> [fugitive]c :Gcommit<CR>
+nnoremap <silent> [fugitive]b :Gblame<CR>
+nnoremap <silent> [fugitive]d :Gdiff<CR>
+nnoremap <silent> [fugitive]m :Gmerge<CR>
+'''
 
 [[plugins]] # show status line
 repo = 'vim-airline/vim-airline'

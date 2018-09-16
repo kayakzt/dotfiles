@@ -57,7 +57,7 @@ command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
 " Open junk file."{{{
 command! -nargs=0 JunkFile call s:open_junk_file()
 function! s:open_junk_file()
-  let l:junk_dir = $HOME . '/.vim_junk'. strftime('/%Y/%m')
+  let l:junk_dir = $HOME . '/.junk'. strftime('/%Y/%m')
   if !isdirectory(l:junk_dir)
     call mkdir(l:junk_dir, 'p')
   endif
@@ -168,4 +168,3 @@ inoremap <silent> っｊ <ESC>
 " インデント後にビジュアルモードが解除されないようにする
 vnoremap < <gv
 vnoremap > >gv
-

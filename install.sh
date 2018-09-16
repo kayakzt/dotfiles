@@ -340,6 +340,48 @@ fi
 
 
 #
+# Config Setup
+#
+
+# zsh setup
+if [ ! -e $HOME/.cache/shell/enhancd ]; then
+    run mkdir -p $HOME/.config/shell/enhancd
+fi
+
+# neovim setup
+if [ ! -e $HOME/.config/nvim ]; then
+    run mkdir -p $HOME/.config/nvim
+fi
+
+# setup other files
+if [ ! -e $CONF_PATH/fontconfig ]; then
+    run mkdir $CONF_PATH/fontconfig
+fi
+if [ ! -e $CONF_PATH/peco ]; then
+    run mkdir $CONF_PATH/peco
+fi
+if [ ! -e $CONF_PATH/terminator ]; then
+    run mkdir $CONF_PATH/terminator
+fi
+
+# set symbolic link
+run ln -snf $DOT_PATH/.zshenv $HOME/.zshenv
+run ln -snf $DOT_PATH/.zshrc $HOME/.zshrc
+run ln -snf $DOT_PATH/.zsh_logout $HOME/.zsh_logout
+run ln -snf $DOT_PATH/tmux.conf $HOME/.tmux.conf
+run ln -snf $DOT_PATH/tmux.memory $HOME/dev/bin/tmux.memory
+run ln -snf $DOT_PATH/tmux.loadaverage $HOME/dev/bin/tmux.loadaverage
+run ln -snf $DOT_PATH/.gitconfig $HOME/.gitconfig
+run ln -snf $DOT_PATH/fonts.conf $CONF_PATH/fontconfig/fonts.conf
+run ln -snf $DOT_PATH/nvim.init.vim $CONF_PATH/nvim/init.vim
+run ln -snf $DOT_PATH/nvim.dein.toml $CONF_PATH/nvim/dein.toml
+run ln -snf $DOT_PATH/nvim.dein_lazy.toml $CONF_PATH/nvim/dein_lazy.toml
+run ln -snf $DOT_PATH/peco.config.json $CONF_PATH/peco/config.json
+run ln -snf $DOT_PATH/.editorconfig $HOME/.editorconfig
+run ln -snf $DOT_PATH/terminator_config $CONF_PATH/terminator/config
+
+
+#
 # Developper Apps install
 #
 
@@ -386,16 +428,7 @@ if ! $FLG_R && ! $FLG_M; then
   go get github.com/motemen/ghq
   go get github.com/github/hub
   go get github.com/mdempsky/gocode # for deoplete-go
-
-  # glide install
-  GLIDE_VERSION=$(curl -sI https://github.com/Masterminds/glide/releases/latest | awk -F'/' '/^Location:/{print $NF}')
-  GLIDE_VERSION=`echo ${GLIDE_VERSION%\%*} | sed -e "s/[\r\n]\+//g"`
-  run wget https://github.com/Masterminds/glide/releases/download/"$GLIDE_VERSION"/glide-"$GLIDE_VERSION"-linux-amd64.tar.gz
-  tar -zxvf glide-"$GLIDE_VERSION"-linux-amd64.tar.gz
-  mv linux-amd64/glide $HOME/dev/bin/glide
-  chmod u+x $HOME/dev/bin/glide
-  run rm glide-"$GLIDE_VERSION"-linux-amd64.tar.gz
-  run rm -rf linux-amd64
+  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
   # rustup (stable channel) setup
   echo "$password" | sudo -S echo ""
@@ -483,48 +516,6 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Paper\n" \
   > $HOME/.config/gtk-3.0/settings.ini
 fi
-
-
-#
-# App Setup
-#
-
-# zsh setup
-if [ ! -e $HOME/.cache/shell/enhancd ]; then
-    run mkdir -p $HOME/.config/shell/enhancd
-fi
-
-# neovim setup
-if [ ! -e $HOME/.config/nvim ]; then
-    run mkdir -p $HOME/.config/nvim
-fi
-
-# setup other files
-if [ ! -e $CONF_PATH/fontconfig ]; then
-    run mkdir $CONF_PATH/fontconfig
-fi
-if [ ! -e $CONF_PATH/peco ]; then
-    run mkdir $CONF_PATH/peco
-fi
-if [ ! -e $CONF_PATH/terminator ]; then
-    run mkdir $CONF_PATH/terminator
-fi
-
-# set symbolic link
-run ln -snf $DOT_PATH/.zshenv $HOME/.zshenv
-run ln -snf $DOT_PATH/.zshrc $HOME/.zshrc
-run ln -snf $DOT_PATH/.zsh_logout $HOME/.zsh_logout
-run ln -snf $DOT_PATH/tmux.conf $HOME/.tmux.conf
-run ln -snf $DOT_PATH/tmux.memory $HOME/dev/bin/tmux.memory
-run ln -snf $DOT_PATH/tmux.loadaverage $HOME/dev/bin/tmux.loadaverage
-run ln -snf $DOT_PATH/.gitconfig $HOME/.gitconfig
-run ln -snf $DOT_PATH/fonts.conf $CONF_PATH/fontconfig/fonts.conf
-run ln -snf $DOT_PATH/nvim.init.vim $CONF_PATH/nvim/init.vim
-run ln -snf $DOT_PATH/nvim.dein.toml $CONF_PATH/nvim/dein.toml
-run ln -snf $DOT_PATH/nvim.dein_lazy.toml $CONF_PATH/nvim/dein_lazy.toml
-run ln -snf $DOT_PATH/peco.config.json $CONF_PATH/peco/config.json
-run ln -snf $DOT_PATH/.editorconfig $HOME/.editorconfig
-run ln -snf $DOT_PATH/terminator_config $CONF_PATH/terminator/config
 
 
 #
