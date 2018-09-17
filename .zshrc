@@ -162,8 +162,8 @@ function github-star-import() {
 }
 
 # This fuction depends on ripgrep
-function search() {
-  local filepath="$(rg --hidden --files | peco --prompt '[search]')"
+function shell_search() {
+  local filepath="$(rg -p --hidden --files -g "!.git/" | peco --prompt '[search]')"
   [ -z "$filepath" ] && return
   if [ -n "$LBUFFER" ]; then
     BUFFER="$LBUFFER$filepath"
@@ -177,8 +177,8 @@ function search() {
   CURSOR=$#BUFFER
 }
 
-zle -N search
-bindkey '^[s' search
+zle -N shell_search
+bindkey '^[s' shell_search
 
 #
 # Alias
@@ -222,6 +222,9 @@ alias termil='terminator -l large'
 
 alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
+
+alias showtime='date & time'
+alias sht='date & time'
 
 alias di='dicto'
 alias de='dicto -e'
