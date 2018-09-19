@@ -102,22 +102,55 @@ prepare_path
 FLG_M=false
 FLG_R=false
 FLG_C=false
+FLG_V=false
+FLG_H=false
 
 usage_exit() {
   echo "Usage: $0 [-m] [-r] [-c]" 1>&2
   exit 1
 }
 
+function yes_or_no(){
+  PS3="Answer? "
+  while true;do
+    echo $(colored $cyan "$1")
+    select answer in yes no;do
+      case $answer in
+        yes)
+          echo -e "tyeped yes.\n"
+          return 0
+          ;;
+        no)
+          echo -e "tyeped no.\n"
+          return 1
+          ;;
+        *)
+          echo -e "cannot understand your answer. plz input '1' or '2'.\n"
+          ;;
+      esac
+    done
+  done
+}
+
+# argments processing
 while getopts mrc OPT
 do
   case $OPT in
     m) FLG_M=true ;;
     r) FLG_R=true ;;
     c) FLG_C=true ;;
+    v) FLG_V=true ;;
+    h) FLG_H=true ;;
 
     :|\?) usage_exit;;
   esac
 done
+
+# ask some questions to the user
+yes_or_no "Do you wanna minimum install?" && FLG_M=true
+yes_or_no "Do you wanna rootless install?" && FLG_R=true
+yes_or_no "Is this a CUI environment?" && FLG_C=true
+yes_or_no "Is the host VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
 echo -n "* OSNAME: "
 echo $(colored $yellow "$OSNAME")
@@ -132,6 +165,12 @@ fi
 if $FLG_C; then
   echo -n $(colored $yellow "cui, ")
 fi
+if $FLG_V; then
+  echo -n $(colored $yellow "VM, ")
+fi
+if $FLG_H; then
+  echo -n $(colored $yellow "hyper-v, ")
+fi
 echo " "
 
 if ! $FLG_R; then
@@ -142,8 +181,8 @@ fi
 # Download dotfiles from github.com
 #
 
-if [ ! -e $DOT_PATH ]; then
-    run mkdir -p $DOT_PATH
+if [ ! -e "$DOT_PATH" ]; then
+    run mkdir -p "$DOT_PATH"
 fi
 
 git clone ${DOT_REPO} ${DOT_PATH}
@@ -232,9 +271,9 @@ fi
 #
 
 # preapre bin, src directories
-run mkdir -p $HOME/dev
-run mkdir -p $HOME/dev/bin
-run mkdir -p $HOME/dev/src
+run mkdir -p "$HOME"/dev
+run mkdir -p "$HOME"/dev/bin
+run mkdir -p "$HOME"/dev/src
 
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
   echo "$password" | sudo -S echo ""
@@ -344,41 +383,41 @@ fi
 #
 
 # zsh setup
-if [ ! -e $HOME/.cache/shell/enhancd ]; then
-    run mkdir -p $HOME/.config/shell/enhancd
+if [ ! -e "$HOME/.cache/shell/enhancd" ]; then
+    run mkdir -p "$HOME/.config/shell/enhancd"
 fi
 
 # neovim setup
-if [ ! -e $HOME/.config/nvim ]; then
-    run mkdir -p $HOME/.config/nvim
+if [ ! -e "$HOME/.config/nvim" ]; then
+    run mkdir -p "$HOME/.config/nvim"
 fi
 
 # setup other files
-if [ ! -e $CONF_PATH/fontconfig ]; then
-    run mkdir $CONF_PATH/fontconfig
+if [ ! -e "$CONF_PATH/fontconfig" ]; then
+    run mkdir "$CONF_PATH/fontconfig"
 fi
-if [ ! -e $CONF_PATH/peco ]; then
-    run mkdir $CONF_PATH/peco
+if [ ! -e "$CONF_PATH/peco" ]; then
+    run mkdir "$CONF_PATH/peco"
 fi
-if [ ! -e $CONF_PATH/terminator ]; then
-    run mkdir $CONF_PATH/terminator
+if [ ! -e "$CONF_PATH/terminator" ]; then
+    run mkdir "$CONF_PATH/terminator"
 fi
 
 # set symbolic link
-run ln -snf $DOT_PATH/.zshenv $HOME/.zshenv
-run ln -snf $DOT_PATH/.zshrc $HOME/.zshrc
-run ln -snf $DOT_PATH/.zsh_logout $HOME/.zsh_logout
-run ln -snf $DOT_PATH/tmux.conf $HOME/.tmux.conf
-run ln -snf $DOT_PATH/tmux.memory $HOME/dev/bin/tmux.memory
-run ln -snf $DOT_PATH/tmux.loadaverage $HOME/dev/bin/tmux.loadaverage
-run ln -snf $DOT_PATH/.gitconfig $HOME/.gitconfig
-run ln -snf $DOT_PATH/fonts.conf $CONF_PATH/fontconfig/fonts.conf
-run ln -snf $DOT_PATH/nvim.init.vim $CONF_PATH/nvim/init.vim
-run ln -snf $DOT_PATH/nvim.dein.toml $CONF_PATH/nvim/dein.toml
-run ln -snf $DOT_PATH/nvim.dein_lazy.toml $CONF_PATH/nvim/dein_lazy.toml
-run ln -snf $DOT_PATH/peco.config.json $CONF_PATH/peco/config.json
-run ln -snf $DOT_PATH/.editorconfig $HOME/.editorconfig
-run ln -snf $DOT_PATH/terminator_config $CONF_PATH/terminator/config
+run ln -snf "$DOT_PATH/.zshenv" "$HOME/.zshenv"
+run ln -snf "$DOT_PATH/.zshrc" "$HOME/.zshrc"
+run ln -snf "$DOT_PATH/.zsh_logout" "$HOME/.zsh_logout"
+run ln -snf "$DOT_PATH/tmux.conf" "$HOME/.tmux.conf"
+run ln -snf "$DOT_PATH/tmux.memory" "$HOME/dev/bin/tmux.memory"
+run ln -snf "$DOT_PATH/tmux.loadaverage" "$HOME/dev/bin/tmux.loadaverage"
+run ln -snf "$DOT_PATH/.gitconfig" "$HOME/.gitconfig"
+run ln -snf "$DOT_PATH/fonts.conf" "$CONF_PATH/fontconfig/fonts.conf"
+run ln -snf "$DOT_PATH/nvim.init.vim" "$CONF_PATH/nvim/init.vim"
+run ln -snf "$DOT_PATH/nvim.dein.toml" "$CONF_PATH/nvim/dein.toml"
+run ln -snf "$DOT_PATH/nvim.dein_lazy.toml" "$CONF_PATH/nvim/dein_lazy.toml"
+run ln -snf "$DOT_PATH/peco.config.json" "$CONF_PATH/peco/config.json"
+run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
+run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
 
 
 #
@@ -387,10 +426,12 @@ run ln -snf $DOT_PATH/terminator_config $CONF_PATH/terminator/config
 
 if ! $FLG_R && ! $FLG_M; then
   echo "$password" | sudo -S echo ""
-  # install apps for building c++ code
+  # install apps for building c++ code + shellcheck
   if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
     sudo apt install -y gdb valgrind strace ltrace \
-    make cmake scons libhdf5-dev
+    make cmake scons libhdf5-dev shellcheck
+    # for matplotlib build
+    sudo apt install -y libfreetype6-dev pkg-config libpng-dev
   fi
 
   # pip default package update & package install
@@ -473,8 +514,8 @@ fi
 # Themes & Icons & Fonts install
 #
 
-if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
-  run mkdir -p $HOME/.themes
+if ! $FLG_R && ! $FLG_C; then
+  run mkdir -p "$HOME/.themes"
   echo "$password" | sudo -S echo ""
   # Paper-Icon & Adapta-Gtk-Theme
   sudo apt-get install -y paper-icon-theme \
@@ -485,15 +526,17 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   git clone https://github.com/EliverLara/Ant-Dracula.git ~/.themes/Ant-Dracula
 
   # install fonts
-  sudo apt-get install -y fonts-ipafont \
-    fonts-ipafont-gothic \
-    fonts-ipafont-mincho \
-    fonts-noto-cjk \
-    fonts-noto-color-emoji \
-    fonts-roboto \
-    fonts-takao \
-    fonts-takao-gothic \
-    fonts-takao-mincho
+  if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+    sudo apt-get install -y fonts-ipafont \
+      fonts-ipafont-gothic \
+      fonts-ipafont-mincho \
+      fonts-noto-cjk \
+      fonts-noto-color-emoji \
+      fonts-roboto \
+      fonts-takao \
+      fonts-takao-gothic \
+      fonts-takao-mincho
+  fi
 
   # set customized noto sans cjk jp (Noto Sans CJK JP Kai)
   wget https://ja.osdn.net/downloads/users/17/17406/NSCJKaR.tar.xz
@@ -510,13 +553,34 @@ if ! $FLG_R && ! $FLG_M && ! $FLG_C; then
   fc-cache -fv
 
   # set gtk3.0 theme & icon
-  if [ ! -e $HOME/.config/gtk-3.0 ]; then
-      run mkdir $HOME/.config/gtk-3.0
+  if [ ! -e "$HOME/.config/gtk-3.0" ]; then
+      run mkdir "$HOME/.config/gtk-3.0"
   fi
   printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Paper\n" \
-  > $HOME/.config/gtk-3.0/settings.ini
+  > "$HOME/.config/gtk-3.0/settings.ini"
 fi
 
+#
+# VM setup
+#
+
+if $FLG_V; then
+  if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+    sudo apt install -y linux-cloud-tools-common \
+      linux-cloud-tools-generic \
+      linux-cloud-tools-virtual \
+      linux-cloud-tools-lowlatency
+  fi
+  if $FLG_H; then
+      sudo apt install -y xrdp
+      git clone https://github.com/Microsoft/linux-vm-tools.git ~/linux-vm-tools
+      cd ~/linux-vm-tools/ubuntu/18.04/
+      sudo chmod +x install.sh
+      sudo ./install.sh
+      cd "$WORKING_DIR"
+      # rm -rf ~/linux-vm-tools
+  fi
+fi
 
 #
 # Manual Processing for complete setup
@@ -547,3 +611,16 @@ There are some steps to finish setup.
 
 * End. Please reboot
 EOF
+
+if $FLG_H; then
+    cat <<-EOF
+
+reboot, then if you want to connect this VM with EnhancedSession on Hyper-V, don't remenber config below.
+PS C:\> Set-VM -VMName <VMname> -EnhancedSessionTransportType HvSocket
+PS C:\> (Get-VM -VMName <VMname>).EnhancedSessionTransportType
+
+And, exchange xrdp keyboard layout (jp & us), see /etc/xrdp/xrdp_keyboard.ini to detect ini file name.
+EOF
+fi
+
+exit 0
