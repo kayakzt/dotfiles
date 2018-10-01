@@ -54,6 +54,10 @@ endif
 " Rename function
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
 
+" My autocmd
+" formatting with yapf on save in *.py
+autocmd BufWritePre *.py 0,$!yapf
+
 " Open junk file."{{{
 command! -nargs=0 JunkFile call s:open_junk_file()
 function! s:open_junk_file()

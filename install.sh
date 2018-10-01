@@ -292,7 +292,8 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     silversearcher-ag \
     jq \
     exuberant-ctags \
-    python-dev python-pip python3-dev python3-pip neovim \
+    python-dev python-pip python3-dev python3-pip \
+    neovim \
     gufw
 
 elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
@@ -441,7 +442,13 @@ if ! $FLG_R && ! $FLG_M; then
   pip install --user flake8 \
     wheel \
     jedi
-  pip3 install --user flake8 \
+  pip3 install --user wheel \
+    flake8 \
+    pep8 \
+    autopep8 \
+    yapf \
+    mypy \
+    pylint \
     wheel \
     jedi \
     numpy \

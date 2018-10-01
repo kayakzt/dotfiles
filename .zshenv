@@ -4,9 +4,12 @@
 # export http_proxy=
 # export https_proxy=$http_proxy
 # export HTTP_PROXY=$http_proxy
-# exrpot HTTPS_PEOXY=$http_proxy
+# export HTTPS_PEOXY=$http_proxy
 # export no_proxy=
 # export NO_PROXY=$no_proxy
+
+# basic path
+export path=(~/.local/bin(N-/) $path)
 
 # goenv & go
 export GOENV_ROOT=$HOME/.goenv
