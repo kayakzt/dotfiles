@@ -9,6 +9,7 @@
 # export NO_PROXY=$no_proxy
 
 # basic path
+export path=(/opt/local/bin(N-/) $path)
 export path=(~/.local/bin(N-/) $path)
 
 # goenv & go
