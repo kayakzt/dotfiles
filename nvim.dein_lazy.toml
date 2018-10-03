@@ -292,6 +292,14 @@ autocmd MyAutoCmd InsertLeave * :PreciousReset
 
 # Other
 
+[[plugins]] # a plugin for using web-api in vim
+repo = 'mattn/webapi-vim'
+
+[[plugins]] # for using gist services
+repo = 'mattn/gist-vim'
+depends = ['webapi-vim']
+on_cmd = 'Gist'
+
 [[plugins]] # for visualize indent
 repo = 'nathanaelkane/vim-indent-guides'
 on_event = 'InsertEnter'
@@ -390,6 +398,7 @@ on_cmd = 'Obsession'
 [[plugins]] # call :Template to get template each file types
 repo = 'mattn/sonictemplate-vim'
 on_cmd = 'Template'
+
 
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
