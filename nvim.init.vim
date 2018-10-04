@@ -59,6 +59,7 @@ command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
 autocmd BufWritePre *.py 0,$!yapf
 " close help window with 'q'
 autocmd FileType help nnoremap <buffer> q <C-w>c
+autocmd FileType godoc nnoremap <buffer> q <C-w>c
 
 " Open junk file."{{{
 command! -nargs=0 JunkFile call s:open_junk_file()
