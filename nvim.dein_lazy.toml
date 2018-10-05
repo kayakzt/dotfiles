@@ -130,10 +130,16 @@ build = 'make'
 depends = ['deoplete.nvim']
 on_ft = 'go'
 hook_add = '''
-let g:deoplete#sources#go#align_class = 1
+" let g:deoplete#sources#go#align_class = 1
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-let g:deoplete#sources#go#package_dot = 1
+let g:deoplete#sources#go#package_dot = 0
+let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#source_importer = 1
+let g:deoplete#sources#go#builtin_objects = 1
 let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
+" let g:deoplete#sources#go#cgo = 1
+" let g:deoplete#sources#go#cgo#std = "c11"
+let g:deoplete#sources#go#auto_goos = 1
 '''
 
 [[plugins]] # rust standard library completion
