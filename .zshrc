@@ -163,7 +163,7 @@ function github-star-import() {
 
 # This fuction depends on ripgrep
 function shell_search() {
-  local filepath="$(rg -p --hidden --files --color never -g "!.git/" | peco --prompt '[search]')"
+  local filepath="$(rg -p --smart-case --hidden --files --color never -g "!.git/" | peco --prompt '[search]')"
   [ -z "$filepath" ] && return
   if [ -n "$LBUFFER" ]; then
     BUFFER="$LBUFFER$filepath"
