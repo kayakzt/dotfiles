@@ -15,10 +15,26 @@ options     head
       }
     }
 
-snippet funcTemplate
-abbr function template snippet
+snippet func
+abbr function template
 alias fn
 options head
     func ${1}(${2}) {
         ${3}
+    }
+
+snippet iferr
+abbr if error basic template
+alias ife
+options head
+    if err != nil {
+        ${1}
+    }
+
+snippet ifok
+abbr if ok template
+alias ifo
+options head
+    if !ok {
+        ${1}
     }

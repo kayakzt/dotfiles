@@ -111,7 +111,7 @@ endif
 let g:neosnippet#snippets_directory = '~/.config/dotfiles/snippets'
 '''
 on_i  = 1
-on_ft = ['snippet']
+# on_ft = ['snippet']
 depends = ['neosnippet-snippets']
 
 [[plugins]] # python completion
