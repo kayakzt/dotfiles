@@ -134,7 +134,7 @@ hook_add = '''
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 let g:deoplete#sources#go#package_dot = 0
 let g:deoplete#sources#go#pointer = 1
-let g:deoplete#sources#go#source_importer = 0
+let g:deoplete#sources#go#source_importer = 1
 let g:deoplete#sources#go#builtin_objects = 1
 let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
 " let g:deoplete#sources#go#cgo = 1
@@ -230,6 +230,7 @@ let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+let g:go_term_mode = 'split'
 let g:go_version_warning = 0
 
 let g:go_auto_type_info = 0
@@ -257,6 +258,8 @@ autocmd FileType go nmap <Leader>t  <Plug>(go-test)
 autocmd FileType go nmap <Leader>b :<C-u>call <SID>build_go_files()<CR>
 autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 autocmd FileType go nmap <Leader>i <Plug>(go-info)
+autocmd FileType go nmap <leader>s <Plug>(go-def-split)
+autocmd FileType go nmap <leader>v <Plug>(go-def-vertical)
 autocmd Filetype go command! -bang GoA call go#alternate#Switch(<bang>0, 'edit')
 autocmd Filetype go command! -bang GoAV call go#alternate#Switch(<bang>0, 'vsplit')
 autocmd Filetype go command! -bang GoAS call go#alternate#Switch(<bang>0, 'split')
