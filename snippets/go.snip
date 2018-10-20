@@ -1,5 +1,25 @@
+snippet func
+alias fn
+options head
+    func ${1}(${2}) ${3:#:() }{
+        ${4}
+    }
+
+snippet iferr
+alias ife
+options head
+    if err != nil {
+        ${1}
+    }
+
+snippet ifok
+alias ifo
+options head
+    if !ok {
+        ${1}
+    }
+
 snippet     testTable
-abbr        table test template
 options     head
     func Test${1}(t *testing.T) {
       cases := []struct {
@@ -15,26 +35,16 @@ options     head
       }
     }
 
-snippet func
-abbr function template
-alias fn
+snippet benchmark
+alias bench,ben
 options head
-    func ${1}(${2}) {
-        ${3}
-    }
-
-snippet iferr
-abbr if error basic template
-alias ife
-options head
-    if err != nil {
-        ${1}
-    }
-
-snippet ifok
-abbr if ok template
-alias ifo
-options head
-    if !ok {
-        ${1}
+    func Benchmark${1}(b *testing.B) {
+        b.Run("${2}", func(b *testing.B) {
+            b.ReportAllocs()
+            b.ResetTimer()
+            for i := 0; i < b.N; i++ {
+                ${3:#:// do something...}
+            }
+            b.StopTimer()
+        })
     }

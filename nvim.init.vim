@@ -106,6 +106,7 @@ set autoread
 set nobackup
 set noswapfile
 set completeopt=menuone
+set splitright
 
 " Search / Replace
 set hlsearch
