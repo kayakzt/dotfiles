@@ -246,8 +246,8 @@ nmap k <Plug>(accelerated_jk_gk)
 
 [[plugins]] # file manager for vim
 repo = 'cocopon/vaffle.vim'
-hook_add = '''
-'''
+# hook_add = '''
+# '''
 
 # [[plugins]] # showing file tree
 # repo = 'scrooloose/nerdtree'
