@@ -194,6 +194,7 @@ alias cdh='cd $HOME'
 
 alias -g @g='| grep'
 alias -g @l='| less -R'
+alias -g @jl='| jq "." -C | less -R'
 alias -g @h='| head'
 alias -g @t='| tail'
 alias -g @s='| sed'
