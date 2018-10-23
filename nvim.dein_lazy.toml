@@ -352,11 +352,11 @@ hook_add = '''
     if !&l:modifiable
       silent! nunmap <buffer> gc
       silent! xunmap <buffer> gc
-      silent! nunmap <buffer> gcc
-      silent! xunmap <buffer> gcc
+      " silent! nunmap <buffer> gcc
+      " silent! xunmap <buffer> gcc
     else
-      nmap <buffer> gcc <Plug>(caw:prefix)
-      xmap <buffer> gcc <Plug>(caw:prefix)
+      " nmap <buffer> gcc <Plug>(caw:prefix)
+      " xmap <buffer> gcc <Plug>(caw:prefix)
       nmap <buffer> gc <Plug>(caw:hatpos:toggle)
       xmap <buffer> gc <Plug>(caw:hatpos:toggle)
     endif
