@@ -370,12 +370,31 @@ install_zsh() {
   rm -rf zsh-5.5.1
 }
 
+# ripgrep install
+install_rg() {
+    # from https://gist.github.com/niftylettuce/a9f0a293289eb7274516bf2cb0455796
+    REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
+    RG_LATEST=$(curl -sSL "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
+    RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-x86_64-unknown-linux-musl.tar.gz"
+
+    TMPDIR=$(mktemp -d)
+    cd $TMPDIR
+    wget -O - ${REPO}${RELEASE} | tar zxf - --strip-component=1
+    sudo mv rg /usr/local/bin/
+    sudo mv doc/rg.1 /usr/local/share/man/man1/
+    sudo mandb
+    # sudo mv complete/rg.bash-completion /usr/share/bash-completion/completions/rg
+    cd $WORKING_DIR
+    rm -rf $TMPDIR
+}
+
 if ! $FLG_R; then
   if ! $FLG_C;  then
     install_tmux
   fi
 else
   install_zsh
+  install_rg
 fi
 
 
@@ -492,7 +511,7 @@ if ! $FLG_R && ! $FLG_M; then
   rustup component add rust-src
   cargo install cargo-update
   cargo install cargo-script
-  cargo install ripgrep
+  # cargo install ripgrep
 
   # nvm setup
   # run curl -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash
