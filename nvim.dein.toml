@@ -231,9 +231,8 @@ repo = 'pseewald/vim-anyfold'
 hook_add = '''
 filetype plugin indent on
 syntax on
-let anyfold_activate=1
+let g:anyfold_activate=1
 set foldlevel=20
-hi Folded term=NONE cterm=NONE
 '''
 
 [[plugins]] # accelerate up-down moving

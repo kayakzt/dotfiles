@@ -56,7 +56,8 @@ command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
 
 " My autocmd
 " formatting with yapf on save in *.py
-autocmd BufWritePre *.py 0,$!yapf
+" autocmd BufWritePre *.py 0,$!yapf
+autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr><C-o>
 " close help window with 'q'
 autocmd FileType help nnoremap <buffer> q <C-w>c
 autocmd FileType godoc nnoremap <buffer> q <C-w>c
@@ -89,6 +90,7 @@ set number
 set cursorline
 "set cursorcolumn
 set showmatch
+set virtualedit=block
 set list
 set listchars=tab:¦_,trail:-,nbsp:%,eol:↲,extends:❯,precedes:❮
 " set showbreak=↪
