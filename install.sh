@@ -104,9 +104,10 @@ FLG_R=false
 FLG_C=false
 FLG_V=false
 FLG_H=false
+INSTALL_RUST=false
 
 usage_exit() {
-  echo "Usage: $0 [-m] [-r] [-c]" 1>&2
+  echo "Usage: $0 [-m] [-r] [-c] [-v] [-h]" 1>&2
   exit 1
 }
 
@@ -150,6 +151,7 @@ done
 yes_or_no "Do you wanna minimum install?" && FLG_M=true
 yes_or_no "Do you wanna rootless install?" && FLG_R=true
 yes_or_no "Is this a CUI environment?" && FLG_C=true
+yes_or_no "Do you want to install rust language?" && INSTALL_RUST=true
 yes_or_no "Is the host VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
 echo -n "* OSNAME: "
@@ -338,8 +340,9 @@ install_tmux() {
   fi
 
   cd ${WORKING_DIR}/tmux
+  LATEST_TAG=$(curl -sSL "https://api.github.com/repos/tmux/tmux/releases/latest" | jq --raw-output .tag_name)
 
-  git checkout $(git tag | sort -V | tail -n 1)
+  git checkout "$LATEST_TAG"
   sh autogen.sh
   ./configure
   make
@@ -497,21 +500,23 @@ if ! $FLG_R && ! $FLG_M; then
   go get github.com/mdempsky/gocode # for deoplete-go
   curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
-  # rustup (stable channel) setup
-  echo "$password" | sudo -S echo ""
-  curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain nightly
-  # ru ncurl -L https://static.rust-lang.org/rustup.sh | sudo sh
-  export PATH=$PATH:$HOME/.cargo/bin
-  cargo install racer # racer must be installed under the nightly channel
-  # cargo install rustfmt
+  if $INSTALL_RUST; then
+    # rustup (stable channel) setup
+    echo "$password" | sudo -S echo ""
+    curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain nightly
+    # ru ncurl -L https://static.rust-lang.org/rustup.sh | sudo sh
+    export PATH=$PATH:$HOME/.cargo/bin
+    cargo install racer # racer must be installed under the nightly channel
+    # cargo install rustfmt
 
-  # install rust stable channnel & default use
-  rustup toolchain install stable
-  rustup default stable
-  rustup component add rust-src
-  cargo install cargo-update
-  cargo install cargo-script
-  # cargo install ripgrep
+    # install rust stable channnel & default use
+    rustup toolchain install stable
+    rustup default stable
+    rustup component add rust-src
+    cargo install cargo-update
+    cargo install cargo-script
+    # cargo install ripgrep
+  fi
 
   # nvm setup
   # run curl -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash
