@@ -52,7 +52,7 @@ call denite#custom#option('default', {
       \ })
 
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-      \ [ '.git/', '.ropeproject/', '__pycache__/', 'bin/',
+      \ [ '.git/', 'build/', '*.make', '*.o', '.ropeproject/', '__pycache__/', 'bin/',
       \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
 '''
 hook_add = '''
