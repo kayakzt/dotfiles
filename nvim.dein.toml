@@ -231,7 +231,7 @@ repo = 'pseewald/vim-anyfold'
 hook_add = '''
 filetype plugin indent on
 syntax on
-let g:anyfold_activate=1
+autocmd Filetype * AnyFoldActivate
 set foldlevel=20
 '''
 
