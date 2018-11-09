@@ -19,6 +19,21 @@ options head
         ${1}
     }
 
+snippet forcstyle
+alias forc
+options head
+    for i := 0; i < ${1}; i++ {
+        ${2}
+    }
+
+snippet switch
+alias swi
+options head
+    switch ${1} {
+    case ${2}:
+    default:
+    }
+
 snippet     testTable
 options     head
     func Test${1}(t *testing.T) {
