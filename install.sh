@@ -295,6 +295,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     jq \
     exuberant-ctags \
     python-dev python-pip python3-dev python3-pip \
+    direnv \
     neovim \
     gufw
 

@@ -325,6 +325,7 @@ setopt transient_rprompt
 setopt auto_cd
 setopt auto_pushd
 setopt pushd_ignore_dups
+eval "$(direnv hook zsh)"
 
 # X forwarding Settings
 if [ -n "$SSH_CONNECTION" ] ; then
