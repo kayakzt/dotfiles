@@ -461,6 +461,7 @@ if ! $FLG_R && ! $FLG_M; then
   # pip default package update & package install
   pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs pip install -U --user
   pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs pip3 install -U --user
+  pip3 install -U setuptools
 
   pip install --user flake8 \
     wheel \
@@ -480,6 +481,7 @@ if ! $FLG_R && ! $FLG_M; then
     matplotlib \
     jupyter \
     seaborn \
+    'python-language-server[all]' \
     neovim
 
   # pyenv setup

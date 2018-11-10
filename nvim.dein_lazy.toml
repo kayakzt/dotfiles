@@ -114,15 +114,24 @@ on_i  = 1
 # on_ft = ['snippet']
 depends = ['neosnippet-snippets']
 
+# [[plugins]] # provides LSP completion source for deoplete
+# repo = 'Shougo/deoplete-lsp'
+# on_i = 1
+# depends = ['deoplete.nvim']
+# hook_add = '''
+# call lsp#server#add('python', 'pyls')
+# '''
+
 [[plugins]] # python completion
 repo = 'zchee/deoplete-jedi'
 on_i  = 1
+depends = ['deoplete.nvim']
 on_ft = 'python'
 
-[[plugins]]
-repo = 'shawncplus/phpcomplete.vim'
-on_i  = 1
-on_ft = 'php'
+# [[plugins]]
+# repo = 'shawncplus/phpcomplete.vim'
+# on_i  = 1
+# on_ft = 'php'
 
 [[plugins]] # golang completion
 repo = 'zchee/deoplete-go'
