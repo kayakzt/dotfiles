@@ -79,6 +79,9 @@ endfunction"}}}
 " 縦分割版gf <C-w>+fで横分割, <C-w>+gfで新しいタブに開く
 nnoremap gs :vertical wincmd f<CR>
 
+" set python path
+let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
+
 
 " vim settings
 
@@ -107,8 +110,9 @@ set hidden
 set autoread
 set nobackup
 set noswapfile
-set completeopt=menuone
 set splitright
+set splitbelow
+set completeopt=menuone,preview
 
 " Search / Replace
 set hlsearch

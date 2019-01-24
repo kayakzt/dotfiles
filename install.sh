@@ -280,37 +280,50 @@ run mkdir -p "$HOME"/dev/src
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
     sudo apt install -y build-essential \
-        libssl-dev libreadline-dev zlib1g-dev \
+        libssl-dev \
+        libreadline-dev \
         libappindicator1 \
+        libffi-dev \
+        libbz2-dev \
+        libsqlite3-dev
+        zlib1g-dev \
         wget \
         git \
         zsh \
         xclip \
         gawk \
         terminator \
-        python3-venv \
         ansible \
         openssh-server \
         silversearcher-ag \
         jq \
         exuberant-ctags \
-        python-dev python-pip python3-dev python3-pip \
         direnv \
         neovim \
         gufw
+        # python3-venv \
+        # python-dev python-pip python3-dev python3-pip \
 
 elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
-    yum install -y wget \
+    sudo yum install -y wget \
         git \
         zsh \
         xclip \
         gawk \
         terminator \
-        python3-dev \
         ansible \
         openssh-server \
         silversearcher-ag \
         jq
+        # python3-dev \
+
+    sudo yum install -y bzip2 \
+        donebzip2-devel \
+        libbz2-dev \
+        openssl \
+        openssl-devel \
+        readline \
+        readline-devel
 fi
 
 # peco install ('go get' is not recommended)
@@ -458,15 +471,20 @@ if ! $FLG_R && ! $FLG_M; then
         sudo apt install -y libfreetype6-dev pkg-config libpng-dev
     fi
 
-    # pip default package update & package install
-    pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs pip install -U --user
-    pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs pip3 install -U --user
-    pip3 install -U setuptools
+    # python
+    # install pyenv
+    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    pyenv install "$(pyenv install --list | grep -v - | grep -v b | tail -1)"
+    pyenv global "$(pyenv install --list | grep -v - | grep -v b | tail -1)"
 
-    pip install --user flake8 \
-        wheel \
-        jedi
-    pip3 install --user wheel \
+    # install poetry
+    curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+
+    # install python modules
+    pip install wheel \
         flake8 \
         pep8 \
         autopep8 \
@@ -482,11 +500,7 @@ if ! $FLG_R && ! $FLG_M; then
         jupyter \
         seaborn \
         'python-language-server[all]' \
-        neovim
-
-    # pyenv setup
-    # git clone https://github.com/yyuu/pyenv.git ~/.pyenv
-    # apt install -y python-virtualenv
+        pynvim
 
     # goenv & setup
     echo "$password" | sudo -S echo ""
@@ -496,8 +510,8 @@ if ! $FLG_R && ! $FLG_M; then
     export PATH=$PATH:$GOENV_ROOT/bin
     eval "$(goenv init -)"
     GO_VERSION=$(goenv install -l | tail -n 1 | tr -d ' ')
-    goenv install $GO_VERSION
-    goenv global $GO_VERSION
+    goenv install "$GO_VERSION"
+    goenv global "$GO_VERSION"
     go get github.com/motemen/ghq
     go get github.com/github/hub
     go get github.com/mdempsky/gocode # for deoplete-go
