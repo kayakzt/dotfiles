@@ -111,7 +111,8 @@ set nobackup
 set noswapfile
 set splitright
 set splitbelow
-set completeopt=menuone,preview
+set completeopt=menuone
+autocmd FileType python set completeopt=menuone,preview
 
 " Search / Replace
 set hlsearch
