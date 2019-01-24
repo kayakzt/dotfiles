@@ -55,12 +55,12 @@ endif
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
 
 " My autocmd
-" formatting with yapf on save in *.py
-" autocmd BufWritePre *.py 0,$!yapf
-autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr><C-o>
 " close help window with 'q'
 autocmd FileType help nnoremap <buffer> q <C-w>c
 autocmd FileType godoc nnoremap <buffer> q <C-w>c
+
+" show preview window during the completion mode
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " Open junk file."{{{
 command! -nargs=0 JunkFile call s:open_junk_file()
@@ -79,9 +79,8 @@ endfunction"}}}
 " 縦分割版gf <C-w>+fで横分割, <C-w>+gfで新しいタブに開く
 nnoremap gs :vertical wincmd f<CR>
 
-" set python path
+" set python path for neovim
 let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
-
 
 " vim settings
 
