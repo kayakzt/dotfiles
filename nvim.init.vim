@@ -2,7 +2,7 @@
 
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 if (has("termguicolors"))
-  set termguicolors
+    set termguicolors
 endif
 
 " XDG Set
@@ -13,14 +13,14 @@ let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CON
 " Initialization
 
 if !&compatible
-  set nocompatible
+    set nocompatible
 endif
 
 let g:python_host_skip_check = 1
 
-" reset augroup
+" reset my augroup
 augroup MyAutoCmd
-  autocmd!
+    autocmd!
 augroup END
 
 " dein settings {{{
@@ -30,23 +30,23 @@ let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if !isdirectory(s:dein_repo_dir)
-  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
+    call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
 endif
 let &runtimepath = s:dein_repo_dir .",". &runtimepath
 " プラグイン読み込み＆キャッシュ作成
 let s:toml = '~/.config/nvim/dein.toml'
 let s:toml_lazy = '~/.config/nvim/dein_lazy.toml'
 if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
-  call dein#load_toml(s:toml,{'lazy' : 0})
-  call dein#load_toml(s:toml_lazy,{'lazy' : 1})
-  call dein#end()
-  call dein#save_state()
+    call dein#begin(s:dein_dir)
+    call dein#load_toml(s:toml,{'lazy' : 0})
+    call dein#load_toml(s:toml_lazy,{'lazy' : 1})
+    call dein#end()
+    call dein#save_state()
 endif
 
 " 不足プラグインの自動インストール
 if has('vim_starting') && dein#check_install()
-  call dein#install()
+    call dein#install()
 endif
 
 " }}}
@@ -65,15 +65,15 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 " Open junk file."{{{
 command! -nargs=0 JunkFile call s:open_junk_file()
 function! s:open_junk_file()
-  let l:junk_dir = $HOME . '/.junk'. strftime('/%Y/%m')
-  if !isdirectory(l:junk_dir)
-    call mkdir(l:junk_dir, 'p')
-  endif
+    let l:junk_dir = $HOME . '/.junk'. strftime('/%Y/%m')
+    if !isdirectory(l:junk_dir)
+        call mkdir(l:junk_dir, 'p')
+    endif
 
-  let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
-  if l:filename != ''
-    execute 'edit ' . l:filename
-  endif
+    let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+    if l:filename != ''
+        execute 'edit ' . l:filename
+    endif
 endfunction"}}}
 
 " 縦分割版gf <C-w>+fで横分割, <C-w>+gfで新しいタブに開く
@@ -182,3 +182,9 @@ inoremap <silent> っｊ <ESC>
 " インデント後にビジュアルモードが解除されないようにする
 vnoremap < <gv
 vnoremap > >gv
+
+" set my augroup
+augroup MyAutoCmd
+    autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
+augroup END
+
