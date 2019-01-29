@@ -550,13 +550,13 @@ if ! $FLG_R && ! $FLG_M; then
     # nvm use --lts
 
     # rbenv setup
-    git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
-    git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
-    export PATH=$PATH:$HOME/.rbenv/bin
-    eval "$(rbenv init -)"
-    RUBY_VERSION=$(rbenv install -l | grep -v -e ruby -e - | tail -n 1 | tr -d ' ')
-    rbenv install $RUBY_VERSION
-    rbenv global $RUBY_VERSION
+    # git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
+    # git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
+    # export PATH=$PATH:$HOME/.rbenv/bin
+    # eval "$(rbenv init -)"
+    # RUBY_VERSION=$(rbenv install -l | grep -v -e ruby -e - | tail -n 1 | tr -d ' ')
+    # rbenv install $RUBY_VERSION
+    # rbenv global $RUBY_VERSION
 fi
 
 
@@ -589,13 +589,13 @@ if ! $FLG_R && ! $FLG_C; then
     fi
 
     # set customized noto sans cjk jp (Noto Sans CJK JP Kai)
-    wget https://ja.osdn.net/downloads/users/17/17406/NSCJKaR.tar.xz
-    tar xavf NSCJKaR.tar.xz && rm NSCJKaR.tar.xz
+    # wget https://ja.osdn.net/downloads/users/17/17406/NSCJKaR.tar.xz
+    # tar xavf NSCJKaR.tar.xz && rm NSCJKaR.tar.xz
     # wget https://ja.osdn.net/downloads/users/10/10745/fonts.conf && \
     run mkdir -p ~/.local/share/fonts/
     # run mkdir -p ~/.config/fontconfig/ && \
     # run mv fonts.conf ~/.config/fontconfig/
-    run mv NSCJKaR/ ~/.local/share/fonts/
+    # run mv NSCJKaR/ ~/.local/share/fonts/
 
     # set Ricty Diminished for PowerLine
     git clone https://github.com/mzyy94/RictyDiminished-for-Powerline.git
