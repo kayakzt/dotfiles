@@ -523,13 +523,14 @@ if ! $FLG_R && ! $FLG_M; then
         curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain nightly
         # ru ncurl -L https://static.rust-lang.org/rustup.sh | sudo sh
         export PATH=$PATH:$HOME/.cargo/bin
-        cargo install racer # racer must be installed under the nightly channel
-        # cargo install rustfmt
+        cargo install racer # racer must be installed under the nightly channel from 2.1
 
         # install rust stable channnel & default use
         rustup toolchain install stable
         rustup default stable
+        rustup component add rustfmt
         rustup component add rust-src
+        rustup component add rls rust-analysis rust-src # install RLS
         cargo install cargo-update
         cargo install cargo-script
         # cargo install ripgrep
