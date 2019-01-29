@@ -285,7 +285,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         libappindicator1 \
         libffi-dev \
         libbz2-dev \
-        libsqlite3-dev
+        libsqlite3-dev \
         zlib1g-dev \
         wget \
         git \
