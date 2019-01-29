@@ -509,7 +509,7 @@ if ! $FLG_R && ! $FLG_M; then
     export GOPATH=$HOME/dev
     export PATH=$PATH:$GOENV_ROOT/bin
     eval "$(goenv init -)"
-    GO_VERSION=$(goenv install -l | tail -n 1 | tr -d ' ')
+    GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
     goenv install "$GO_VERSION"
     goenv global "$GO_VERSION"
     go get github.com/motemen/ghq
