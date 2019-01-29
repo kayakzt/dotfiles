@@ -477,8 +477,8 @@ if ! $FLG_R && ! $FLG_M; then
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init -)"
-    pyenv install "$(pyenv install --list | grep -v - | grep -v b | tail -1)"
-    pyenv global "$(pyenv install --list | grep -v - | grep -v b | tail -1)"
+    pyenv install "$(pyenv install --list | grep -v - | grep -v b | tail -1 | tr -d ' ')"
+    pyenv global "$(pyenv install --list | grep -v - | grep -v b | tail -1 | tr -d ' ')"
 
     # install poetry
     curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
