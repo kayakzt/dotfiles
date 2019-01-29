@@ -529,6 +529,7 @@ if ! $FLG_R && ! $FLG_M; then
         rustup toolchain install stable
         rustup default stable
         rustup component add rustfmt
+        rustup component add clippy
         rustup component add rust-src
         rustup component add rls rust-analysis rust-src # install RLS
         cargo install cargo-update
