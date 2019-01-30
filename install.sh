@@ -485,6 +485,7 @@ if ! $FLG_R && ! $FLG_M; then
 
     # install poetry
     curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+    export PATH="$HOME/.poetry/bin:$PATH"
     poetry completions zsh > ~/.zfunc/_poetry
 
     # install python modules
