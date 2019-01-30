@@ -38,18 +38,19 @@ if command -v rustc > /dev/null; then
 fi
 export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
 
-export NVM_DIR=$HOME/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+# export NVM_DIR=$HOME/.nvm
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # This loads nvm
 
-export path=($HOME/.rbenv/bin(N-/) $path)
-if command -v rbenv > /dev/null; then
-    eval "$(rbenv init - --no-rehash)"
-fi
+# export path=($HOME/.rbenv/bin(N-/) $path)
+# if command -v rbenv > /dev/null; then
+#     eval "$(rbenv init - --no-rehash)"
+# fi
 
 export EDITOR=nvim
 export PAGER=less
 
 export path=(/usr/lib/git-core/(N-/) $path)
+fpath=( ~/.zfunc "${fpath[@]}" )
 
 # History Settings
 HISTSIZE=1000

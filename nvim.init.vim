@@ -1,4 +1,4 @@
-" Color Mode Set
+" Set Color Mode
 
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 if (has("termguicolors"))
@@ -6,12 +6,10 @@ if (has("termguicolors"))
 endif
 
 " XDG Set
-
 let g:cache_home = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_HOME
 let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CONFIG_HOME
 
 " Initialization
-
 if !&compatible
     set nocompatible
 endif
@@ -44,7 +42,7 @@ if dein#load_state(s:dein_dir)
     call dein#save_state()
 endif
 
-" 不足プラグインの自動インストール
+" automatic plugin installation
 if has('vim_starting') && dein#check_install()
     call dein#install()
 endif
@@ -53,14 +51,6 @@ endif
 
 " Rename function
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
-
-" My autocmd
-" close help window with 'q'
-autocmd FileType help nnoremap <buffer> q <C-w>c
-autocmd FileType godoc nnoremap <buffer> q <C-w>c
-
-" show preview window during the completion mode
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " Open junk file."{{{
 command! -nargs=0 JunkFile call s:open_junk_file()
@@ -112,7 +102,6 @@ set noswapfile
 set splitright
 set splitbelow
 set completeopt=menuone
-autocmd FileType python set completeopt=menuone,preview
 
 " Search / Replace
 set hlsearch
@@ -183,8 +172,16 @@ inoremap <silent> っｊ <ESC>
 vnoremap < <gv
 vnoremap > >gv
 
-" set my augroup
+" set MyAutoCmd
 augroup MyAutoCmd
-    autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
-augroup END
+    " close help window with 'q'
+    autocmd FileType help nnoremap <buffer> q <C-w>c
+    autocmd FileType godoc nnoremap <buffer> q <C-w>c
 
+    " show preview window during the completion mode
+    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+    " completion settings
+    autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
+
+augroup END

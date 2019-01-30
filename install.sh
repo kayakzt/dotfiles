@@ -439,6 +439,9 @@ fi
 if [ ! -e "$CONF_PATH/terminator" ]; then
         run mkdir "$CONF_PATH/terminator"
 fi
+if [ ! -e "$HOME/.zfunc" ]; then
+        run mkdir "$HOME/.zfunc"
+fi
 
 # set symbolic link
 run ln -snf "$DOT_PATH/.zshenv" "$HOME/.zshenv"
@@ -482,6 +485,7 @@ if ! $FLG_R && ! $FLG_M; then
 
     # install poetry
     curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+    poetry completions zsh > ~/.zfunc/_poetry
 
     # install python modules
     pip install wheel \
@@ -532,6 +536,7 @@ if ! $FLG_R && ! $FLG_M; then
         rustup component add clippy
         rustup component add rust-src
         rustup component add rls rust-analysis rust-src # install RLS
+        # rustup component add rls-preview rust-analysis rust-src
         cargo install cargo-update
         cargo install cargo-script
         # cargo install ripgrep
