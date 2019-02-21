@@ -53,27 +53,27 @@ call denite#custom#option('default', {
 
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
       \ [ '.git/', 'build/', '*.make', '*.o', '.ropeproject/', '__pycache__/', 'bin/',
-      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
+      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/', 'vendor/'])
 '''
 hook_add = '''
 nnoremap [denite] <Nop>
 nmap <Space>u [denite]
-nnoremap <silent> [denite]t :Denite filetype -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]f :Denite file_rec -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]v :Denite file_rec/git -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]l :Denite line -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]g :Denite grep -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]c :Denite change -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]t :Denite filetype -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]f :Denite file_rec -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]v :Denite file_rec/git -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]l :Denite line -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]g :Denite grep -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]c :Denite change -auto-resize -highlight-mode-insert=Search<CR>
 nnoremap <silent> [denite]o :Denite -split=vertical -winwidth=48 outline -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]] :DeniteCursorWord grep -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]b :Denite buffer -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]j :Denite jump -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]h :Denite file_mru -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]y :Denite neoyank -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]e :Denite emoji -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]u :Denite -resume<CR>
-nnoremap <silent> [denite]n :Denite -resume -buffer-name=search-buffer-denite -select=+1 -immediately<CR>
-nnoremap <silent> [denite]p :Denite -resume -buffer-name=search-buffer-denite -select=-1 -immediately<CR>
+nnoremap <silent> [denite]] :DeniteCursorWord grep -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]b :Denite buffer -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]j :Denite jump -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]h :Denite file_mru -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]y :Denite neoyank -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]e :Denite emoji -auto-resize -highlight-mode-insert=Search<CR>
+nnoremap <silent> [denite]u :Denite -auto-resize -resume<CR>
+nnoremap <silent> [denite]n :Denite -resume -immediately -select=+1<CR>
+nnoremap <silent> [denite]p :Denite -resume -immediately -select=-1<CR>
 '''
 
 [[plugins]] # completion provider for nvim
