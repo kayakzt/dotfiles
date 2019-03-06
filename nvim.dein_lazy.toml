@@ -49,6 +49,8 @@ call denite#custom#option('default', {
       \ 'auto_accel': v:true,
       \ 'prompt': '>',
       \ 'source_names': 'short',
+      \ 'auto_resize': v:false,
+      \ 'highlight_mode_insert': 'Search',
       \ })
 
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
@@ -58,20 +60,20 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
 hook_add = '''
 nnoremap [denite] <Nop>
 nmap <Space>u [denite]
-nnoremap <silent> [denite]t :Denite filetype -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]f :Denite file_rec -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]v :Denite file_rec/git -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]l :Denite line -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]g :Denite grep -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]c :Denite change -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]o :Denite -split=vertical -winwidth=48 outline -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]] :DeniteCursorWord grep -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]b :Denite buffer -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]j :Denite jump -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]h :Denite file_mru -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]y :Denite neoyank -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]e :Denite emoji -auto-resize -highlight-mode-insert=Search<CR>
-nnoremap <silent> [denite]u :Denite -auto-resize -resume<CR>
+nnoremap <silent> [denite]t :Denite filetype <CR>
+nnoremap <silent> [denite]f :Denite file_rec<CR>
+nnoremap <silent> [denite]v :Denite file_rec/git <CR>
+nnoremap <silent> [denite]l :Denite line <CR>
+nnoremap <silent> [denite]g :Denite grep <CR>
+nnoremap <silent> [denite]c :Denite change <CR>
+nnoremap <silent> [denite]o :Denite -split=vertical -winwidth=48 -auto-resize outline <CR>
+nnoremap <silent> [denite]] :DeniteCursorWord grep <CR>
+nnoremap <silent> [denite]b :Denite buffer <CR>
+nnoremap <silent> [denite]j :Denite jump <CR>
+nnoremap <silent> [denite]h :Denite file_mru <CR>
+nnoremap <silent> [denite]y :Denite neoyank <CR>
+nnoremap <silent> [denite]e :Denite emoji <CR>
+nnoremap <silent> [denite]u :Denite -resume<CR>
 nnoremap <silent> [denite]n :Denite -resume -immediately -select=+1<CR>
 nnoremap <silent> [denite]p :Denite -resume -immediately -select=-1<CR>
 '''

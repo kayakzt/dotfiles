@@ -59,6 +59,7 @@ HISTFILE=${HOME}/.zsh_history
 setopt histignorealldups
 setopt EXTENDED_HISTORY
 setopt share_history
+setopt hist_ignore_dups
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt hist_verify
