@@ -253,9 +253,80 @@ if executable('rls')
         \ })
 endif
 
-let g:lsp_diagnostics_enabled = 0
 let g:lsp_auto_enable = 1
+let g:lsp_diagnostics_enabled = 0
+let g:lsp_async_completion = 0
+
+" setlocal omnifunc=lsp#complete
+autocmd Filetype * nnoremap <buffer> <Leader>d :<C-u>LspDefinition<CR>
+autocmd Filetype * nnoremap <buffer> <Leader>R :<C-u>LspReferences<CR>
+autocmd Filetype * nnoremap <buffer> <Leader>s :<C-u>LspDocumentSymbol<CR>
+autocmd Filetype * nnoremap <buffer> <Leader>S :<C-u>LspWorksspaceSymbol<CR>
+autocmd Filetype * nnoremap <buffer> <Leader>f :<C-u>LspDocumentFormat<CR>
+autocmd Filetype * vnoremap <buffer> <Leader>F :LspDocumentRangeFormat<CR>
+autocmd Filetype * nnoremap <buffer> <Leader>h :<C-u>LspHover<CR>
+autocmd Filetype * nnoremap <buffer> <Leader>i :<C-u>LspImplementation<CR>
+autocmd Filetype * nnoremap <buffer> <Leader>r :<C-u>LspRename<CR>
 '''
+
+# [[plugins]]
+# repo='prabirshrestha/asyncomplete.vim'
+# hook_add='''
+# let g:asyncomplete_remove_duplicates = 1
+# " let g:asyncomplete_smart_completion = 1
+# let g:asyncomplete_auto_popup = 1
+# set completeopt+=preview
+# autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+#
+# inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+# inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+# inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+# '''
+#
+# [[plugins]]
+# repo = 'prabirshrestha/asyncomplete-buffer.vim'
+# depends = 'prabirshrestha/asyncomplete.vim'
+# hook_source = '''
+#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+#      \ 'name': 'buffer',
+#      \ 'priority': 5,
+#      \ 'whitelist': ['*'],
+#      \ 'completor': function('asyncomplete#sources#buffer#completor'),
+#      \ }))
+# '''
+#
+# [[plugins]]
+# repo = 'prabirshrestha/asyncomplete-file.vim'
+# depends = 'prabirshrestha/asyncomplete.vim'
+# hook_source = '''
+#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+#      \ 'name': 'file',
+#      \ 'priority': 3,
+#      \ 'whitelist': ['*'],
+#      \ 'completor': function('asyncomplete#sources#file#completor'),
+#      \ }))
+# '''
+#
+# [[plugins]]
+# repo='prabirshrestha/asyncomplete-neosnippet.vim'
+# depends = 'prabirshrestha/asyncomplete.vim'
+# hook_source='''
+#   call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+#    \ 'name': 'neosnippet',
+#    \ 'priority': 9,
+#    \ 'whitelist': ['*'],
+#    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+#    \ }))
+# '''
+# hook_add='''
+# imap <C-e>     <Plug>(neosnippet_expand_or_jump)
+# smap <C-e>     <Plug>(neosnippet_expand_or_jump)
+# xmap <C-e>     <Plug>(neosnippet_expand_target)
+# '''
+#
+# [[plugins]]
+# repo='prabirshrestha/asyncomplete-lsp.vim'
+# depends = 'prabirshrestha/asyncomplete.vim'
 
 # Others
 

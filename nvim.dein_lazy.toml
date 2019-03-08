@@ -196,8 +196,9 @@ let g:quickrun_config["python"] = {"command": "python3"}
 au FileType qf nnoremap <silent><buffer>q :quit<CR>
 " \r: save and execute quickrun (excluding go file type)
 let g:quickrun_no_default_key_mappings = 1
-autocmd Filetype * if &ft!="go"|nnoremap <buffer> <Leader>r :cclose<CR>:write<CR>:QuickRun -mode n<CR>|endif
-autocmd Filetype * if &ft!="go"|xnoremap <buffer> <Leader>r :<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>|endif
+autocmd Filetype * nnoremap <buffer> <Leader><Leader> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+" autocmd Filetype * if &ft!="go"|nnoremap <buffer> <Leader><Leader> :cclose<CR>:write<CR>:QuickRun -mode n<CR>|endif
+autocmd Filetype * xnoremap <buffer> <Leader><Leader> :<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>
 " nnoremap \r :cclose<CR>:write<CR>:QuickRun -mode n<CR>
 " xnoremap \r :<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>
 " C-c: stop quickrun
@@ -243,17 +244,17 @@ function! s:build_go_files()
     call go#cmd#Build(0)
   endif
 endfunction
-autocmd FileType go nmap <Leader>r  <Plug>(go-run)
+" autocmd FileType go nmap <Leader>r  <Plug>(go-run)
 autocmd FileType go nmap <Leader>t  <Plug>(go-test)
-autocmd FileType go nmap <Leader>b :<C-u>call <SID>build_go_files()<CR>
+" autocmd FileType go nmap <Leader>b :<C-u>call <SID>build_go_files()<CR>
 autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 autocmd FileType go nmap <Leader>i <Plug>(go-info)
-autocmd FileType go nmap <leader>s <Plug>(go-def-split)
-autocmd FileType go nmap <leader>v <Plug>(go-def-vertical)
-autocmd Filetype go command! -bang GoA call go#alternate#Switch(<bang>0, 'edit')
-autocmd Filetype go command! -bang GoAV call go#alternate#Switch(<bang>0, 'vsplit')
-autocmd Filetype go command! -bang GoAS call go#alternate#Switch(<bang>0, 'split')
-autocmd Filetype go command! -bang GoAT call go#alternate#Switch(<bang>0, 'tabe')
+" autocmd FileType go nmap <leader>s <Plug>(go-def-split)
+" autocmd FileType go nmap <leader>v <Plug>(go-def-vertical)
+" autocmd Filetype go command! -bang GoA call go#alternate#Switch(<bang>0, 'edit')
+" autocmd Filetype go command! -bang GoAV call go#alternate#Switch(<bang>0, 'vsplit')
+" autocmd Filetype go command! -bang GoAS call go#alternate#Switch(<bang>0, 'split')
+" autocmd Filetype go command! -bang GoAT call go#alternate#Switch(<bang>0, 'tabe')
 '''
 
 [[plugins]] # Emmet

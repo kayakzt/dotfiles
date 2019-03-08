@@ -520,6 +520,7 @@ if ! $FLG_R && ! $FLG_M; then
     go get github.com/motemen/ghq
     go get github.com/github/hub
     go get github.com/mdempsky/gocode # for deoplete-go
+    go get github.com/saibing/bingo # for lsp-server
     curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
     if $INSTALL_RUST; then
