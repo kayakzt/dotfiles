@@ -391,7 +391,7 @@ install_zsh() {
     wget "http://sourceforge.net/projects/zsh/files/zsh/5.5.1/zsh-5.5.1.tar.gz/download"
     tar xzvf download
     cd zsh-5.5.1
-    ./configure --prefix=$HOME/local --enable-multibyte --enable-locale
+    ./configure --prefix=$HOME/.local --enable-multibyte --enable-locale
     make
     make install
     cd $WORKING_DIR
@@ -416,8 +416,13 @@ install_rg() {
         rm -rf $TMPDIR
 }
 
+# install zsh to local in the rootless mode
+if $FLG_R; then
+    install_zsh
+fi
+
+# tmux and ripgrep are always installed to local
 install_tmux
-install_zsh
 install_rg
 
 #
