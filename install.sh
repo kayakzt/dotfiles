@@ -104,6 +104,7 @@ FLG_R=false
 FLG_C=false
 FLG_V=false
 FLG_H=false
+USE_REPO_JAPAN=false
 INSTALL_RUST=false
 
 usage_exit() {
@@ -151,6 +152,7 @@ done
 yes_or_no "Do you wanna minimum install?" && FLG_M=true
 yes_or_no "Do you wanna rootless install?" && FLG_R=true
 yes_or_no "Is this a CUI environment?" && FLG_C=true
+yes_or_no "Do you want to use repository in Japan?" && USE_REPO_JAPAN=true
 yes_or_no "Do you want to install rust language?" && INSTALL_RUST=true
 yes_or_no "Is the host VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
@@ -172,6 +174,12 @@ if $FLG_V; then
 fi
 if $FLG_H; then
     echo -n $(colored $yellow "hyper-v, ")
+fi
+if $USE_REPO_JAPAN; then
+    echo -n $(colored $yellow "japan-repo, ")
+fi
+if $INSTALL_RUST; then
+    echo -n $(colored $yellow "install_rust, ")
 fi
 echo " "
 
@@ -195,8 +203,11 @@ git clone ${DOT_REPO} ${DOT_PATH}
 
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
-    # change apt repository, archive.ubuntu.jp -> JAIST
-    sudo sed -i.bak -e "s%http://[^ ]\+%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
+
+    if $USE_REPO_JAPAN; then
+        # change apt repository to JAIST
+        sudo sed -i.bak -e "s%http://[^ ]\+%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
+    fi
 
     # add ppa repositories
     sudo apt install software-properties-common
