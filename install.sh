@@ -405,15 +405,9 @@ install_rg() {
         rm -rf $TMPDIR
 }
 
-if ! $FLG_R; then
-    if ! $FLG_C; then
-        install_tmux
-    fi
-else
-    install_zsh
-    install_rg
-fi
-
+install_tmux
+install_zsh
+install_rg
 
 #
 # Config Setup
