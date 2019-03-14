@@ -1,0 +1,61 @@
+{
+    "editor.fontSize": 15,
+    "editor.fontFamily": "'Ricty Diminished', 'Source Code Pro Medium', 'Takao Gothic', Consolas, 'Courier New', monospace",
+    "editor.wordWrap": "on",
+    "editor.mouseWheelZoom": true,
+    "editor.minimap.renderCharacters": false,
+    "editor.minimap.showSlider": "always",
+    "editor.renderControlCharacters": true, // 制御文字を表示
+    "editor.renderLineHighlight": "all", // 選択行を行番号含めすべてハイライト
+    "editor.renderWhitespace": "all", // 半角スペースを常に表示
+    "editor.formatOnPaste": true, // ペースト時に自動でフォーマット
+    "editor.formatOnSave": true, // ファイル保存時に自動でフォーマット
+    "editor.formatOnType": true, // 入力した行を自動でフォーマット
+    "editor.multiCursorModifier": "ctrlCmd", // change multi cursor key to ctrl (cmd)
+    "window.openFoldersInNewWindow": "on", // 新規ワークスペースを別ウインドウで開く
+    "workbench.editor.tabSizing": "shrink", // タブの表示設定
+    "workbench.editor.labelFormat": "short", // タブに表示する文字列の設定
+    "workbench.startupEditor": "none",
+    "workbench.colorTheme": "One Dark Pro",
+    "window.title": "${activeEditorMedium}${separator}${rootName}", // ウインドウ上部に表示する文字列の設定
+    "files.autoGuessEncoding": true,
+    "files.associations": { // ファイルと言語の関連付けを変更
+        ".*lintrc": "json"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.map": true,
+        "**/node_modules": true,
+        "/vendor/": true
+    },
+    "files.insertFinalNewline": true, // ファイルの保存時に末尾を改行
+    "files.trimFinalNewlines": true, // ファイルの保存時に最終行以降をトリミング
+    "files.trimTrailingWhitespace": true, // ファイルの保存時に行末の空白をトリミング
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false // Markdown のファイルは行末の空白をトリミングしない
+    },
+    "python.linting.flake8Enabled": true,
+    "emmet.showSuggestionsAsSnippets": true, // Emmet の候補を表示
+    "emmet.triggerExpansionOnTab": true, // TAB キーで Emmet を展開できるようにする
+    "emmet.variables": { // Emmet で展開される HTML の言語を変更
+        "lang": "ja"
+    },
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "html.format.contentUnformatted": "pre, code, textarea, title, h1, h2, h3, h4, h5, h6, p", // タグ内の記述はフォーマットしない
+    "html.format.extraLiners": "", // head, body, /html タグの前に改行を入れない
+    "html.format.unformatted": null, // フレージング・コンテンツ（旧インライン要素のようなタグ）はフォーマットしない
+    "html.format.wrapLineLength": 0, // 行の文字数制限を無くし自動で改行させない
+    "search.exclude": { // 検索対象外にするファイル設定（ files.exclude のファイルも含む）
+        "**/temp": true,
+        "**/tmp": true
+    },
+    "merge-conflict.autoNavigateNextConflict.enabled": true,
+    "japanese-proofreading.textlint.ひらく漢字": false,
+    "cSpell.ignoreRegExpList": [
+        "[０-９Ａ-Ｚａ-ｚぁ-んァ-ヶ亜-熙纊-黑]+"
+    ],
+}
