@@ -9,6 +9,8 @@
 # export NO_PROXY=$no_proxy
 
 # basic path
+export my_dev_dir=~/dev
+export path=(${my_dev_dir}/bin(N-/) $path)
 export path=(/opt/local/bin(N-/) $path)
 export path=(~/.local/bin(N-/) $path)
 
@@ -25,11 +27,13 @@ fi
 
 # goenv & go
 export GOENV_ROOT=$HOME/.goenv
-export GOPATH=$HOME/dev
-export path=($GOENV_ROOT/bin(N-/) $GOPATH/bin(N-/) $path)
+export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
+# export GOENV_DISABLE_GOPATH=1 # disable GOPATH management by goenv
+export GOPATH=${my_dev_dir}
 if command -v goenv > /dev/null; then
     eval "$(goenv init -)"
 fi
+export path=($GOENV_ROOT/bin(N-/) $GOPATH/bin(N-/) $path)
 
 # rustup & rust
 export path=($HOME/.cargo/bin(N-/) $path)
