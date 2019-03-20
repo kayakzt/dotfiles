@@ -484,6 +484,9 @@ if ! $FLG_R && ! $FLG_M; then
         sudo apt install -y libfreetype6-dev pkg-config libpng-dev
     fi
 
+    # set default directory for devolepment
+    export my_dev_dir=~/dev
+
     # python
     # install pyenv
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
@@ -521,9 +524,10 @@ if ! $FLG_R && ! $FLG_M; then
     echo "$password" | sudo -S echo ""
     export GOENV_ROOT=$HOME/.goenv
     git clone https://github.com/syndbg/goenv.git ~/.goenv
-    export GOPATH=$HOME/dev
+    # export GOPATH=$HOME/dev
     export PATH=$PATH:$GOENV_ROOT/bin
     eval "$(goenv init -)"
+    export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
     GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
     goenv install "$GO_VERSION"
     goenv global "$GO_VERSION"
