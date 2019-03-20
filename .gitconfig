@@ -51,6 +51,6 @@
     compactionHeuristic = true
 	wordRegex = .
 [github]
-    user = kaya-kzt
+    user = kayakzt
 [ghq]
     root = ~/dev/src
