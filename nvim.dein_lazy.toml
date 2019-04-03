@@ -218,7 +218,7 @@ autocmd Filetype * nnoremap <buffer> <Leader>r :<C-u>LspRename<CR>
 [[plugins]] # completion provider for nvim
 repo = 'Shougo/deoplete.nvim'
 if = 'has("nvim")'
-depends = 'context_filetype.vim'
+# depends = 'context_filetype.vim'
 # on_event = 'InsertCharPre'
 hook_source = '''
 let g:deoplete#enable_at_startup = 1
