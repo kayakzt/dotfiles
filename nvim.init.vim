@@ -66,15 +66,13 @@ function! s:open_junk_file()
     endif
 endfunction"}}}
 
-" 縦分割版gf <C-w>+fで横分割, <C-w>+gfで新しいタブに開く
-nnoremap gs :vertical wincmd f<CR>
-
-" set python path for neovim
-let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
-
 " vim settings
 
 set encoding=utf8
+let mapleader = "\<Space>"
+
+" set python path for neovim
+let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
 
 " Display
 " syntax on
@@ -147,6 +145,9 @@ nnoremap ZQ <Nop>
 noremap <Down> gj
 noremap <Up>   gk
 
+" 縦分割版gf <C-w>+fで横分割, <C-w>+gfで新しいタブに開く
+nnoremap gs :vertical wincmd f<CR>
+
 " 入力モードでのカーソル移動
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
@@ -183,5 +184,6 @@ augroup MyAutoCmd
 
     " completion settings
     autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
+    autocmd BufRead,BufNewFile *.go set completeopt=menuone,preview
 
 augroup END
