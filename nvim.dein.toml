@@ -141,6 +141,114 @@ syntax enable
 au MyAutoCmd VimEnter * nested colorscheme onedark
 '''
 
+# Completion
+
+[[plugins]] # completion provider for nvim
+repo = 'Shougo/deoplete.nvim'
+depends = 'context_filetype.vim'
+on_event = 'InsertEnter'
+hook_add = '''
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_delay = 50
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_camel_case = 0
+let g:deoplete#enable_ignore_case = 0
+let g:deoplete#enable_refresh_always = 0
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#max_list = 500
+
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+inoremap <expr><tab> pumvisible() ? "\<C-n>" :
+   \ neosnippet#expandable_or_jumpable() ?
+   \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
+
+" <TAB>: completion.
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ deoplete#manual_complete()
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+" <S-TAB>: completion back.
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function() abort
+  return pumvisible() ? deoplete#close_popup()."\<CR>" : "\<CR>"
+endfunction
+'''
+
+# [[plugins]]
+# repo = 'prabirshrestha/async.vim'
+#
+# [[plugins]]
+# repo='prabirshrestha/asyncomplete.vim'
+# depends = ['async.vim']
+# on_event = 'InsertEnter'
+# hook_add='''
+# let g:asyncomplete_remove_duplicates = 1
+# let g:asyncomplete_smart_completion = 1
+# let g:asyncomplete_auto_popup = 1
+# let g:lsp_async_completion = 1
+# set completeopt+=preview
+# autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+#
+# inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+# inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+# inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+#
+# " call asyncomplete#enable_for_buffer()
+# '''
+#
+# [[plugins]]
+# repo = 'prabirshrestha/asyncomplete-buffer.vim'
+# depends = 'asyncomplete.vim'
+# hook_add = '''
+#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+#    \ 'name': 'buffer',
+#    \ 'priority': 5,
+#    \ 'whitelist': ['*'],
+#    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+#    \ }))
+# '''
+#
+# [[plugins]]
+# repo = 'prabirshrestha/asyncomplete-file.vim'
+# depends = 'asyncomplete.vim'
+# hook_add = '''
+#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+#    \ 'name': 'file',
+#    \ 'priority': 3,
+#    \ 'whitelist': ['*'],
+#    \ 'completor': function('asyncomplete#sources#file#completor'),
+#    \ }))
+# '''
+#
+# [[plugins]]
+# repo='prabirshrestha/asyncomplete-neosnippet.vim'
+# depends = 'asyncomplete.vim'
+# hook_add='''
+#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+#  \ 'name': 'neosnippet',
+#  \ 'priority': -999,
+#  \ 'whitelist': ['*'],
+#  \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+#  \ }))
+# imap <C-e>     <Plug>(neosnippet_expand_or_jump)
+# smap <C-e>     <Plug>(neosnippet_expand_or_jump)
+# xmap <C-e>     <Plug>(neosnippet_expand_target)
+# '''
+#
+# [[plugins]]
+# repo='prabirshrestha/asyncomplete-lsp.vim'
+# depends = 'asyncomplete.vim'
+
 # Lint
 
 [[plugins]]
