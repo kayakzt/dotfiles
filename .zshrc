@@ -246,10 +246,10 @@ alias apt-update-yes='sudo apt-get update \
                     && sudo apt-get dist-upgrade -y \
                     && sudo apt-get autoclean -y \
                     && sudo apt-get autoremove -y'
-# alias pip-update-all='pip freeze --local \
-#                     | grep -v "^\-e" \
-#                     | cut -d = -f 1 \
-#                     | xargs pip install -U --user'
+alias pip-update-all='pip freeze --local \
+                    | grep -v "^\-e" \
+                    | cut -d = -f 1 \
+                    | xargs pip install -U --user'
 # alias pip3-update-all='pip3 freeze --local \
 #                     | grep -v "^\-e" \
 #                     | cut -d = -f 1 \
