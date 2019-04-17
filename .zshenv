@@ -26,14 +26,15 @@ if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
 fi
 
 # goenv & go
-export path=($GOENV_ROOT/bin(N-/) $GOPATH/bin(N-/) $path)
 export GOENV_ROOT=$HOME/.goenv
+export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
+# export GOENV_DISABLE_GOPATH=1 # disable GOPATH management by goenv
+export path=($GOENV_ROOT/bin(N-/) $path)
 if command -v goenv > /dev/null; then
     eval "$(goenv init -)"
 fi
-export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
-# export GOENV_DISABLE_GOPATH=1 # disable GOPATH management by goenv
 # export GOPATH=${my_dev_dir}
+export path=($GOPATH/bin(N-/) $path)
 
 # rustup & rust
 export path=($HOME/.cargo/bin(N-/) $path)
