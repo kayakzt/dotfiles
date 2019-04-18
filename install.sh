@@ -531,11 +531,9 @@ if ! $FLG_R && ! $FLG_M; then
     GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
     goenv install "$GO_VERSION"
     goenv global "$GO_VERSION"
-    go get github.com/motemen/ghq
-    go get github.com/github/hub
-    go get github.com/mdempsky/gocode # for deoplete-go
-    go get github.com/saibing/bingo # for lsp-server
-    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+    go get -u github.com/motemen/ghq
+    go get -u github.com/github/hub
+    go get -u golang.org/x/tools/cmd/gopls #for lsp
 
     if $INSTALL_RUST; then
         # rustup (stable channel) setup
