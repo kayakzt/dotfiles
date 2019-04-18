@@ -388,14 +388,14 @@ install_tmux() {
 # zsh install
 install_zsh() {
     mkdir $HOME/local
-    wget "http://sourceforge.net/projects/zsh/files/zsh/5.5.1/zsh-5.5.1.tar.gz/download"
+    wget "http://sourceforge.net/projects/zsh/files/zsh/5.7.1/zsh-5.7.1.tar.gz/download"
     tar xzvf download
-    cd zsh-5.5.1
+    cd zsh-5.7.1
     ./configure --prefix=$HOME/.local --enable-multibyte --enable-locale
     make
     make install
     cd $WORKING_DIR
-    rm -rf zsh-5.5.1
+    rm -rf zsh-5.7.1
 }
 
 # ripgrep install
@@ -523,11 +523,11 @@ if ! $FLG_R && ! $FLG_M; then
     # goenv & setup
     echo "$password" | sudo -S echo ""
     export GOENV_ROOT=$HOME/.goenv
+    export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
     git clone https://github.com/syndbg/goenv.git ~/.goenv
     # export GOPATH=$HOME/dev
     export PATH=$PATH:$GOENV_ROOT/bin
     eval "$(goenv init -)"
-    export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
     GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
     goenv install "$GO_VERSION"
     goenv global "$GO_VERSION"
