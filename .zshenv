@@ -13,6 +13,7 @@ export my_dev_dir=~/dev
 export path=(${my_dev_dir}/bin(N-/) $path)
 export path=(/opt/local/bin(N-/) $path)
 export path=(~/.local/bin(N-/) $path)
+export path=(/snap/bin(N-/) $path)
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
