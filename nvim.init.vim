@@ -138,6 +138,7 @@ set ttimeoutlen=100
 nnoremap Q gq
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
+nnoremap Y y$
 
 " for japanese input
 
