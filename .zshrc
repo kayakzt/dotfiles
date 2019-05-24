@@ -301,7 +301,7 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   zplug "zsh-users/zsh-completions", depth:1
   zplug "zsh-users/zsh-syntax-highlighting", defer:2
   zplug "b4b4r07/enhancd", use:init.sh
-  zplug "b4b4r07/emoji-cli", at:3e9e958
+  zplug "b4b4r07/emoji-cli"
   zplug "mrowa44/emojify", as:command
   # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
