@@ -10,13 +10,25 @@ endfunction
 
 [[plugins]] # show status line
 repo = 'vim-airline/vim-airline'
-depends = ['tagbar', 'vim-fugitive']
+depends = ['vim-fugitive','coc.nvim']
 hook_add = '''
-let g:airline_powerline_fonts = 0
+let g:airline#extensions#coc#enabled = 1
 set laststatus=2
+let g:airline_powerline_fonts = 0
 let g:airline#extensions#tabline#enabled = 1
+let airline#extensions#coc#error_symbol = 'E:'
+let airline#extensions#coc#warning_symbol = 'W:'
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+"
+let g:airline_symbols.crypt = '🔒'		"暗号化されたファイル
+let g:airline_symbols.branch = '⭠'		"gitブランチ
+let g:airline_symbols.paste = 'ρ'			"ペーストモード
+let g:airline_symbols.spell = 'Ꞩ'			"スペルチェック
+let g:airline_symbols.notexists = '∄'		"gitで管理されていない場合
 '''
-# source ~/.config/nvim/plugins/airline.rc.vim
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
@@ -33,101 +45,11 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_experimental_simple_template_highlight = 1
 '''
 
-# [[plugins]] # Html5
-# repo  = 'othree/html5.vim'
-# on_ft = 'html'
-
-# [[plugins]]
-# repo = 'digitaltoad/vim-pug'
-# on_ft = 'pug'
-
-# [[plugins]]
-# repo = 'hail2u/vim-css3-syntax'
-# on_ft = 'css'
-
-#[[plugins]]
-#repo = 'stephenway/postcss.vim'
-#on_ft = 'css'
-
-# [[plugins]]
-# repo = 'jelera/vim-javascript-syntax'
-# on_ft = 'js'
-
-# [[plugins]]
-# repo = 'StanAngeloff/php.vim'
-# on_ft = 'php'
-# hook_add = '''
-# function! PhpSyntaxOverride()
-#   hi! def link phpDocTags  phpDefine
-#   hi! def link phpDocParam phpType
-# endfunction
-#
-# augroup phpSyntaxOverride
-#   autocmd!
-#   autocmd FileType php call PhpSyntaxOverride()
-# augroup END
-# '''
-
-# go-lang syntax provides vim-go at lint section.
-
-# [[plugins]]
-# repo = 'rust-lang/rust.vim'
-# on_ft = 'rust'
-
-# [[plugins]]
-# repo = 'rhysd/rust-doc.vim'
-# on_ft = 'rust'
-
-# [[plugins]]
-# repo = 'LaTeX-Box-Team/LaTeX-Box'
-# on_ft = ['tex', 'latex']
-
-# [[plugins]]
-# repo = 'elzr/vim-json'
-# on_ft = 'json'
-# hook_add = '''
-# let g:vim_json_syntax_conceal = 0
-# '''
-
 [[plugins]]
 repo  = 'cespare/vim-toml'
 on_ft = 'toml'
 
-# [[plugins]]
-# repo = 'rcmdnk/vim-markdown'
-# on_ft = ['markdown','mkd', 'md', ]
-# hook_add = '''
-# let g:vim_markdown_math = 1
-# let g:vim_markdown_frontmatter = 1
-# '''
-
-# [[plugins]]
-# repo = 'stephpy/vim-yaml'
-# on_ft = ['yml', 'yaml']
-
-# [[plugins]]
-# repo = 'pearofducks/ansible-vim'
-# on_ft = ['yml', 'yaml']
-
-# [[plugins]]
-# repo = 'Shougo/neco-syntax'
-# on_ft = 'vim'
-
-# [[plugins]]
-# repo = 'vim-jp/autofmt'
-
-
 # Colors
-
-#[[plugins]]
-#repo = 'mhartington/oceanic-next'
-#hook_add = '''
-#if (has("termguicolors"))
-# set termguicolors
-#endif
-#syntax enable
-#au MyAutoCmd VimEnter * nested colorscheme OceanicNext
-#'''
 
 [[plugins]]
 repo = 'joshdick/onedark.vim'
@@ -144,161 +66,97 @@ colorscheme onedark
 
 # Completion
 
-[[plugins]] # completion provider for nvim
-repo = 'Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
-on_event = 'InsertEnter'
-hook_add = '''
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#auto_complete_delay = 50
-let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#enable_camel_case = 0
-let g:deoplete#enable_ignore_case = 0
-let g:deoplete#enable_refresh_always = 0
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#max_list = 500
-
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-inoremap <expr><tab> pumvisible() ? "\<C-n>" :
-   \ neosnippet#expandable_or_jumpable() ?
-   \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
-
-" <TAB>: completion.
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ deoplete#manual_complete()
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-" <S-TAB>: completion back.
-inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function() abort
-  return pumvisible() ? deoplete#close_popup()."\<CR>" : "\<CR>"
-endfunction
-'''
-
-# [[plugins]]
-# repo = 'prabirshrestha/async.vim'
-#
-# [[plugins]]
-# repo='prabirshrestha/asyncomplete.vim'
-# depends = ['async.vim']
+# [[plugins]] # completion provider for nvim
+# repo = 'Shougo/deoplete.nvim'
+# depends = 'context_filetype.vim'
 # on_event = 'InsertEnter'
-# hook_add='''
-# let g:asyncomplete_remove_duplicates = 1
-# let g:asyncomplete_smart_completion = 1
-# let g:asyncomplete_auto_popup = 1
-# let g:lsp_async_completion = 1
-# set completeopt+=preview
+# hook_add = '''
+# let g:deoplete#enable_at_startup = 1
+# let g:deoplete#auto_complete_delay = 50
+# let g:deoplete#auto_complete_start_length = 1
+# let g:deoplete#enable_camel_case = 0
+# let g:deoplete#enable_ignore_case = 0
+# let g:deoplete#enable_refresh_always = 0
+# let g:deoplete#enable_smart_case = 1
+# let g:deoplete#file#enable_buffer_path = 1
+# let g:deoplete#max_list = 500
+#
 # autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 #
-# inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-# inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-# inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+# inoremap <expr><tab> pumvisible() ? "\<C-n>" :
+#   \ neosnippet#expandable_or_jumpable() ?
+#   \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
 #
-# " call asyncomplete#enable_for_buffer()
+# " <TAB>: completion.
+# inoremap <silent><expr> <TAB>
+#    \ pumvisible() ? "\<C-n>" :
+#    \ <SID>check_back_space() ? "\<TAB>" :
+#    \ deoplete#manual_complete()
+# function! s:check_back_space() abort
+#   let col = col('.') - 1
+#   return !col || getline('.')[col - 1]  =~ '\s'
+# endfunction
+#
+# " <S-TAB>: completion back.
+# inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
+#
+# " <CR>: close popup and save indent.
+# inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+# function! s:my_cr_function() abort
+#   return pumvisible() ? deoplete#close_popup()."\<CR>" : "\<CR>"
+# endfunction
 # '''
-#
-# [[plugins]]
-# repo = 'prabirshrestha/asyncomplete-buffer.vim'
-# depends = 'asyncomplete.vim'
-# hook_add = '''
-#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-#    \ 'name': 'buffer',
-#    \ 'priority': 5,
-#    \ 'whitelist': ['*'],
-#    \ 'completor': function('asyncomplete#sources#buffer#completor'),
-#    \ }))
-# '''
-#
-# [[plugins]]
-# repo = 'prabirshrestha/asyncomplete-file.vim'
-# depends = 'asyncomplete.vim'
-# hook_add = '''
-#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-#    \ 'name': 'file',
-#    \ 'priority': 3,
-#    \ 'whitelist': ['*'],
-#    \ 'completor': function('asyncomplete#sources#file#completor'),
-#    \ }))
-# '''
-#
-# [[plugins]]
-# repo='prabirshrestha/asyncomplete-neosnippet.vim'
-# depends = 'asyncomplete.vim'
-# hook_add='''
-#   au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-#  \ 'name': 'neosnippet',
-#  \ 'priority': -999,
-#  \ 'whitelist': ['*'],
-#  \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-#  \ }))
-# imap <C-e>     <Plug>(neosnippet_expand_or_jump)
-# smap <C-e>     <Plug>(neosnippet_expand_or_jump)
-# xmap <C-e>     <Plug>(neosnippet_expand_target)
-# '''
-#
-# [[plugins]]
-# repo='prabirshrestha/asyncomplete-lsp.vim'
-# depends = 'asyncomplete.vim'
+
 
 # Lint
 
-[[plugins]]
-repo = 'w0rp/ale'
-hook_add = '''
-" エラー行に表示するマーク
-let g:ale_sign_error = '⨉'
-let g:ale_sign_warning = '!'
-" エラー行にカーソルをあわせた際に表示されるメッセージフォーマット
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-" エラー表示の列を常時表示
-let g:ale_sign_column_always = 1
-
-let g:ale_lint_on_enter = 1
-let g:ale_lint_on_save = 1
-" 編集中のlintはしない
-let g:ale_lint_on_text_changed = 'never'
-
-let g:ale_fix_on_save = 1
-
-" lint結果をロケーションリストとQuickFixには表示しない
-" 出てると結構うざいしQuickFixを書き換えられるのは困る
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
-let g:ale_open_list = 0
-let g:ale_keep_list_window_open = 0
-
-" 有効にするlinter
-let g:ale_linters = {
-\   'sh': ['shellcheck'],
-\   'python': ['flake8'],
-\   'go': ['golangci-lint','golint'],
-\   'javascript': ['eslint'],
-\}
-
-let g:ale_go_golangci_lint_package = 1
-let g:ale_go_golangci_lint_options = ''
-
-let g:ale_fixers = {
-\  'python': ['yapf', 'autopep8'],
-\}
-
-" ALE用プレフィックス
-nmap [ale] <Nop>
-map <C-k> [ale]
-" エラー行にジャンプ
-nmap <silent> [ale]<C-P> <Plug>(ale_previous)
-nmap <silent> [ale]<C-N> <Plug>(ale_next)
-'''
+# [[plugins]]
+# repo = 'w0rp/ale'
+# hook_add = '''
+# " エラー行に表示するマーク
+# let g:ale_sign_error = '⨉'
+# let g:ale_sign_warning = '!'
+# " エラー行にカーソルをあわせた際に表示されるメッセージフォーマット
+# let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+# " エラー表示の列を常時表示
+# let g:ale_sign_column_always = 1
+#
+# let g:ale_lint_on_enter = 1
+# let g:ale_lint_on_save = 1
+# " 編集中のlintはしない
+# let g:ale_lint_on_text_changed = 'never'
+#
+# let g:ale_fix_on_save = 1
+#
+# " lint結果をロケーションリストとQuickFixには表示しない
+# " 出てると結構うざいしQuickFixを書き換えられるのは困る
+# let g:ale_set_loclist = 0
+# let g:ale_set_quickfix = 0
+# let g:ale_open_list = 0
+# let g:ale_keep_list_window_open = 0
+#
+# " 有効にするlinter
+# let g:ale_linters = {
+#\   'sh': ['shellcheck'],
+#\   'python': ['flake8'],
+#\   'go': ['golangci-lint','golint'],
+#\   'javascript': ['eslint'],
+#\}
+#
+# let g:ale_go_golangci_lint_package = 1
+# let g:ale_go_golangci_lint_options = ''
+#
+# let g:ale_fixers = {
+#\  'python': ['yapf', 'autopep8'],
+#\}
+#
+# " ALE用プレフィックス
+# nmap [ale] <Nop>
+# map <C-k> [ale]
+# " エラー行にジャンプ
+# nmap <silent> [ale]<C-P> <Plug>(ale_previous)
+# nmap <silent> [ale]<C-N> <Plug>(ale_next)
+# '''
 
 # Others
 

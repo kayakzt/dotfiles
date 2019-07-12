@@ -44,8 +44,9 @@ if command -v rustc > /dev/null; then
 fi
 export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
 
-# export NVM_DIR=$HOME/.nvm
+export NVM_DIR=$HOME/.nvm
 # [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # export path=($HOME/.rbenv/bin(N-/) $path)
 # if command -v rbenv > /dev/null; then

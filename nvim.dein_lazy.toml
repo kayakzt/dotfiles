@@ -137,69 +137,130 @@ endfunction
 
 # LSP
 
-[[plugins]]
-repo = 'prabirshrestha/async.vim'
-on_event = 'VimEnter'
+# [[plugins]]
+# repo = 'prabirshrestha/async.vim'
+# on_event = 'VimEnter'
 
-[[plugins]] # a vim client for language server protocol (LSP)
-repo = 'prabirshrestha/vim-lsp'
-depends = ['async.vim']
-on_event = 'VimEnter'
-hook_add = '''
-let g:pyls_path = $PYENV_ROOT . '/shims/pyls' "reffer pyls in pyenv.
-if executable('pyls')
-    autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ 'priority': 2,
-        \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}}}}
-        \ })
-    autocmd FileType python setlocal omnifunc=lsp#complete
-endif
-
-if executable('gopls')
-    au User lsp_setup call lsp#register_server({
-       \ 'name': 'gopls',
-       \ 'cmd': {server_info->['gopls']},
-       \ 'whitelist': ['go'],
-       \ 'priority': 2,
-       \ })
-    autocmd FileType go setlocal omnifunc=lsp#complete
-endif
-
-if executable('rls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'Cargo.toml'))},
-        \ 'whitelist': ['rust'],
-        \ 'priority': 2,
-        \ })
-    autocmd FileType rust setlocal omnifunc=lsp#complete
-endif
-
-let g:lsp_auto_enable = 1
-let g:lsp_diagnostics_enabled = 0
-
-" setlocal omnifunc=lsp#complete
-autocmd Filetype * nnoremap <buffer> <Leader>d :<C-u>LspDefinition<CR>
-autocmd Filetype * nnoremap <buffer> <Leader>R :<C-u>LspReferences<CR>
-autocmd Filetype * nnoremap <buffer> <Leader>s :<C-u>LspDocumentSymbol<CR>
-autocmd Filetype * nnoremap <buffer> <Leader>S :<C-u>LspWorksspaceSymbol<CR>
-autocmd Filetype * nnoremap <buffer> <Leader>f :<C-u>LspDocumentFormat<CR>
-autocmd Filetype * vnoremap <buffer> <Leader>F :LspDocumentRangeFormat<CR>
-autocmd Filetype * nnoremap <buffer> <Leader>h :<C-u>LspHover<CR>
-autocmd Filetype * nnoremap <buffer> <Leader>i :<C-u>LspImplementation<CR>
-autocmd Filetype * nnoremap <buffer> <Leader>r :<C-u>LspRename<CR>
-'''
+# [[plugins]] # a vim client for language server protocol (LSP)
+# repo = 'prabirshrestha/vim-lsp'
+# depends = ['async.vim']
+# on_event = 'VimEnter'
+# hook_add = '''
+# let g:pyls_path = $PYENV_ROOT . '/shims/pyls' "reffer pyls in pyenv.
+# if executable('pyls')
+#     autocmd User lsp_setup call lsp#register_server({
+#        \ 'name': 'pyls',
+#        \ 'cmd': {server_info->['pyls']},
+#        \ 'whitelist': ['python'],
+#        \ 'priority': 2,
+#        \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}}}}
+#        \ })
+#     autocmd FileType python setlocal omnifunc=lsp#complete
+# endif
+#
+# if executable('gopls')
+#     au User lsp_setup call lsp#register_server({
+#       \ 'name': 'gopls',
+#       \ 'cmd': {server_info->['gopls']},
+#       \ 'whitelist': ['go'],
+#       \ 'priority': 2,
+#       \ })
+#     autocmd FileType go setlocal omnifunc=lsp#complete
+# endif
+#
+# if executable('rls')
+#     au User lsp_setup call lsp#register_server({
+#        \ 'name': 'rls',
+#        \ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
+#        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'Cargo.toml'))},
+#        \ 'whitelist': ['rust'],
+#        \ 'priority': 2,
+#        \ })
+#     autocmd FileType rust setlocal omnifunc=lsp#complete
+# endif
+#
+# let g:lsp_auto_enable = 1
+# let g:lsp_diagnostics_enabled = 0
+#
+# " setlocal omnifunc=lsp#complete
+# autocmd Filetype * nnoremap <buffer> <Leader>d :<C-u>LspDefinition<CR>
+# autocmd Filetype * nnoremap <buffer> <Leader>R :<C-u>LspReferences<CR>
+# autocmd Filetype * nnoremap <buffer> <Leader>s :<C-u>LspDocumentSymbol<CR>
+# autocmd Filetype * nnoremap <buffer> <Leader>S :<C-u>LspWorksspaceSymbol<CR>
+# autocmd Filetype * nnoremap <buffer> <Leader>f :<C-u>LspDocumentFormat<CR>
+# autocmd Filetype * vnoremap <buffer> <Leader>F :LspDocumentRangeFormat<CR>
+# autocmd Filetype * nnoremap <buffer> <Leader>h :<C-u>LspHover<CR>
+# autocmd Filetype * nnoremap <buffer> <Leader>i :<C-u>LspImplementation<CR>
+# autocmd Filetype * nnoremap <buffer> <Leader>r :<C-u>LspRename<CR>
+# '''
 
 # Completion
 
 [[plugins]]
-repo = 'lighttiger2505/deoplete-vim-lsp'
-depends = ['deoplete.nvim']
-on_event = 'InsertEnter'
+repo = 'neoclide/coc.nvim'
+rev = "release"
+merged = 0
+on_event = 'VimEnter'
+hook_add = '''
+" change completion window behaviors
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+augroup cocfunc
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Use `:Format` to format current buffer
+command! -nargs=0 CocFormatBuf :call CocAction('format')
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline^=%{coc#status()}
+
+" coc keymaps
+nmap [coc] <Nop>
+map <C-k> [coc]
+nmap <silent> [coc]<C-f> :<C-u>CocFormatBuf<cr>
+nmap <silent> [coc]f     <Plug>(coc-format-selected)
+xmap <silent> [coc]f     <Plug>(coc-format-selected)
+nmap <silent> [coc]<C-p> <Plug>(coc-diagnostic-prev)
+nmap <silent> [coc]<C-n> <Plug>(coc-diagnostic-next)
+nmap <silent> [coc]x     <Plug>(coc-fix-current)
+nmap <silent> [coc]d     :<C-u>CocList diagnostics<cr>
+nmap <silent> [coc]r     <Plug>(coc-rename)
+nmap <silent> [coc]h     :call CocAction('doHover')<cr>
+nmap <silent> [coc]o     :<C-u>CocList outline<cr>
+nmap <silent> [coc]y     :<C-u>CocList -I symbols<cr>
+
+nmap <silent> [coc]K     :call <SID>show_documentation()<CR>
+nmap <silent> gd <Plug>(coc-definition)
+
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+'''
+
+# [[plugins]]
+# repo = 'lighttiger2505/deoplete-vim-lsp'
+# depends = ['deoplete.nvim']
+# on_event = 'InsertEnter'
 
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
@@ -217,58 +278,6 @@ let g:neosnippet#snippets_directory = '~/.config/dotfiles/snippets'
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
-
-# [[plugins]] # provides LSP completion source for deoplete
-# repo = 'Shougo/deoplete-lsp'
-# on_event = 'InsertCharPre'
-# depends = ['deoplete.nvim']
-# hook_add = '''
-# call lsp#server#add('python', 'pyls')
-# '''
-
-# [[plugins]] # python completion
-# repo = 'zchee/deoplete-jedi'
-# on_event = 'InsertEnter'
-# depends = ['deoplete.nvim']
-# on_ft = 'python'
-# hook_add = '''
-# let g:deoplete#sources#jedi#show_docstring = 1
-# '''
-
-# [[plugins]]
-# repo = 'shawncplus/phpcomplete.vim'
-# on_i  = 1
-# on_ft = 'php'
-
-# [[plugins]] # golang completion
-# repo = 'zchee/deoplete-go'
-# on_event = 'InsertEnter'
-# build = 'make'
-# depends = ['deoplete.nvim']
-# on_ft = 'go'
-# hook_add = '''
-# " let g:deoplete#sources#go#align_class = 1
-# let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-# let g:deoplete#sources#go#package_dot = 0
-# let g:deoplete#sources#go#pointer = 1
-# let g:deoplete#sources#go#source_importer = 1
-# let g:deoplete#sources#go#builtin_objects = 1
-# let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
-# " let g:deoplete#sources#go#cgo = 1
-# " let g:deoplete#sources#go#cgo#std = "c11"
-# let g:deoplete#sources#go#auto_goos = 1
-# '''
-
-# [[plugins]] # rust standard library completion
-# repo = 'racer-rust/vim-racer'
-# on_ft = 'rust'
-# hook_add = '''
-# set hidden
-# let g:racer_cmd = "$HOME/.cargo/bin/racer"
-# let g:rustfmt_autosave = 1
-# let g:rustfmt_command = "$HOME/.cargo/bin/rustfmt"
-# let g:rust_doc#downloaded_rust_doc_dir = $RUST_ROOT
-# '''
 
 [[plugins]] # Auto close parentheses
 repo = 'cohama/lexima.vim'
@@ -293,7 +302,6 @@ let g:quickrun_config._ = {
       \ 'outputter/buffer/split'  : ':rightbelow 8sp',
       \ 'outputter/buffer/close_on_empty' : 1,
       \ }
-let g:quickrun_config["python"] = {"command": "python3"}
 
 " q: close quickfix
 au FileType qf nnoremap <silent><buffer>q :quit<CR>
@@ -309,10 +317,6 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 '''
 
 # Lint
-
-# [[plugins]]
-# repo = 'hynek/vim-python-pep8-indent'
-# on_ft = 'python'
 
 [[plugins]] # Golang syntax+lint
 repo = 'fatih/vim-go'
@@ -337,13 +341,6 @@ let g:go_fmt_command = 'goimports'
 let g:go_def_mode = 'gopls'
 let g:go_def_mapping_enabled = 0
 
-" let s:goargs = go#package#ImportPath(expand('%:p:h'))
-" let g:neomake_go_errcheck_maker = {
-"  \ 'args': ['-abspath'],
-"  \ 'append_file': 0,
-"  \ 'errorformat': '%f:%l:%c:\ %m, %f:%l:%c\ %#%m',
-"  \ }
-" let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
 autocmd FileType go nmap <Leader>r  <Plug>(go-run)
 autocmd FileType go nmap <Leader>t  <Plug>(go-test)
 " autocmd FileType go nmap <Leader>b :<C-u>call <SID>build_go_files()<CR>
@@ -355,22 +352,6 @@ autocmd Filetype go command! -bang GoA call go#alternate#Switch(<bang>0, 'edit')
 autocmd Filetype go command! -bang GoAV call go#alternate#Switch(<bang>0, 'vsplit')
 autocmd Filetype go command! -bang GoAS call go#alternate#Switch(<bang>0, 'split')
 autocmd Filetype go command! -bang GoAT call go#alternate#Switch(<bang>0, 'tabe')
-'''
-
-[[plugins]] # Emmet
-repo = 'mattn/emmet-vim'
-on_event = 'InsertEnter'
-on_ft = 'html'
-hook_source = '''
-let g:user_emmet_mode = 'i'
-let g:user_emmet_leader_key='<C-E>' # <C-E-,>
-let g:use_emmet_complete_tag = 1
-let g:user_emmet_settings = {
-\   'variables': {
-\       'lang': "ja"
-\   },
-\   'indentation': '    '
-\}
 '''
 
 # Display
@@ -444,13 +425,6 @@ inoremap <expr> & smartchr#loop('&', ' & ', ' && ')
 " inoremap <expr> | smartchr#loop('|', ' | ', ' || ')
 '''
 
-# [[plugins]] # show tag structure in file
-# repo = 'majutsushi/tagbar'
-# hook_add = '''
-# let g:tagbar_width = 30
-# let g:tagbar_autoshowtag = 1
-# '''
-
 [[plugins]] # comment out / decomment plugin
 repo = 'tyru/caw.vim'
 on_map = {nx = '<Plug>'}
@@ -473,22 +447,10 @@ hook_add = '''
   call InitCaw()
 '''
 
-# [[plugins]] # multi byte chars selection support in Visual Mode
-# repo = 'kana/vim-niceblock'
-# on_map = {x = '<Plug>'}
-# hook_add = '''
-#   xmap I  <Plug>(niceblock-I)
-#   xmap A  <Plug>(niceblock-A)
-# '''
-
 [[plugins]] # for enabling display & edit binary file in vim
 repo = 'Shougo/vinarise.vim'
 on_cmd = 'Vinarise'
 hook_add = 'let g:vinarise_enable_auto_detect = 1'
-
-[[plugins]] # Calendar plugin for vim
-repo = 'itchyny/calendar.vim'
-on_cmd = 'Calendar'
 
 [[plugins]] # for sorting python file import line, command ':PyImportSort!'
 repo = 'tweekmonster/impsort.vim'
@@ -517,7 +479,6 @@ on_cmd = 'Obsession'
 [[plugins]] # call :Template to get template each file types
 repo = 'mattn/sonictemplate-vim'
 on_cmd = 'Template'
-
 
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'

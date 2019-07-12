@@ -299,6 +299,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         libsqlite3-dev \
         zlib1g-dev \
         wget \
+        tree \
         git \
         zsh \
         xclip \
@@ -310,8 +311,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         jq \
         exuberant-ctags \
         direnv \
-        neovim \
-        gufw
+        neovim
         # python3-venv \
         # python-dev python-pip python3-dev python3-pip \
 
@@ -439,6 +439,10 @@ if [ ! -e "$HOME/.config/nvim" ]; then
         run mkdir -p "$HOME/.config/nvim"
 fi
 
+if [ ! -e "$HOME/.config/efm-langserver" ]; then
+        run mkdir -p "$HOME/.config/efm-langserver"
+fi
+
 # setup other files
 if [ ! -e "$CONF_PATH/fontconfig" ]; then
         run mkdir "$CONF_PATH/fontconfig"
@@ -465,6 +469,8 @@ run ln -snf "$DOT_PATH/fonts.conf" "$CONF_PATH/fontconfig/fonts.conf"
 run ln -snf "$DOT_PATH/nvim.init.vim" "$CONF_PATH/nvim/init.vim"
 run ln -snf "$DOT_PATH/nvim.dein.toml" "$CONF_PATH/nvim/dein.toml"
 run ln -snf "$DOT_PATH/nvim.dein_lazy.toml" "$CONF_PATH/nvim/dein_lazy.toml"
+run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
+run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.yaml"
 run ln -snf "$DOT_PATH/peco.config.json" "$CONF_PATH/peco/config.json"
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
@@ -557,16 +563,19 @@ if ! $FLG_R && ! $FLG_M; then
     fi
 
     # nvm setup
-    # run curl -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash
     export NVM_DIR=$HOME/.nvm
     git clone https://github.com/creationix/nvm.git $NVM_DIR
     cd $NVM_DIR
     git checkout $(git tag | sort -V | tail -n 1) # set latest tag
     cd $WORKING_DIR
 
-    # [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-    # nvm install --lts
-    # nvm use --lts
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install --lts
+    nvm use --lts
+
+    # install needed npm packages
+    npm install -g npm
+    npm install -g markdownlint
 
     # rbenv setup
     # git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
@@ -587,6 +596,10 @@ if ! $FLG_R && ! $FLG_C; then
     run mkdir -p "$HOME/.themes"
     echo "$password" | sudo -S echo ""
     # Paper-Icon & Adapta-Gtk-Theme
+
+    # install GUI apps
+    sudo apt install gufw
+
     sudo apt-get install -y paper-icon-theme \
     paper-cursor-theme
 
