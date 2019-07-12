@@ -222,7 +222,7 @@ alias termis='terminator -l small'
 alias termim='terminator -l medium'
 alias termil='terminator -l large'
 
-alias tmux='env TERM=xterm-256color tmux'
+# alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
 
 alias showtime='date & time'
