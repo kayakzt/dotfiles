@@ -22,9 +22,9 @@ if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
 export path=($HOME/.poetry/bin(N-/) $path)
-if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
-    source "${VIRTUAL_ENV}/bin/activate"
-fi
+# if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
+#     source "${VIRTUAL_ENV}/bin/activate"
+# fi
 
 # goenv & go
 export GOENV_ROOT=$HOME/.goenv
@@ -41,17 +41,16 @@ export path=($GOPATH/bin(N-/) $path)
 export path=($HOME/.cargo/bin(N-/) $path)
 if command -v rustc > /dev/null; then
     export RUST_ROOT=$(rustc --print sysroot)
+    export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
 fi
-export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
 
 export NVM_DIR=$HOME/.nvm
-# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # This loads nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# export path=($HOME/.rbenv/bin(N-/) $path)
-# if command -v rbenv > /dev/null; then
-#     eval "$(rbenv init - --no-rehash)"
-# fi
+export path=($HOME/.rbenv/bin(N-/) $path)
+if command -v rbenv > /dev/null; then
+    eval "$(rbenv init - --no-rehash)"
+fi
 
 export EDITOR=nvim
 export PAGER=less
