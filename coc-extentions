@@ -1,4 +1,4 @@
-CocInfo
-CocInfo
-CocInstall coc-calc
+CocInstall coc-json
+CocInstall coc-python
+CocInstall coc-neosnippet
 q!
