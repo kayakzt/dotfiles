@@ -60,11 +60,12 @@ call denite#custom#var('file/git', 'command',
       \ ['git', 'ls-files', '-c', '--exclude-standard'])
 
 call denite#custom#option('default', {
-      \ 'auto_accel': v:true,
       \ 'prompt': '>',
       \ 'source_names': 'short',
       \ 'auto_resize': v:false,
-      \ 'highlight_mode_insert': 'Search',
+      \ 'start_filter': v:true,
+      \ 'split': "horizontal",
+      \ 'filter_split_direction': "aboveleft",
       \ })
 
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
@@ -113,8 +114,6 @@ function! s:denite_filter_my_settings() abort
 inoremap <silent><buffer><expr> <C-h>   denite#do_map('move_up_path')
 inoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
 nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
-inoremap <silent><buffer><expr> <Esc>   denite#do_map('quit')
-nnoremap <silent><buffer><expr> <Esc>   denite#do_map('quit')
 endfunction
 
 " transparent denite window
