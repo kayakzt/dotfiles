@@ -44,13 +44,28 @@ if command -v rustc > /dev/null; then
     export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
 fi
 
+# nvm & node path
 export NVM_DIR=$HOME/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+nvm() { # pesuedo nvm function
+    unset -f nvm
+    source "${NVM_DIR}/nvm.sh"
+    nvm "$@"
+}
+
+NODE_VERSION=v$(cat ${NVM_DIR}/alias/default) # set 'nvm alias default vX.Y.Z'
+NODE_PATH=${NVM_DIR}/versions/node/$NODE_VERSION/bin
+MANPATH=${NVM_DIR}/versions/node/$NODE_VERSION/share/man:$MANPATH
+export path=($NODE_PATH(N-/) $path)
+
+# rbenv
 export path=($HOME/.rbenv/bin(N-/) $path)
 if command -v rbenv > /dev/null; then
     eval "$(rbenv init - --no-rehash)"
 fi
+
+# other settings
 
 export EDITOR=nvim
 export PAGER=less

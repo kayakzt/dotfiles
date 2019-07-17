@@ -6,6 +6,12 @@
     "diagnostic.errorSign": "☓",
     "diagnostic.signOffset": 500,
     "diagnostic.refreshAfterSave": true,
+    "list.insertMappings": {
+    "<C-h>": "do:exit"
+    },
+    "list.normalMappings": {
+    "q": "do:exit"
+    },
     "languageserver": {
         "efm": {
             "command": "efm-langserver",
