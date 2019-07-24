@@ -218,7 +218,7 @@ augroup end
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Use `:Format` to format current buffer
+" Use `:CocFormatBuf` to format current buffer
 command! -nargs=0 CocFormatBuf :call CocAction('format')
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
@@ -241,8 +241,9 @@ nmap <silent> [coc]o     :<C-u>CocList outline<cr>
 nmap <silent> [coc]y     :<C-u>CocList -I symbols<cr>
 
 nmap <silent> [coc]K     :call <SID>show_documentation()<CR>
-nmap <silent> gd <Plug>(coc-definition)
 
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gh :call CocAction('doHover')<cr>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
