@@ -561,6 +561,8 @@ if ! $FLG_R && ! $FLG_M; then
         cargo install cargo-update
         cargo install cargo-script
         # cargo install ripgrep
+        cargo install exa
+        cargo install tokei
     fi
 
     # nvm setup
