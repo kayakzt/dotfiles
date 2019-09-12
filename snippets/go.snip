@@ -1,25 +1,27 @@
 snippet func
+abbr func () (){...}
 alias fn
 options head
-    func ${1}(${2}) ${3:#:() }{
+    func ${1}(${2}) ${3:error }{
         ${4}
     }
 
 snippet iferr
-alias ife
+abbr if err != nil {...}
 options head
     if err != nil {
         ${1}
     }
 
 snippet ifok
-alias ifo
+abbr if !ok {...}
 options head
     if !ok {
         ${1}
     }
 
 snippet forcstyle
+abbr for i := 0; i < x; i++ {...}
 alias forc
 options head
     for i := 0; i < ${1}; i++ {
@@ -27,31 +29,44 @@ options head
     }
 
 snippet switch
-alias swi
+abbr switch { case:... default:... }
 options head
     switch ${1} {
     case ${2}:
     default:
     }
 
-snippet     testTable
-options     head
-    func Test${1}(t *testing.T) {
-      cases := []struct {
-        in, want ${2}
-      }{
-        ${3}
-      }
-      for _, c := range cases {
-        got := ${4}
+snippet tableTest
+abbr table test block
+options head
+    cases := []struct {
+        in   ${2}
+        want ${3}
+    }{
+        ${4}
+    }
+    for _, c := range cases {
+        got := ${5}
         if got != c.want {
-          t.Errorf("Reverse(%q) == %q, want %q", c.in, got, c.want)
+            t.Errorf("func(%q) = %q, want %q", c.in, got, c.want)
         }
-      }
     }
 
-snippet benchmark
-alias bench,ben
+snippet subTest
+abbr func Test (t *testing.T) {t.Run(...)}
+alias subt
+options head
+    func Test${1}(t *testing.T) {
+        t.Run("${2}", func(t *testing.T) {
+            for i := 0; i < t.N; i++ {
+                ${3:#:// do something...}
+            }
+        })
+    }
+
+snippet subBench
+abbr func Benchmark (b *testing.B) {b.Run(...)}
+alias subb
 options head
     func Benchmark${1}(b *testing.B) {
         b.Run("${2}", func(b *testing.B) {
@@ -63,3 +78,4 @@ options head
             b.StopTimer()
         })
     }
+
