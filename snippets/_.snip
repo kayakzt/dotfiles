@@ -1,0 +1,10 @@
+snippet     gijiroku
+abbr        inserts gijiroku header
+options     head
+    # ${1:#:Title}
+    Date: `strftime("%Y %m %d (%a)")`
+    Place: ${2}
+    Member: ${3}
+
+    ${4}
+

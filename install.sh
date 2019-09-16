@@ -540,7 +540,7 @@ if ! $FLG_R && ! $FLG_M; then
     go get -u github.com/motemen/ghq
     go get -u github.com/github/hub
     go get -u golang.org/x/tools/cmd/gopls #for lsp
-    go get github.com/mattn/efm-langserver/cmd/efm-langserver
+    go get github.com/mattn/efm-langserver
 
     if $INSTALL_RUST; then
         # rustup (stable channel) setup
