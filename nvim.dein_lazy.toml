@@ -2,14 +2,21 @@
 repo = 'tpope/vim-fugitive'
 on_event = 'VimEnter'
 hook_add = '''
-nnoremap [fugitive]  <Nop>
-nmap <space>g [fugitive]
-nnoremap <silent> [fugitive]s :Gstatus<CR><C-w>T
-nnoremap <silent> [fugitive]a :Gwrite<CR>
-nnoremap <silent> [fugitive]c :Gcommit<CR>
-nnoremap <silent> [fugitive]b :Gblame<CR>
-nnoremap <silent> [fugitive]d :Gdiff<CR>
-nnoremap <silent> [fugitive]m :Gmerge<CR>
+nnoremap [git]  <Nop>
+nmap <space>g [git]
+nnoremap <silent> [git]s :Gstatus<CR><C-w>T
+nnoremap <silent> [git]a :Gwrite<CR>
+nnoremap <silent> [git]c :Gcommit<CR>
+nnoremap <silent> [git]b :Gblame<CR>
+nnoremap <silent> [git]d :Gdiff<CR>
+nnoremap <silent> [git]m :Gmerge<CR>
+'''
+
+[[plugins]]
+repo = 'rhysd/git-messenger.vim'
+hook_add = '''
+" let g:git_messenger_no_default_mappings=v:true
+nnoremap <silent> [git]gm :GitMessenger<CR>
 '''
 
 [[plugins]] # get recent buffer in denite.vim
@@ -64,7 +71,7 @@ call denite#custom#option('default', {
       \ 'source_names': 'short',
       \ 'auto_resize': v:false,
       "\ 'start_filter': v:true,
-      \ 'split': "horizontal",
+      \ 'split': "floating",
       \ 'filter_split_direction': "aboveleft",
       \ })
 
@@ -320,41 +327,56 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 
 # Lint
 
-[[plugins]] # Golang syntax+lint
-repo = 'fatih/vim-go'
+# [[plugins]] # Golang syntax+lint
+# repo = 'fatih/vim-go'
+# on_event = 'VimEnter'
+# on_ft = 'go'
+# hook_add = '''
+# let g:go_test_timeout = '10s'
+#
+# let g:go_highlight_functions = 1
+# let g:go_highlight_methods = 1
+# let g:go_highlight_fields = 1
+# let g:go_highlight_types = 1
+# let g:go_highlight_operators = 1
+# let g:go_highlight_build_constraints = 1
+# let g:go_term_mode = 'split'
+# let g:go_version_warning = 0
+#
+# let g:go_auto_type_info = 0
+# let g:go_auto_sameids = 1
+#
+# let g:go_fmt_command = 'goimports'
+# let g:go_def_mode = 'gopls'
+# let g:go_def_mapping_enabled = 0
+#
+# autocmd FileType go nmap <Leader>r  <Plug>(go-run)
+# autocmd FileType go nmap <Leader>t  <Plug>(go-test)
+# " autocmd FileType go nmap <Leader>b :<C-u>call <SID>build_go_files()<CR>
+# autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+# " autocmd FileType go nmap <Leader>i <Plug>(go-info)
+# " autocmd FileType go nmap <leader>s <Plug>(go-def-split)
+# " autocmd FileType go nmap <leader>v <Plug>(go-def-vertical)
+# autocmd Filetype go command! -bang GoA call go#alternate#Switch(<bang>0, 'edit')
+# autocmd Filetype go command! -bang GoAV call go#alternate#Switch(<bang>0, 'vsplit')
+# autocmd Filetype go command! -bang GoAS call go#alternate#Switch(<bang>0, 'split')
+# autocmd Filetype go command! -bang GoAT call go#alternate#Switch(<bang>0, 'tabe')
+# '''
+
+[[plugins]] # Simpler golang support plugin
+repo = 'arp242/gopher.vim'
 on_event = 'VimEnter'
 on_ft = 'go'
 hook_add = '''
-let g:go_test_timeout = '10s'
-
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_types = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-let g:go_term_mode = 'split'
-let g:go_version_warning = 0
-
-let g:go_auto_type_info = 0
-let g:go_auto_sameids = 1
-
-let g:go_fmt_command = 'goimports'
-let g:go_def_mode = 'gopls'
-let g:go_def_mapping_enabled = 0
-
-autocmd FileType go nmap <Leader>r  <Plug>(go-run)
-autocmd FileType go nmap <Leader>t  <Plug>(go-test)
-" autocmd FileType go nmap <Leader>b :<C-u>call <SID>build_go_files()<CR>
-autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-" autocmd FileType go nmap <Leader>i <Plug>(go-info)
-" autocmd FileType go nmap <leader>s <Plug>(go-def-split)
-" autocmd FileType go nmap <leader>v <Plug>(go-def-vertical)
-autocmd Filetype go command! -bang GoA call go#alternate#Switch(<bang>0, 'edit')
-autocmd Filetype go command! -bang GoAV call go#alternate#Switch(<bang>0, 'vsplit')
-autocmd Filetype go command! -bang GoAS call go#alternate#Switch(<bang>0, 'split')
-autocmd Filetype go command! -bang GoAT call go#alternate#Switch(<bang>0, 'tabe')
+command GoBuild :setl makeprg=go\ build | :make
+command GoRun :setl makeprg=go\ run | :make %:h/*.go
+command GoTest :compiler gotest | :make
 '''
+
+[[plugins]] # Neovim/Vim integration for Delve
+repo = 'sebdah/vim-delve'
+on_event = 'VimEnter'
+on_ft = 'go'
 
 # Display
 
