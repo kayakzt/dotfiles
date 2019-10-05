@@ -14,8 +14,9 @@ nnoremap <silent> [git]m :Gmerge<CR>
 
 [[plugins]]
 repo = 'rhysd/git-messenger.vim'
+on_event = 'BufReadPost'
 hook_add = '''
-" let g:git_messenger_no_default_mappings=v:true
+let g:git_messenger_no_default_mappings=v:true
 nnoremap <silent> [git]gm :GitMessenger<CR>
 '''
 
@@ -105,24 +106,24 @@ nnoremap <silent> [denite]p :Denite -buffer-name=grep-buffer-denite -resume -imm
 " denite key map
 autocmd FileType denite call s:denite_my_settings()
 function! s:denite_my_settings() abort
-nnoremap <silent><buffer><expr> <CR>    denite#do_map('do_action')
-nnoremap <silent><buffer><expr> <Tab>   denite#do_map('choose_action')
-nnoremap <silent><buffer><expr> a       denite#do_map('open_filter_buffer')
-nnoremap <silent><buffer><expr> i       denite#do_map('open_filter_buffer')
-nnoremap <silent><buffer><expr> d       denite#do_map('do_action', 'delete')
-nnoremap <silent><buffer><expr> p       denite#do_map('do_action', 'preview')
-nnoremap <silent><buffer><expr> q       denite#do_map('quit')
-nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
-nnoremap <silent><buffer><expr> <Esc>   denite#do_map('quit')
-nnoremap <silent><buffer><expr> <C-t>   denite#do_map('toggle_select').'j'
-nnoremap <silent><buffer><expr> <C-h>   denite#do_map('move_up_path')
+    nnoremap <silent><buffer><expr> <CR>    denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> <Tab>   denite#do_map('choose_action')
+    nnoremap <silent><buffer><expr> a       denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> i       denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> d       denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> p       denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> q       denite#do_map('quit')
+    nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
+    nnoremap <silent><buffer><expr> <Esc>   denite#do_map('quit')
+    nnoremap <silent><buffer><expr> <C-t>   denite#do_map('toggle_select').'j'
+    nnoremap <silent><buffer><expr> <C-h>   denite#do_map('move_up_path')
 endfunction
 
 autocmd FileType denite-filter call s:denite_filter_my_settings()
 function! s:denite_filter_my_settings() abort
-inoremap <silent><buffer><expr> <C-h>   denite#do_map('move_up_path')
-inoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
-nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
+    inoremap <silent><buffer><expr> <C-h>   denite#do_map('move_up_path')
+    inoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
+    nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
 endfunction
 
 " transparent denite window
@@ -299,7 +300,7 @@ hook_add = '''
 
 [[plugins]] # enable to buffer execution on vim
 repo = 'thinca/vim-quickrun'
-on_event = 'VimEnter'
+on_event = 'BufReadPost'
 hook_add = '''
 let g:quickrun_config = get(g:, 'quickrun_config', {})
 let g:quickrun_config._ = {
@@ -365,18 +366,27 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 
 [[plugins]] # Simpler golang support plugin
 repo = 'arp242/gopher.vim'
-on_event = 'VimEnter'
+on_event = 'BufReadPost'
 on_ft = 'go'
 hook_add = '''
 command GoBuild :setl makeprg=go\ build | :make
 command GoRun :setl makeprg=go\ run | :make %:h/*.go
 command GoTest :compiler gotest | :make
+
+nnoremap <Leader>b :GoBuild<CR>
+nnoremap <Leader>r :GoRun<CR>
+nnoremap <Leader>t :GoTest<CR>
+nnoremap <Leader>c :GoCoverage toggle<CR>
 '''
 
 [[plugins]] # Neovim/Vim integration for Delve
 repo = 'sebdah/vim-delve'
-on_event = 'VimEnter'
+on_event = 'BufReadPost'
 on_ft = 'go'
+hook_add = '''
+nnoremap <Leader>d :DlvDebug<CR>
+nnoremap <Leader>b :DlvToggleBreakpoint<CR>
+'''
 
 # Display
 
@@ -399,7 +409,7 @@ on_event = 'CursorMoved'
 
 [[plugins]] # plugin for GoDecls command in vim-go
 repo = 'ctrlpvim/ctrlp.vim'
-on_event = 'VimEnter'
+on_event = 'BufReadPost'
 
 [[plugins]] # highlights trailing whitespace
 repo = 'bronson/vim-trailing-whitespace'
@@ -452,7 +462,7 @@ inoremap <expr> & smartchr#loop('&', ' & ', ' && ')
 [[plugins]] # comment out / decomment plugin
 repo = 'tyru/caw.vim'
 on_map = {nx = '<Plug>'}
-on_event = 'VimEnter'
+on_event = 'BufReadPost'
 hook_add = '''
   function! InitCaw() abort
     if !&l:modifiable
@@ -485,6 +495,7 @@ hook_source = 'let g:impsort_highlight_imported = 0'
 [[plugins]] # for url open in browser & search word
 repo = 'tyru/open-browser.vim'
 on_map = ['<Plug>(openbrowser-smart-search)']
+on_event = 'BufReadPost'
 hook_add = '''
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
@@ -494,6 +505,7 @@ vmap gx <Plug>(openbrowser-smart-search)
 repo = 'previm/previm'
 on_cmd = 'PrevimOpen'
 on_ft = 'md'
+on_event = 'BufReadPost'
 depends = ['open-browser.vim']
 
 [[plugins]] # Continuously updated session files
@@ -507,7 +519,7 @@ on_cmd = 'Template'
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
 on_ft = 'help'
-on_event = 'VimEnter'
+on_event = 'BufReadPost'
 hook_add = '''
 set helplang=ja,en
 '''
