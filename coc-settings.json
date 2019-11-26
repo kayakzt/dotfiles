@@ -103,5 +103,8 @@
                 }
             }
         }
-    }
+    },
+    "python.linting.enabled":false,
+    "python.jediEnabled":false,
+    "python.analysis.diagnosticEnabled":false
 }

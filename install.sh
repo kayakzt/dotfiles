@@ -524,7 +524,9 @@ if ! $FLG_R && ! $FLG_M; then
         jupyter \
         seaborn \
         'python-language-server[all]' \
-        pynvim
+        pynvim \
+        yamllint \
+        vim-vint
 
     # goenv & setup
     echo "$password" | sudo -S echo ""
