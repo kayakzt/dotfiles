@@ -1,7 +1,7 @@
 {
     "coc.preferences.extensionUpdateCheck": "weekly",
     "diagnostic.infoSign": ">",
-    "diagnostic.hintSign": ">",
+    "diagnostic.hintSign": "?",
     "diagnostic.warningSign": "!",
     "diagnostic.errorSign": "☓",
     "diagnostic.signOffset": 500,
