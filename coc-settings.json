@@ -13,6 +13,14 @@
     "q": "do:exit"
     },
     "languageserver": {
+        "ccls": {
+            "command": "ccls",
+            "filetypes": ["c", "cpp","objc", "objcpp"],
+            "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
+            "initializationOptions": {
+                "directory": "/tmp/ccls"
+            }
+        },
         "efm": {
             "command": "efm-langserver",
             "args": [],
@@ -21,7 +29,8 @@
             "filetypes": [
                 "vim",
                 "eruby",
-                "markdown"
+                "markdown",
+                "yaml"
             ]
         },
         "golang": {
@@ -102,6 +111,11 @@
                     }
                 }
             }
+        },
+        "dockerfile": {
+            "command": "docker-langserver",
+            "filetypes": ["dockerfile"],
+            "args": ["--stdio"]
         }
     },
     "python.linting.enabled":false,

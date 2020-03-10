@@ -339,17 +339,18 @@ fi
 
 # peco install ('go get' is not recommended)
 install_peco() {
-    PECO_VERSION=$(curl -sI https://github.com/peco/peco/releases/latest | awk -F'/' '/^Location:/{print $NF}')
-    PECO_VERSION=`echo ${PECO_VERSION%\%*} | sed -e "s/[\r\n]\+//g"`
-    echo $PECO_VERSION
-    run wget https://github.com/peco/peco/releases/download/${PECO_VERSION}/peco_linux_amd64.tar.gz
-    tar -zxvf peco_linux_amd64.tar.gz
+    PECO_LATEST=$(curl -sSL "https://api.github.com/repos/peco/peco/releases/latest" | jq --raw-output .tag_name)
+    PECO_REPO="https://github.com/peco/peco/releases/download/${PECO_LATEST}/"
+    RELEASE="peco_linux_amd64.tar.gz"
+
+    run wget ${PECO_REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
+
     mv peco_linux_amd64/peco $HOME/dev/bin/peco
     chmod u+x $HOME/dev/bin/peco
-    run rm peco_linux_amd64.tar.gz
+    run rm ${RELEASE}
     run rm -rf peco_linux_amd64
 }
-install_peco
 
 # tmux install
 install_tmux() {
@@ -400,20 +401,34 @@ install_zsh() {
 
 # ripgrep install
 install_rg() {
-        # from https://gist.github.com/niftylettuce/a9f0a293289eb7274516bf2cb0455796
-        REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
-        RG_LATEST=$(curl -sSL "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
-        RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-x86_64-unknown-linux-musl.tar.gz"
+    # from https://gist.github.com/niftylettuce/a9f0a293289eb7274516bf2cb0455796
+    REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
+    RG_LATEST=$(curl -sSL "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
+    RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-x86_64-unknown-linux-musl.tar.gz"
 
-        TMPDIR=$(mktemp -d)
-        cd $TMPDIR
-        wget -O - ${REPO}${RELEASE} | tar zxf - --strip-component=1
-        sudo mv rg /usr/local/bin/
-        sudo mv doc/rg.1 /usr/local/share/man/man1/
-        sudo mandb
-        # sudo mv complete/rg.bash-completion /usr/share/bash-completion/completions/rg
-        cd $WORKING_DIR
-        rm -rf $TMPDIR
+    TMPDIR=$(mktemp -d)
+    cd $TMPDIR
+    wget -O - ${REPO}${RELEASE} | tar zxf - --strip-component=1
+    sudo mv rg /usr/local/bin/
+    sudo mv doc/rg.1 /usr/local/share/man/man1/
+    sudo mandb
+    # sudo mv complete/rg.bash-completion /usr/share/bash-completion/completions/rg
+    cd $WORKING_DIR
+    rm -rf $TMPDIR
+}
+
+# gh install (using .deb file)
+install_gh() {
+    GH_LATEST=$(curl -sSL "https://api.github.com/repos/cli/cli/releases/latest" | jq --raw-output .tag_name)
+    GH_REPO="https://github.com/cli/cli/releases/download/${GH_LATEST}/"
+    RELEASE="gh_${GH_LATEST:1}_linux_amd64.deb"
+
+    run wget ${GH_REPO}${RELEASE}
+
+    echo "$password" | sudo -S echo ""
+    sudo dpkg -i ${RELEASE}
+
+    run rm ${RELEASE}
 }
 
 # install zsh to local in the rootless mode
@@ -421,8 +436,14 @@ if $FLG_R; then
     install_zsh
 fi
 
+# install gh command if root enabled
+if !$FLG_R; then
+    install_gh
+fi
+
 # tmux and ripgrep are always installed to local
 install_tmux
+install_peco
 install_rg
 
 #
