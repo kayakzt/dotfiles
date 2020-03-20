@@ -291,6 +291,8 @@ run mkdir -p "$HOME"/dev/src
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
     sudo apt install -y build-essential \
+        bison \
+        flex \
         libssl-dev \
         libreadline-dev \
         libappindicator1 \
