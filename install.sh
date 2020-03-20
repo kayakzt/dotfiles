@@ -565,7 +565,7 @@ if ! $FLG_R && ! $FLG_M; then
     goenv global "$GO_VERSION"
     go get -u github.com/motemen/ghq
     go get -u github.com/github/hub
-    go get -u golang.org/x/tools/cmd/gopls #for lsp
+    GO111MODULE=on go get -u golang.org/x/tools/gopls@latest
     go get github.com/mattn/efm-langserver
 
     if $INSTALL_RUST; then
