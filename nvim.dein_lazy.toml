@@ -67,12 +67,19 @@ call denite#custom#alias('source', 'file/git', 'file/rec')
 call denite#custom#var('file/git', 'command',
       \ ['git', 'ls-files', '-c', '--exclude-standard'])
 
+let s:denite_win_width_percent = 0.85
+let s:denite_win_height_percent = 0.7
+
 call denite#custom#option('default', {
       \ 'prompt': '>',
       \ 'source_names': 'short',
       \ 'auto_resize': v:false,
       "\ 'start_filter': v:true,
       \ 'split': "floating",
+      \ 'winwidth': float2nr(&columns * s:denite_win_width_percent),
+      \ 'wincol': float2nr((&columns - (&columns * s:denite_win_width_percent)) / 2),
+      \ 'winheight': float2nr(&lines * s:denite_win_height_percent),
+      \ 'winrow': float2nr((&lines - (&lines * s:denite_win_height_percent)) / 2),
       \ 'filter_split_direction': "aboveleft",
       \ })
 
