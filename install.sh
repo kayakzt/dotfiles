@@ -212,7 +212,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     # add ppa repositories
     sudo apt install software-properties-common
     sudo -E add-apt-repository -y ppa:git-core/ppa
-    sudo -E add-apt-repository -y ppa:ansible/ansible
+    # sudo -E add-apt-repository -y ppa:ansible/ansible
     sudo -E add-apt-repository -y ppa:snwh/pulp
     # sudo -E add-apt-repository -y ppa:tista/adapta
     # sudo -E add-apt-repository -y ppa:eosrei/fonts
