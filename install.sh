@@ -548,6 +548,8 @@ if ! $FLG_R && ! $FLG_M; then
         jupyter \
         seaborn \
         'python-language-server[all]' \
+        pyls-isort \
+        pyls-black \
         pynvim \
         yamllint \
         vim-vint
@@ -566,6 +568,7 @@ if ! $FLG_R && ! $FLG_M; then
     go get -u github.com/motemen/ghq
     go get -u github.com/github/hub
     GO111MODULE=on go get -u golang.org/x/tools/gopls@latest
+    go get github.com/go-delve/delve/cmd/dlv
     go get github.com/mattn/efm-langserver
 
     if $INSTALL_RUST; then

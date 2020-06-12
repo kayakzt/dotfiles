@@ -179,6 +179,7 @@ vnoremap > >gv
 
 " set MyAutoCmd
 augroup MyAutoCmd
+    autocmd!
     " close help window with 'q'
     autocmd FileType help nnoremap <buffer> q <C-w>c
     autocmd FileType godoc nnoremap <buffer> q <C-w>c
@@ -189,5 +190,4 @@ augroup MyAutoCmd
     " completion settings
     autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
     autocmd BufRead,BufNewFile *.go set completeopt=menuone,preview
-
 augroup END

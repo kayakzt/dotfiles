@@ -230,6 +230,12 @@ augroup cocfunc
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+  " format settings
+  autocmd BufWritePre *.py CocFormatBuf
+  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+  autocmd BufWritePre *.go CocFormatBuf
+
 augroup end
 
 " Highlight symbol under cursor on CursorHold
