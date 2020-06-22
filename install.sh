@@ -216,7 +216,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     # sudo -E add-apt-repository -y ppa:snwh/pulp
     # sudo -E add-apt-repository -y ppa:tista/adapta
     # sudo -E add-apt-repository -y ppa:eosrei/fonts
-    sudo -E add-apt-repository -y ppa:neovim-ppa/stable
+    # sudo -E add-apt-repository -y ppa:neovim-ppa/stable
 fi
 
 if ( [ $OSNAME = "centos" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
