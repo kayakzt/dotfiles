@@ -210,7 +210,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     fi
 
     # add ppa repositories
-    sudo apt install software-properties-common
+    # sudo apt install software-properties-common
     # sudo -E add-apt-repository -y ppa:git-core/ppa
     # sudo -E add-apt-repository -y ppa:ansible/ansible
     # sudo -E add-apt-repository -y ppa:snwh/pulp
@@ -553,6 +553,7 @@ if ! $FLG_R && ! $FLG_M; then
         pynvim \
         yamllint \
         vim-vint
+    pip install  --upgrade pip
 
     # goenv & setup
     echo "$password" | sudo -S echo ""
@@ -608,7 +609,8 @@ if ! $FLG_R && ! $FLG_M; then
     # install needed npm packages
     npm install -g npm
     npm install -g npm-check-updates
-    npm install -g markdownlint
+    npm install -g markdownlint-cli \
+        vue-cli
 
     # rbenv setup
     # git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
