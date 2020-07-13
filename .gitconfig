@@ -54,3 +54,5 @@
     user = kayakzt
 [ghq]
     root = ~/dev/src
+[pull]
+	rebase = false
