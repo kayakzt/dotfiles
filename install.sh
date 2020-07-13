@@ -598,13 +598,14 @@ if ! $FLG_R && ! $FLG_M; then
     # nvm setup
     export NVM_DIR=$HOME/.nvm
     git clone https://github.com/creationix/nvm.git $NVM_DIR
-    # cd $NVM_DIR
-    # git checkout $(git tag | sort -V | tail -n 1) # set latest tag
-    # cd $WORKING_DIR
+    cd $NVM_DIR
+    git checkout $(git tag | sort -V | tail -n 1) # set latest tag
+    cd $WORKING_DIR
 
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install --lts
-    nvm use --lts
+    nvm install --lts --latest-npm
+    nvm alias default lts/*
+    # nvm use --lts
 
     # install needed npm packages
     npm install -g npm
