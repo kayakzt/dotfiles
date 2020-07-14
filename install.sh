@@ -213,7 +213,6 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     # sudo apt install software-properties-common
     # sudo -E add-apt-repository -y ppa:git-core/ppa
     # sudo -E add-apt-repository -y ppa:ansible/ansible
-    # sudo -E add-apt-repository -y ppa:snwh/pulp
     # sudo -E add-apt-repository -y ppa:tista/adapta
     # sudo -E add-apt-repository -y ppa:eosrei/fonts
     # sudo -E add-apt-repository -y ppa:neovim-ppa/stable
@@ -598,13 +597,14 @@ if ! $FLG_R && ! $FLG_M; then
     # nvm setup
     export NVM_DIR=$HOME/.nvm
     git clone https://github.com/creationix/nvm.git $NVM_DIR
-    # cd $NVM_DIR
-    # git checkout $(git tag | sort -V | tail -n 1) # set latest tag
-    # cd $WORKING_DIR
+    cd $NVM_DIR
+    git checkout $(git tag | sort -V | tail -n 1) # set latest tag
+    cd $WORKING_DIR
 
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install --lts
-    nvm use --lts
+    nvm install --lts --latest-npm
+    nvm alias default lts/*
+    # nvm use --lts
 
     # install needed npm packages
     npm install -g npm
@@ -635,8 +635,12 @@ if ! $FLG_R && ! $FLG_C; then
     # install GUI apps
     sudo apt install gufw
 
-    sudo apt-get install -y paper-icon-theme \
-    paper-cursor-theme
+    sudo add-apt-repository -y ppa:snwh/pulp
+    sudo add-apt-repository -y ppa:papirus/papirus
+    sudo apt update
+    sudo apt install -y paper-icon-theme \
+    paper-cursor-theme \
+    papirus-icon-theme
 
     git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant
     git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody
