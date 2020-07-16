@@ -635,12 +635,13 @@ if ! $FLG_R && ! $FLG_C; then
     # install GUI apps
     sudo apt install gufw
 
-    sudo add-apt-repository -y ppa:snwh/pulp
+    # sudo add-apt-repository -y ppa:snwh/pulp
+    # sudo apt update
+    # sudo apt install -y paper-icon-theme
+
     sudo add-apt-repository -y ppa:papirus/papirus
     sudo apt update
-    sudo apt install -y paper-icon-theme \
-    paper-cursor-theme \
-    papirus-icon-theme
+    sudo apt install -y papirus-icon-theme
 
     git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant
     git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody
