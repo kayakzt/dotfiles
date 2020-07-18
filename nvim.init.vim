@@ -72,6 +72,7 @@ endfunction"}}}
 " vim settings
 
 set encoding=utf8
+set conceallevel=0
 let mapleader = "\<Space>"
 
 " set python path for neovim

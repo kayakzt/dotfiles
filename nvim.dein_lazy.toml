@@ -514,12 +514,20 @@ nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 '''
 
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = 'md'
+
 [[plugins]] # for realtime preview for Markdown Documents
 repo = 'previm/previm'
 on_cmd = 'PrevimOpen'
 on_ft = 'md'
 on_event = 'BufReadPost'
-depends = ['open-browser.vim']
+depends = ['vim-markdown', 'open-browser.vim']
+hook_add = '''
+let g:vim_markdown_conceal=0
+let g:vim_markdown_folding_disabled=1
+'''
 
 [[plugins]] # Continuously updated session files
 repo = 'tpope/vim-obsession'
