@@ -11,8 +11,9 @@
     invert = revert
     last = log -1 HEAD --format=format:"%Cred%H"
     summary = status -u -s
-    graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Cresetâ¢ %<(75,trunc)%s (%cN, %ar) %Cred%d' --date-order
-    history = log -10 --format=format:'%Cgreen%h %Cresetâ¢ %s (%cN, %ar)'
+    graph = log --graph -100  --branches --remotes --tags --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+    graphlong = log --graph --branches --remotes --tags --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+    history = log -10 --format=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
     logline = log --pretty=oneline --stat
     branchout = checkout -b
     new-branch = checkout -b
