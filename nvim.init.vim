@@ -189,6 +189,6 @@ augroup MyAutoCmd
     autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
     " completion settings
-    autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
-    autocmd BufRead,BufNewFile *.go set completeopt=menuone,preview
+    " autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
+    " autocmd BufRead,BufNewFile *.go set completeopt=menuone,preview
 augroup END

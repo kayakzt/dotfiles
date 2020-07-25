@@ -1,5 +1,0 @@
-CocInstall coc-json
-CocInstall coc-python
-CocInstall coc-rls
-CocInstall coc-neosnippet
-q!

@@ -5,7 +5,13 @@
     "diagnostic.warningSign": "!",
     "diagnostic.errorSign": "☓",
     "diagnostic.signOffset": 500,
-    "diagnostic.refreshAfterSave": true,
+    "diagnostic.refreshAfterSave": false,
+    "diagnostic.refreshOnInsertMode": false,
+    "diagnostic.enableHighlightLineNumber": true,
+    "suggest.floatEnable": true,
+    "suggest.enablePreview": true,
+    "suggest.maxPreviewWidth": 80,
+    "suggest.detailMaxLength": 80,
     "list.insertMappings": {
     "<C-h>": "do:exit"
     },
@@ -33,18 +39,18 @@
                 "yaml"
             ]
         },
-        "golang": {
-            "command": "gopls",
-            "rootPatterns": [
-                "go.mod",
-                ".vim/",
-                ".git/",
-                ".hg/"
-            ],
-            "filetypes": [
-                "go"
-            ]
-        },
+        // "golang": {
+        //     "command": "gopls",
+        //     "rootPatterns": [
+        //         "go.mod",
+        //         ".vim/",
+        //         ".git/",
+        //         ".hg/"
+        //     ],
+        //     "filetypes": [
+        //         "go"
+        //     ]
+        // },
         "python": {
             "command": "python",
             "args": [
@@ -120,5 +126,9 @@
     },
     "python.linting.enabled":false,
     "python.jediEnabled":false,
-    "python.analysis.diagnosticEnabled":false
+    "python.analysis.diagnosticEnabled":false,
+    "go.checkForUpdates": "ask",
+    "go.goplsOptions": {
+        "completeUnimported": true
+    }
 }

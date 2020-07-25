@@ -287,20 +287,26 @@ endfunction
 
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
-on_event = 'InsertCharPre'
-depends = ['neosnippet-snippets', 'context_filetype.vim']
+on_event = 'InsertEnter'
+depends = ['context_filetype.vim']
 hook_source = '''
 imap <C-e> <Plug>(neosnippet_expand_or_jump)
 smap <C-e> <Plug>(neosnippet_expand_or_jump)
 xmap <C-e> <Plug>(neosnippet_expand_target)
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
+
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" if has('conceal')
+"   set conceallevel=2 concealcursor=niv
+" endif
 let g:neosnippet#snippets_directory = '~/.config/dotfiles/snippets'
 '''
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
+on_event = 'InsertEnter'
+depends = ['neosnippet.vim']
 
 [[plugins]] # Auto close parentheses
 repo = 'cohama/lexima.vim'
@@ -386,10 +392,10 @@ command GoBuild :setl makeprg=go\ build | :make
 command GoRun :setl makeprg=go\ run | :make %:h/*.go
 command GoTest :compiler gotest | :make
 
-nnoremap <Leader>b :GoBuild<CR>
-nnoremap <Leader>r :GoRun<CR>
-nnoremap <Leader>t :GoTest<CR>
-nnoremap <Leader>c :GoCoverage toggle<CR>
+autocmd FileType go nnoremap <Leader>b :GoBuild<CR>
+autocmd FileType go nnoremap <Leader>r :GoRun<CR>
+autocmd FileType go nnoremap <Leader>t :GoTest<CR>
+autocmd FileType go nnoremap <Leader>c :GoCoverage toggle<CR>
 '''
 
 [[plugins]] # Neovim/Vim integration for Delve
@@ -397,8 +403,8 @@ repo = 'sebdah/vim-delve'
 on_event = 'BufReadPost'
 on_ft = 'go'
 hook_add = '''
-nnoremap <Leader>d :DlvDebug<CR>
-nnoremap <Leader>b :DlvToggleBreakpoint<CR>
+autocmd FileType go nnoremap <Leader>d :DlvDebug<CR>
+autocmd FileType go nnoremap <Leader>b :DlvToggleBreakpoint<CR>
 '''
 
 # Display
@@ -479,15 +485,19 @@ on_event = 'BufReadPost'
 hook_add = '''
   function! InitCaw() abort
     if !&l:modifiable
-      silent! nunmap <buffer> g/
-      silent! xunmap <buffer> g/
+      silent! nunmap gc
+      silent! xunmap gc
+      " silent! nunmap <buffer> gc
+      " silent! xunmap <buffer> gc
       " silent! nunmap <buffer> gcc
       " silent! xunmap <buffer> gcc
     else
       " nmap <buffer> gcc <Plug>(caw:prefix)
       " xmap <buffer> gcc <Plug>(caw:prefix)
-      nmap <buffer> g/ <Plug>(caw:hatpos:toggle)
-      xmap <buffer> g/ <Plug>(caw:hatpos:toggle)
+      " nmap <buffer> gc <Plug>(caw:hatpos:toggle)
+      " xmap <buffer> gc <Plug>(caw:hatpos:toggle)
+      nmap gc <Plug>(caw:hatpos:toggle)
+      xmap gc <Plug>(caw:hatpos:toggle)
     endif
   endfunction
   autocmd MyAutoCmd FileType * call InitCaw()

@@ -612,6 +612,24 @@ if ! $FLG_R && ! $FLG_M; then
     npm install -g markdownlint-cli \
         vue-cli
 
+    # install coc-extensions for neovim
+    mkdir -p "$CONF_PATH/coc/extensions"
+    cd "$CONF_PATH/coc/extensions"
+    if [ ! -f package.json ]
+    then
+        echo '{"dependencies":{}}' > package.json
+    fi
+    npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod \
+        coc-json \
+        coc-python \
+        coc-go \
+        coc-rls \
+        coc-html \
+        coc-snippets \
+        coc-neosnippet \
+        coc-calc
+    cd "$WORKING_DIR"
+
     # rbenv setup
     # git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
     # git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
