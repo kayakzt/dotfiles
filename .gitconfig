@@ -37,6 +37,7 @@
     mergetrail = log --ancestry-path --merges
     prune = fetch --prune
     diffj = diff --word-diff=color
+    switch = switch
 [blame]
     date = relative
 [push]
