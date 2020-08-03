@@ -1,0 +1,58 @@
+snippet func "func () (){...}" b
+func ${1}(${2}) ${3:error}{
+    ${4}
+}
+endsnippet
+
+snippet iferr "if err != nil {...}" b
+if err != nil {
+    ${1}
+}
+endsnippet
+
+snippet ifok "if !ok {...}" b
+if !ok {
+    ${1}
+}
+endsnippet
+
+snippet forcstyle "C style for loop" b
+for i := 0; i < ${1}; i++ {
+    ${2}
+}
+endsnippet
+
+snippet switch "switch {case:... default:...}" b
+switch ${1:condition} {
+case ${2}:${3}
+default:${0}
+}
+endsnippet
+
+snippet tableTest "table test block" b
+cases := []struct {
+    in   ${1}
+    want ${2}
+}{
+    ${3}
+}
+for _, c := range cases {
+    got := ${4}
+    if got != c.want {
+        t.Errorf("func(%q) = %q, want %q", c.in, got, c.want)
+    }
+}
+endsnippet
+
+snippet subTest "sub test function block" b
+func Benchmark${1}(b *testing.B) {
+    b.Run("${2}", func(b *testing.B) {
+        b.ReportAllocs()
+        b.ResetTimer()
+        for i := 0; i < b.N; i++ {
+            ${3:#:// do something...}
+        }
+        b.StopTimer()
+    })
+}
+endsnippet

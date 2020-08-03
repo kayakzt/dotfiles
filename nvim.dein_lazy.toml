@@ -285,28 +285,46 @@ endfunction
 # depends = ['deoplete.nvim']
 # on_event = 'InsertEnter'
 
+# [[plugins]]
+# repo = 'Shougo/neosnippet.vim'
+# on_event = 'InsertEnter'
+# depends = ['context_filetype.vim']
+# hook_source = '''
+# imap <C-e> <Plug>(neosnippet_expand_or_jump)
+# smap <C-e> <Plug>(neosnippet_expand_or_jump)
+# xmap <C-e> <Plug>(neosnippet_expand_target)
+#
+# smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+#\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+#
+# " if has('conceal')
+# "   set conceallevel=2 concealcursor=niv
+# " endif
+# let g:neosnippet#snippets_directory = '~/.config/dotfiles/snippets'
+# '''
+
+# [[plugins]]
+# repo = 'Shougo/neosnippet-snippets'
+# on_event = 'InsertEnter'
+# depends = ['neosnippet.vim']
+
 [[plugins]]
-repo = 'Shougo/neosnippet.vim'
+repo = 'SirVer/ultisnips'
 on_event = 'InsertEnter'
-depends = ['context_filetype.vim']
 hook_source = '''
-imap <C-e> <Plug>(neosnippet_expand_or_jump)
-smap <C-e> <Plug>(neosnippet_expand_or_jump)
-xmap <C-e> <Plug>(neosnippet_expand_target)
+let g:UltiSnipsExpandTrigger = "<C-e>"
+let g:UltiSnipsJumpForwardTrigger = "<C-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
+let g:UltiSnipsEditSplit = "vertical"
+let g:UltiSnipsSnippetDirectories = ['UltiSnips', '~/.config/dotfiles/snippets']
 
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" if has('conceal')
-"   set conceallevel=2 concealcursor=niv
-" endif
-let g:neosnippet#snippets_directory = '~/.config/dotfiles/snippets'
+let g:ultisnips_python_syle = "google"
 '''
 
 [[plugins]]
-repo = 'Shougo/neosnippet-snippets'
+repo = 'honza/vim-snippets'
 on_event = 'InsertEnter'
-depends = ['neosnippet.vim']
+depends = ['ultisnips']
 
 [[plugins]] # Auto close parentheses
 repo = 'cohama/lexima.vim'
