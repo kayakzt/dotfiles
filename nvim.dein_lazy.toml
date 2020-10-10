@@ -12,7 +12,7 @@ nnoremap <silent> [git]d :Gdiff<CR>
 nnoremap <silent> [git]m :Gmerge<CR>
 '''
 
-[[plugins]]
+[[plugins]] # git-messenger shows message from last commit
 repo = 'rhysd/git-messenger.vim'
 on_event = 'BufReadPost'
 hook_add = '''
@@ -310,20 +310,20 @@ endfunction
 
 [[plugins]]
 repo = 'SirVer/ultisnips'
-on_event = 'InsertEnter'
+on_event = 'BufEnter'
 hook_source = '''
 let g:UltiSnipsExpandTrigger = "<C-e>"
 let g:UltiSnipsJumpForwardTrigger = "<C-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
 let g:UltiSnipsEditSplit = "vertical"
-let g:UltiSnipsSnippetDirectories = ['UltiSnips', '~/.config/dotfiles/snippets']
+let g:UltiSnipsSnippetDirectories = ["~/.config/dotfiles/snippets"]
 
 let g:ultisnips_python_syle = "google"
 '''
 
 [[plugins]]
 repo = 'honza/vim-snippets'
-on_event = 'InsertEnter'
+on_event = 'BufEnter'
 depends = ['ultisnips']
 
 [[plugins]] # Auto close parentheses
@@ -337,7 +337,7 @@ hook_add = '''
 
 [[plugins]] # enable to buffer execution on vim
 repo = 'thinca/vim-quickrun'
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 hook_add = '''
 let g:quickrun_config = get(g:, 'quickrun_config', {})
 let g:quickrun_config._ = {
@@ -403,7 +403,7 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 
 [[plugins]] # Simpler golang support plugin
 repo = 'arp242/gopher.vim'
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 on_ft = 'go'
 hook_add = '''
 command GoBuild :setl makeprg=go\ build | :make
@@ -418,11 +418,11 @@ autocmd FileType go nnoremap <Leader>c :GoCoverage toggle<CR>
 
 [[plugins]] # Neovim/Vim integration for Delve
 repo = 'sebdah/vim-delve'
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 on_ft = 'go'
 hook_add = '''
 autocmd FileType go nnoremap <Leader>d :DlvDebug<CR>
-autocmd FileType go nnoremap <Leader>b :DlvToggleBreakpoint<CR>
+autocmd FileType go nnoremap <Leader>p :DlvToggleBreakpoint<CR>
 '''
 
 # Display
@@ -446,7 +446,7 @@ on_event = 'CursorMoved'
 
 [[plugins]] # plugin for GoDecls command in vim-go
 repo = 'ctrlpvim/ctrlp.vim'
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 
 [[plugins]] # highlights trailing whitespace
 repo = 'bronson/vim-trailing-whitespace'
@@ -499,12 +499,12 @@ inoremap <expr> & smartchr#loop('&', ' & ', ' && ')
 [[plugins]] # comment out / decomment plugin
 repo = 'tyru/caw.vim'
 on_map = {nx = '<Plug>'}
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 hook_add = '''
   function! InitCaw() abort
     if !&l:modifiable
-      silent! nunmap gc
-      silent! xunmap gc
+      silent! nunmap <C-_>
+      silent! xunmap <C-_>
       " silent! nunmap <buffer> gc
       " silent! xunmap <buffer> gc
       " silent! nunmap <buffer> gcc
@@ -514,8 +514,8 @@ hook_add = '''
       " xmap <buffer> gcc <Plug>(caw:prefix)
       " nmap <buffer> gc <Plug>(caw:hatpos:toggle)
       " xmap <buffer> gc <Plug>(caw:hatpos:toggle)
-      nmap gc <Plug>(caw:hatpos:toggle)
-      xmap gc <Plug>(caw:hatpos:toggle)
+      nmap <C-_> <Plug>(caw:hatpos:toggle)
+      xmap <C-_> <Plug>(caw:hatpos:toggle)
     endif
   endfunction
   autocmd MyAutoCmd FileType * call InitCaw()
@@ -536,7 +536,7 @@ hook_source = 'let g:impsort_highlight_imported = 0'
 [[plugins]] # for url open in browser & search word
 repo = 'tyru/open-browser.vim'
 on_map = ['<Plug>(openbrowser-smart-search)']
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 hook_add = '''
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
@@ -550,7 +550,7 @@ on_ft = 'md'
 repo = 'previm/previm'
 on_cmd = 'PrevimOpen'
 on_ft = 'md'
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 depends = ['vim-markdown', 'open-browser.vim']
 hook_add = '''
 let g:vim_markdown_conceal=0
@@ -568,7 +568,7 @@ on_cmd = 'Template'
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
 on_ft = 'help'
-on_event = 'BufReadPost'
+on_event = 'BufEnter'
 hook_add = '''
 set helplang=ja,en
 '''

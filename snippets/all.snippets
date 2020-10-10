@@ -1,0 +1,17 @@
+snippet gijiroku "inserts gijiroku header" b
+# ${1:#:Title}
+Date: `date "+%Y-%m-%d (%a)"`
+Place: ${2}
+Member: ${3}
+
+${4:Contents}
+endsnippet
+
+snippet mail_business "mail template for business" b
+To: ${1}
+
+Hello, I'm ${2}
+${3}
+
+Best regrds,
+endsnippet

@@ -12,6 +12,9 @@
     "suggest.enablePreview": true,
     "suggest.maxPreviewWidth": 80,
     "suggest.detailMaxLength": 80,
+    "snippets.ultisnips.directories": [
+        "~/.config/dotfiles/snippets"
+    ],
     "list.insertMappings": {
     "<C-h>": "do:exit"
     },
