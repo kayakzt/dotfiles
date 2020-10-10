@@ -621,12 +621,16 @@ if ! $FLG_R && ! $FLG_M; then
     fi
     npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod \
         coc-json \
+        coc-snippets \
+        coc-neosnippet \
         coc-python \
         coc-go \
         coc-rls \
+        coc-tsserver \
+        coc-eslint \
+        coc-vetur \
         coc-html \
-        coc-snippets \
-        coc-neosnippet \
+        coc-css \
         coc-calc
     cd "$WORKING_DIR"
 
