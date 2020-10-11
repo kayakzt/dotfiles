@@ -263,7 +263,7 @@ nmap <silent> [coc]h     :call CocAction('doHover')<cr>
 nmap <silent> [coc]o     :<C-u>CocList outline<cr>
 nmap <silent> [coc]y     :<C-u>CocList -I symbols<cr>
 
-nmap <silent> [coc]K     :call <SID>show_documentation()<CR>
+nmap <silent> [coc]<C-d> :call <SID>show_documentation()<CR>
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gh :call CocAction('doHover')<cr>

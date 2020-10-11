@@ -1,5 +1,11 @@
 {
     "coc.preferences.extensionUpdateCheck": "weekly",
+    "coc.preferences.formatOnSaveFiletypes": [
+        "json",
+        "jsonc",
+        "javascript",
+        "typescript"
+    ],
     "diagnostic.infoSign": ">",
     "diagnostic.hintSign": "?",
     "diagnostic.warningSign": "!",
