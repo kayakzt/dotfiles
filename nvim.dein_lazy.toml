@@ -542,9 +542,31 @@ nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 '''
 
-[[plugins]]
+[[plugins]] # set syntax highlights and commands for markdown
 repo = 'plasticboy/vim-markdown'
 on_ft = 'md'
+on_event = 'BufEnter'
+hook_add = '''
+let g:vim_markdown_math = 1
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+let g:vim_markdown_conceal=0
+let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_toc_autofit = 1
+
+autocmd Filetype markdown nnoremap gt :Toc<CR>
+'''
+
+# [[plugins]] # enabling folding in markdown documents.
+# repo = 'masukomi/vim-markdown-folding'
+# on_event = 'BufEnter'
+# on_ft = 'md'
+# depends = ['vim-markdown']
+# hook_add = '''
+# autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
+# '''
 
 [[plugins]] # for realtime preview for Markdown Documents
 repo = 'previm/previm'
@@ -552,10 +574,6 @@ on_cmd = 'PrevimOpen'
 on_ft = 'md'
 on_event = 'BufEnter'
 depends = ['vim-markdown', 'open-browser.vim']
-hook_add = '''
-let g:vim_markdown_conceal=0
-let g:vim_markdown_folding_disabled=1
-'''
 
 [[plugins]] # Continuously updated session files
 repo = 'tpope/vim-obsession'

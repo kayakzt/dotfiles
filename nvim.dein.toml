@@ -25,9 +25,9 @@ endif
 "
 let g:airline_symbols.crypt = '🔒'		"暗号化されたファイル
 let g:airline_symbols.branch = '⭠'		"gitブランチ
-let g:airline_symbols.paste = 'ρ'			"ペーストモード
-let g:airline_symbols.spell = 'Ꞩ'			"スペルチェック
-let g:airline_symbols.notexists = '∄'		"gitで管理されていない場合
+let g:airline_symbols.paste = 'ρ'		"ペーストモード
+let g:airline_symbols.spell = 'Ꞩ'		"スペルチェック
+let g:airline_symbols.notexists = '∄'	"gitで管理されていない場合
 '''
 
 [[plugins]]
