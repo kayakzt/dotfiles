@@ -178,6 +178,14 @@ inoremap <silent> っｊ <ESC>
 vnoremap < <gv
 vnoremap > >gv
 
+" custom vimgrep
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+command! -nargs=* -complete=file Rg :tabnew | :silent grep --sort-files <args> | cw
+command! -nargs=* -complete=file Rgg :tabnew | :silent grep <args> | cw
+
 " set MyAutoCmd
 augroup MyAutoCmd
     autocmd!
