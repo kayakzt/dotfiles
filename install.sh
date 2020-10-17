@@ -154,7 +154,7 @@ yes_or_no "Do you wanna rootless install?" && FLG_R=true
 yes_or_no "Is this a CUI environment?" && FLG_C=true
 yes_or_no "Do you want to use repository in Japan?" && USE_REPO_JAPAN=true
 yes_or_no "Do you want to install rust language?" && INSTALL_RUST=true
-yes_or_no "Is the host VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
+yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
 echo -n "* OSNAME: "
 echo $(colored $yellow "$OSNAME")
