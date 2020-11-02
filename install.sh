@@ -657,13 +657,9 @@ if ! $FLG_R && ! $FLG_C; then
     # install GUI apps
     sudo apt install gufw
 
-    # sudo add-apt-repository -y ppa:snwh/pulp
-    # sudo apt update
-    # sudo apt install -y paper-icon-theme
-
-    # sudo add-apt-repository -y ppa:papirus/papirus
-    # sudo apt update
-    # sudo apt install -y papirus-icon-theme
+    sudo add-apt-repository -y ppa:papirus/papirus
+    sudo apt update
+    sudo apt install -y papirus-icon-theme
 
     git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant
     git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody
@@ -738,20 +734,15 @@ There are some steps to finish setup.
 * for System
 1. import mozc.keymap.txt for using mozc tool.
 2. change terminal color refered to terminal.color.txt (if u don't use a terminator).
-3. launch Tweak-Tool, change Theme & Font (Roboto 10pt).
+3. launch Tweak-Tool, change Theme & Font (Noto Sans CJK JP Regular 10pt).
 4. launch Tweak-Tool, set Gnome Extentions (see gnome_extentions.txt).
-[option] if your host is on virtual, you should install below:
-    * linux-tools-virtual
-    * linux-cloud-tools-virtual
-    * linux-tools-virtual-lts-{your os version}
-    * linux-cloud-tools-virtual-lts-{your os version}
 
 * for zsh
 1. change default shell to zsh(chsh with no sudo).
 
 * for Neovim
 1. try :UpdateRemotePlugins & :CheckHealth to check plugin status
-2. type :GoInstallBinaries to use vim-go
+2. launch DeinUpdate command
 
 * End. Please reboot
 EOF
