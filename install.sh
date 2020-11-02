@@ -657,9 +657,9 @@ if ! $FLG_R && ! $FLG_C; then
     # install GUI apps
     sudo apt install gufw
 
-    sudo add-apt-repository -y ppa:snwh/pulp
-    sudo apt update
-    sudo apt install -y paper-icon-theme
+    # sudo add-apt-repository -y ppa:snwh/pulp
+    # sudo apt update
+    # sudo apt install -y paper-icon-theme
 
     # sudo add-apt-repository -y ppa:papirus/papirus
     # sudo apt update
