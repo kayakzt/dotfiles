@@ -50,14 +50,25 @@ export NVM_DIR=$HOME/.nvm
 
 nvm() { # pesuedo nvm function
     unset -f nvm
-    source "${NVM_DIR}/nvm.sh"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+    # source "${NVM_DIR}/nvm.sh"
     nvm "$@"
 }
 
-NODE_VERSION=v$(cat ${NVM_DIR}/alias/default) # set 'nvm alias default vX.Y.Z'
-NODE_PATH=${NVM_DIR}/versions/node/$NODE_VERSION/bin
-MANPATH=${NVM_DIR}/versions/node/$NODE_VERSION/share/man:$MANPATH
-export path=($NODE_PATH(N-/) $path)
+# This resolves the default node version
+DEFAULT_NODE_VER="$( (< "$NVM_DIR/alias/default" || < ~/.nvmrc) 2> /dev/null)"
+while [ -s "$NVM_DIR/alias/$DEFAULT_NODE_VER" ] && [ ! -z "$DEFAULT_NODE_VER" ]; do
+    DEFAULT_NODE_VER="$(<"$NVM_DIR/alias/$DEFAULT_NODE_VER")"
+done
+
+if [ ! -z "$DEFAULT_NODE_VER" ]; then
+    export PATH="$NVM_DIR/versions/node/v${DEFAULT_NODE_VER#v}/bin:$PATH"
+fi
+
+# NODE_VERSION=v$(cat ${NVM_DIR}/alias/default) # set 'nvm alias default vX.Y.Z'
+# NODE_PATH=${NVM_DIR}/versions/node/$NODE_VERSION/bin
+# MANPATH=${NVM_DIR}/versions/node/$NODE_VERSION/share/man:$MANPATH
+# export path=($NODE_PATH(N-/) $path)
 
 # rbenv
 export path=($HOME/.rbenv/bin(N-/) $path)
