@@ -93,7 +93,7 @@ prepare_path() {
     fi
     DOT_PATH="${CONF_PATH}/dotfiles"
     WORKING_DIR=$(cd $(dirname $0); pwd)
-    DOT_REPO="https://github.com/kaya-kzt/dotfiles"
+    DOT_REPO="https://github.com/kayakzt/dotfiles"
 }
 
 prepare_path
