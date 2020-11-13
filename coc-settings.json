@@ -22,16 +22,26 @@
         "~/.config/dotfiles/snippets"
     ],
     "list.insertMappings": {
-    "<C-h>": "do:exit"
+        "<C-h>": "do:exit"
     },
     "list.normalMappings": {
-    "q": "do:exit"
+        "q": "do:exit"
     },
     "languageserver": {
         "ccls": {
             "command": "ccls",
-            "filetypes": ["c", "cpp","objc", "objcpp"],
-            "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "rootPatterns": [
+                ".ccls",
+                "compile_commands.json",
+                ".git/",
+                ".hg/"
+            ],
             "initializationOptions": {
                 "directory": "/tmp/ccls"
             }
@@ -129,13 +139,17 @@
         },
         "dockerfile": {
             "command": "docker-langserver",
-            "filetypes": ["dockerfile"],
-            "args": ["--stdio"]
+            "filetypes": [
+                "dockerfile"
+            ],
+            "args": [
+                "--stdio"
+            ]
         }
     },
-    "python.linting.enabled":false,
-    "python.jediEnabled":false,
-    "python.analysis.diagnosticEnabled":false,
+    "python.linting.enabled": false,
+    "python.jediEnabled": false,
+    "python.analysis.diagnosticEnabled": false,
     "go.checkForUpdates": "ask",
     "go.goplsOptions": {
         "completeUnimported": true
