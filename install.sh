@@ -736,6 +736,7 @@ There are some steps to finish setup.
 2. change terminal color refered to terminal.color.txt (if u don't use a terminator).
 3. launch Tweak-Tool, change Theme & Font (Noto Sans CJK JP Regular 10pt).
 4. launch Tweak-Tool, set Gnome Extentions (see gnome_extentions.txt).
+5. setup IME through ibus-daemon for Japanese-input method on X-Forwarding
 
 * for zsh
 1. change default shell to zsh(chsh with no sudo).
