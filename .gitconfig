@@ -1,6 +1,6 @@
 [user]
     name = kaya
-    email = kaya-kzt@users.noreply.github.com
+    email = 6240107+kayakzt@users.noreply.github.com
 [alias]
     unstage = reset -q HEAD --
     discard = checkout --
