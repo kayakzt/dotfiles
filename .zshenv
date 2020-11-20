@@ -80,6 +80,7 @@ fi
 
 export EDITOR=nvim
 export PAGER=less
+export VTE_CJK_WIDTH=1
 
 export path=(/usr/lib/git-core/(N-/) $path)
 fpath=( ~/.zfunc "${fpath[@]}" )
