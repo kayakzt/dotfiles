@@ -401,20 +401,20 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 # autocmd Filetype go command! -bang GoAT call go#alternate#Switch(<bang>0, 'tabe')
 # '''
 
-[[plugins]] # Simpler golang support plugin
-repo = 'arp242/gopher.vim'
-on_event = 'BufEnter'
-on_ft = 'go'
-hook_add = '''
-command GoBuild :setl makeprg=go\ build | :make
-command GoRun :setl makeprg=go\ run | :make %:h/*.go
-command GoTest :compiler gotest | :make
-
-autocmd FileType go nnoremap <Leader>b :GoBuild<CR>
-autocmd FileType go nnoremap <Leader>r :GoRun<CR>
-autocmd FileType go nnoremap <Leader>t :GoTest<CR>
-autocmd FileType go nnoremap <Leader>c :GoCoverage toggle<CR>
-'''
+# [[plugins]] # Simpler golang support plugin
+# repo = 'arp242/gopher.vim'
+# on_event = 'BufEnter'
+# on_ft = 'go'
+# hook_add = '''
+# command GoBuild :setl makeprg=go\ build | :make
+# command GoRun :setl makeprg=go\ run | :make %:h/*.go
+# command GoTest :compiler gotest | :make
+#
+# autocmd FileType go nnoremap <Leader>b :GoBuild<CR>
+# autocmd FileType go nnoremap <Leader>r :GoRun<CR>
+# autocmd FileType go nnoremap <Leader>t :GoTest<CR>
+# autocmd FileType go nnoremap <Leader>c :GoCoverage toggle<CR>
+# '''
 
 [[plugins]] # Neovim/Vim integration for Delve
 repo = 'sebdah/vim-delve'
