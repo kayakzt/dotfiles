@@ -628,6 +628,7 @@ if ! $FLG_R && ! $FLG_M; then
         coc-rls \
         coc-tsserver \
         coc-eslint \
+        coc-prettier \
         coc-vetur \
         coc-html \
         coc-css \
