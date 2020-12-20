@@ -427,16 +427,21 @@ autocmd FileType go nnoremap <Leader>p :DlvToggleBreakpoint<CR>
 
 # Display
 
-[[plugins]] # swhitch buffer file type according to cursor position
-repo = 'osyo-manga/vim-precious'
-depends = ['context_filetype.vim']
-on_event = 'VimEnter'
-hook_add ='''
-let g:precious_enable_switch_CursorMoved = { '*': 1, 'help': 1 }
-let g:precious_enable_switch_CursorMoved_i = { '*': 1, 'help': 1 }
-autocmd MyAutoCmd InsertEnter * :PreciousSwitch
-autocmd MyAutoCmd InsertLeave * :PreciousReset
-'''
+# [[plugins]] # get file type for Shougo-san's plugins
+# repo = 'Shougo/context_filetype.vim'
+# on_event = 'BufReadPost'
+
+# [[plugins]] # swhitch buffer file type according to cursor position
+# repo = 'osyo-manga/vim-precious'
+# depends = ['context_filetype.vim']
+# on_event = 'BufReadPost'
+# hook_add ='''
+# '''
+
+# [[plugins]] # syntax highlighting for Vue Components
+# repo = 'posva/vim-vue'
+# on_ft = 'vue'
+# on_event = 'BufReadPost'
 
 # Other
 

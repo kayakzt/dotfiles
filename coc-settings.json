@@ -3,24 +3,27 @@
     "coc.preferences.formatOnSaveFiletypes": [
         "json",
         "jsonc",
+        "html",
+        "css",
+        "sass",
+        "scss",
         "javascript",
-        "typescript"
+        "typescript",
+        "vue"
     ],
     "diagnostic.infoSign": ">",
     "diagnostic.hintSign": "?",
     "diagnostic.warningSign": "!",
     "diagnostic.errorSign": "☓",
-    "diagnostic.signOffset": 500,
-    "diagnostic.refreshAfterSave": false,
+    /* "diagnostic.signOffset": 500,         */
+    /* "diagnostic.refreshAfterSave": false, */
     "diagnostic.refreshOnInsertMode": false,
     "diagnostic.enableHighlightLineNumber": true,
     "suggest.floatEnable": true,
     "suggest.enablePreview": true,
     "suggest.maxPreviewWidth": 80,
     "suggest.detailMaxLength": 80,
-    "snippets.ultisnips.directories": [
-        "~/.config/dotfiles/snippets"
-    ],
+    "snippets.ultisnips.directories": ["~/.config/dotfiles/snippets"],
     "list.insertMappings": {
         "<C-h>": "do:exit"
     },
@@ -30,18 +33,8 @@
     "languageserver": {
         "ccls": {
             "command": "ccls",
-            "filetypes": [
-                "c",
-                "cpp",
-                "objc",
-                "objcpp"
-            ],
-            "rootPatterns": [
-                ".ccls",
-                "compile_commands.json",
-                ".git/",
-                ".hg/"
-            ],
+            "filetypes": ["c", "cpp", "objc", "objcpp"],
+            "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
             "initializationOptions": {
                 "directory": "/tmp/ccls"
             }
@@ -51,12 +44,7 @@
             "args": [],
             // custom config path
             // "args": ["-c", "/path/to/your/config.yaml"],
-            "filetypes": [
-                "vim",
-                "eruby",
-                "markdown",
-                "yaml"
-            ]
+            "filetypes": ["vim", "eruby", "markdown", "yaml"]
         },
         // "golang": {
         //     "command": "gopls",
@@ -72,16 +60,9 @@
         // },
         "python": {
             "command": "python",
-            "args": [
-                "-mpyls",
-                "-vv",
-                "--log-file",
-                "/tmp/lsp_python.log"
-            ],
+            "args": ["-mpyls", "-vv", "--log-file", "/tmp/lsp_python.log"],
             "trace.server": "verbose",
-            "filetypes": [
-                "python"
-            ],
+            "filetypes": ["python"],
             "settings": {
                 "pyls": {
                     "enable": true,
@@ -89,9 +70,7 @@
                         "server": "verbose"
                     },
                     "commandPath": "",
-                    "configurationSources": [
-                        "pycodestyle"
-                    ],
+                    "configurationSources": ["pycodestyle"],
                     "plugins": {
                         "jedi_completion": {
                             "enabled": true
@@ -139,12 +118,8 @@
         },
         "dockerfile": {
             "command": "docker-langserver",
-            "filetypes": [
-                "dockerfile"
-            ],
-            "args": [
-                "--stdio"
-            ]
+            "filetypes": ["dockerfile"],
+            "args": ["--stdio"]
         }
     },
     "python.linting.enabled": false,

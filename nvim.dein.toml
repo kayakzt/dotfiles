@@ -164,9 +164,6 @@ colorscheme onedark
 
 # Others
 
-[[plugins]] # get file type for Shougo-san's plugins
-repo = 'Shougo/context_filetype.vim'
-
 [[plugins]] # EditorConfig
 repo = 'editorconfig/editorconfig-vim'
 on_path = '.*'
@@ -255,3 +252,4 @@ repo = 'cocopon/vaffle.vim'
 #     \ "Unknown"   : "?"
 #     \ }
 # '''
+
