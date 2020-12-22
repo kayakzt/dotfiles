@@ -214,8 +214,8 @@ nmap k <Plug>(accelerated_jk_gk)
 '''
 
 
-[[plugins]] # file manager for vim
-repo = 'cocopon/vaffle.vim'
+# [[plugins]] # file manager for vim
+# repo = 'cocopon/vaffle.vim'
 # hook_add = '''
 # '''
 
