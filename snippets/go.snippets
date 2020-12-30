@@ -4,6 +4,12 @@ func ${1}(${2}) ${3:error}{
 }
 endsnippet
 
+snippet struct "type struct..."
+type ${1} struct {
+	${0}
+}
+endsnippet
+
 snippet iferr "if err != nil {...}"
 if err != nil {
     ${1}
@@ -29,7 +35,13 @@ default:${0}
 }
 endsnippet
 
-snippet tableTest "table test block"
+snippet testFunc "function template for testing"
+func Test${1}(t *testing.T) {
+	${0}
+}
+endsnippet
+
+snippet tableTest "templage block for table testing"
 cases := []struct {
     in   ${1}
     want ${2}
@@ -44,7 +56,21 @@ for _, c := range cases {
 }
 endsnippet
 
-snippet subTest "sub test function block"
+snippet testSub "function template for sub testing"
+func Test${1}(t *testing.T) {
+    t.Run("${2}", func(t *testing.T) {
+		${0}
+    })
+}
+endsnippet
+
+snippet benchFunc "function template for benchmarking"
+func Benchmark${1}(b *testing.B) {
+	${0}
+}
+endsnippet
+
+snippet benchSub "function template for sub benchmarking"
 func Benchmark${1}(b *testing.B) {
     b.Run("${2}", func(b *testing.B) {
         b.ReportAllocs()
