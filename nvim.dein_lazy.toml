@@ -583,9 +583,9 @@ autocmd FileType go nnoremap <Leader>p :DlvToggleBreakpoint<CR>
 repo = 'tpope/vim-surround'
 on_event = 'CursorMoved'
 
-[[plugins]] # plugin for GoDecls command in vim-go
-repo = 'ctrlpvim/ctrlp.vim'
-on_event = 'BufEnter'
+# [[plugins]] # plugin for GoDecls command in vim-go
+# repo = 'ctrlpvim/ctrlp.vim'
+# on_event = 'BufEnter'
 
 [[plugins]] # highlights trailing whitespace
 repo = 'bronson/vim-trailing-whitespace'
@@ -642,19 +642,15 @@ on_event = 'BufEnter'
 hook_add = '''
   function! InitCaw() abort
     if !&l:modifiable
-      silent! nunmap <C-_>
-      silent! xunmap <C-_>
-      " silent! nunmap <buffer> gc
-      " silent! xunmap <buffer> gc
+      silent! nunmap <buffer> gc
+      silent! xunmap <buffer> gc
       " silent! nunmap <buffer> gcc
       " silent! xunmap <buffer> gcc
     else
       " nmap <buffer> gcc <Plug>(caw:prefix)
       " xmap <buffer> gcc <Plug>(caw:prefix)
-      " nmap <buffer> gc <Plug>(caw:hatpos:toggle)
-      " xmap <buffer> gc <Plug>(caw:hatpos:toggle)
-      nmap <C-_> <Plug>(caw:hatpos:toggle)
-      xmap <C-_> <Plug>(caw:hatpos:toggle)
+      nmap <buffer> gc <Plug>(caw:hatpos:toggle)
+      xmap <buffer> gc <Plug>(caw:hatpos:toggle)
     endif
   endfunction
   autocmd MyAutoCmd FileType * call InitCaw()
