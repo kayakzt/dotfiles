@@ -37,11 +37,11 @@ repo = 'junegunn/vim-emoji'
 [[plugins]] # vim emoji support for denite
 repo = 'pocari/vim-denite-emoji'
 depends = ['vim-emoji']
-on_source = ['denite.nvim']
+on_source = ['denite.nvim', 'vim-emoji']
 
 [[plugins]] # for file search + open
 repo = 'Shougo/denite.nvim'
-# depends = ['neomru.vim', 'neoyank.vim']
+depends = ['neomru.vim', 'neoyank.vim']
 hook_source = '''
 if executable('rg')
   call denite#custom#var('file/rec', 'command',
@@ -74,7 +74,6 @@ call denite#custom#option('default', {
       \ 'prompt': '>',
       \ 'source_names': 'short',
       \ 'auto_resize': v:false,
-      "\ 'start_filter': v:true,
       \ 'split': "floating",
       \ 'winwidth': float2nr(&columns * s:denite_win_width_percent),
       \ 'wincol': float2nr((&columns - (&columns * s:denite_win_width_percent)) / 2),
@@ -637,24 +636,10 @@ inoremap <expr> & smartchr#loop('&', ' & ', ' && ')
 
 [[plugins]] # comment out / decomment plugin
 repo = 'tyru/caw.vim'
-on_map = {nx = '<Plug>'}
 on_event = 'BufEnter'
 hook_add = '''
-  function! InitCaw() abort
-    if !&l:modifiable
-      silent! nunmap <buffer> gc
-      silent! xunmap <buffer> gc
-      " silent! nunmap <buffer> gcc
-      " silent! xunmap <buffer> gcc
-    else
-      " nmap <buffer> gcc <Plug>(caw:prefix)
-      " xmap <buffer> gcc <Plug>(caw:prefix)
-      nmap <buffer> gc <Plug>(caw:hatpos:toggle)
-      xmap <buffer> gc <Plug>(caw:hatpos:toggle)
-    endif
-  endfunction
-  autocmd MyAutoCmd FileType * call InitCaw()
-  call InitCaw()
+  nmap  gc <Plug>(caw:hatpos:toggle)
+  xmap  gc <Plug>(caw:hatpos:toggle)
 '''
 
 [[plugins]] # for enabling display & edit binary file in vim
