@@ -19,6 +19,7 @@
     new-branch = checkout -b
     tags = tag
     branches = branch -a
+    ls = branch -a
     stashes = stash list
     remotes = remote -v
     prestage = diff -w --word-diff=color
