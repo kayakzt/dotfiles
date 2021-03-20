@@ -24,6 +24,7 @@
     "suggest.maxPreviewWidth": 80,
     "suggest.detailMaxLength": 80,
     "snippets.ultisnips.directories": ["~/.config/dotfiles/snippets"],
+    "snippets.ultisnips.enable": true,
     "list.insertMappings": {
         "<C-h>": "do:exit"
     },
@@ -96,7 +97,8 @@
                             "enabled": true
                         },
                         "pycodestyle": {
-                            "enabled": true
+                            "enabled": true,
+                            "ignore": ["E203"]
                         },
                         "pydocstyle": {
                             "enabled": false,
