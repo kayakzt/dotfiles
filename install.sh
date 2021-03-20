@@ -420,24 +420,38 @@ install_rg() {
 
 # gh install (using .deb file)
 install_gh() {
-    GH_LATEST=$(curl -sSL "https://api.github.com/repos/cli/cli/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/cli/cli/releases/download/${GH_LATEST}/"
-    RELEASE="gh_${GH_LATEST}_linux_amd64.tar.gz"
+    LATEST=$(curl -sSL "https://api.github.com/repos/cli/cli/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/cli/cli/releases/download/${LATEST}/"
+    RELEASE="gh_${LATEST:1}_linux_amd64.tar.gz"
 
-    run wget ${GH_REPO}${RELEASE}
+    run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv gh_${GH_LATEST}_linux_amd64/bin/gh $HOME/dev/bin/gh
+    mv gh_${LATEST:1}_linux_amd64/bin/gh $HOME/dev/bin/gh
     chmod u+x $HOME/dev/bin/gh
+
+    run rm -rf gh_${LATEST:1}_linux_amd64
     run rm ${RELEASE}
-    run rm -rf gh_${GH_LATEST}_linux_amd64
+}
+
+install_ghq() {
+    LATEST=$(curl -sSL "https://api.github.com/repos/x-motemen/ghq/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/x-motemen/ghq/releases/download/${LATEST}/"
+    RELEASE="ghq_linux_amd64.zip"
+
+    run wget ${REPO}${RELEASE}
+    unzip ${RELEASE}
+
+    mv ghq_linux_amd64/ghq $HOME/dev/bin/ghq
+    chmod u+x $HOME/dev/bin/ghq
 
     run rm ${RELEASE}
+    run rm -rf ghq_linux_amd64
 }
 
 install_lsd() {
     LATEST=$(curl -sSL "https://api.github.com/repos/Peltoche/lsd/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/Peltoche/lsd/releases/download/${PECO_LATEST}/"
+    REPO="https://github.com/Peltoche/lsd/releases/download/${LATEST}/"
     RELEASE="lsd-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
@@ -445,13 +459,14 @@ install_lsd() {
 
     mv lsd-${LATEST}-x86_64-unknown-linux-gnu/lsd $HOME/dev/bin/lsd
     chmod u+x $HOME/dev/bin/lsd
+
     run rm ${RELEASE}
     run rm -rf lsd-${LATEST}-x86_64-unknown-linux-gnu
 }
 
 install_dust() {
     LATEST=$(curl -sSL "https://api.github.com/repos/bootandy/dust/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/bootandy/dust/releases/download/${PECO_LATEST}/"
+    REPO="https://github.com/bootandy/dust/releases/download/${LATEST}/"
     RELEASE="dust-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
@@ -459,6 +474,7 @@ install_dust() {
 
     mv dust-${LATEST}-x86_64-unknown-linux-gnu/dust $HOME/dev/bin/dust
     chmod u+x $HOME/dev/bin/dust
+
     run rm ${RELEASE}
     run rm -rf dust-${LATEST}-x86_64-unknown-linux-gnu/dust
 }
@@ -478,6 +494,7 @@ install_tmux
 install_peco
 install_rg
 install_gh
+install_ghq
 install_lsd
 install_dust
 
@@ -568,7 +585,6 @@ if ! $FLG_R && ! $FLG_M; then
     pip install wheel \
         flake8 \
         pep8 \
-        autopep8 \
         yapf \
         mypy \
         pylint \
@@ -582,7 +598,6 @@ if ! $FLG_R && ! $FLG_M; then
         seaborn \
         'python-language-server[all]' \
         pyls-isort \
-        pyls-black \
         pynvim \
         yamllint \
         vim-vint
@@ -601,7 +616,6 @@ if ! $FLG_R && ! $FLG_M; then
     goenv global "$GO_VERSION"
 
     go install golang.org/x/tools/gopls
-    go install github.com/motemen/ghq
     go install github.com/go-delve/delve/cmd/dlv
     go install github.com/mattn/efm-langserver
 
@@ -728,7 +742,7 @@ if ! $FLG_R && ! $FLG_C; then
     if [ ! -e "$HOME/.config/gtk-3.0" ]; then
         run mkdir "$HOME/.config/gtk-3.0"
     fi
-    printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Paper\n" \
+    printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = papirus\n" \
     > "$HOME/.config/gtk-3.0/settings.ini"
 fi
 
