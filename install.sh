@@ -599,11 +599,11 @@ if ! $FLG_R && ! $FLG_M; then
     GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
     goenv install "$GO_VERSION"
     goenv global "$GO_VERSION"
-    go get -u github.com/motemen/ghq
-    go get -u github.com/github/hub
-    GO111MODULE=on go get -u golang.org/x/tools/gopls@latest
-    go get github.com/go-delve/delve/cmd/dlv
-    go get github.com/mattn/efm-langserver
+
+    go install golang.org/x/tools/gopls
+    go install github.com/motemen/ghq
+    go install github.com/go-delve/delve/cmd/dlv
+    go install github.com/mattn/efm-langserver
 
     if $INSTALL_RUST; then
         # rustup (stable channel) setup
