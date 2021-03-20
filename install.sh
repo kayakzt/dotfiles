@@ -421,15 +421,46 @@ install_rg() {
 # gh install (using .deb file)
 install_gh() {
     GH_LATEST=$(curl -sSL "https://api.github.com/repos/cli/cli/releases/latest" | jq --raw-output .tag_name)
-    GH_REPO="https://github.com/cli/cli/releases/download/${GH_LATEST}/"
-    RELEASE="gh_${GH_LATEST:1}_linux_amd64.deb"
+    REPO="https://github.com/cli/cli/releases/download/${GH_LATEST}/"
+    RELEASE="gh_${GH_LATEST}_linux_amd64.tar.gz"
 
     run wget ${GH_REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
 
-    echo "$password" | sudo -S echo ""
-    sudo dpkg -i ${RELEASE}
+    mv gh_${GH_LATEST}_linux_amd64/bin/gh $HOME/dev/bin/gh
+    chmod u+x $HOME/dev/bin/gh
+    run rm ${RELEASE}
+    run rm -rf gh_${GH_LATEST}_linux_amd64
 
     run rm ${RELEASE}
+}
+
+install_lsd() {
+    LATEST=$(curl -sSL "https://api.github.com/repos/Peltoche/lsd/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/Peltoche/lsd/releases/download/${PECO_LATEST}/"
+    RELEASE="lsd-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
+
+    run wget ${REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
+
+    mv lsd-${LATEST}-x86_64-unknown-linux-gnu/lsd $HOME/dev/bin/lsd
+    chmod u+x $HOME/dev/bin/lsd
+    run rm ${RELEASE}
+    run rm -rf lsd-${LATEST}-x86_64-unknown-linux-gnu
+}
+
+install_dust() {
+    LATEST=$(curl -sSL "https://api.github.com/repos/bootandy/dust/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/bootandy/dust/releases/download/${PECO_LATEST}/"
+    RELEASE="dust-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
+
+    run wget ${REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
+
+    mv dust-${LATEST}-x86_64-unknown-linux-gnu/dust $HOME/dev/bin/dust
+    chmod u+x $HOME/dev/bin/dust
+    run rm ${RELEASE}
+    run rm -rf dust-${LATEST}-x86_64-unknown-linux-gnu/dust
 }
 
 # install zsh to local in the rootless mode
@@ -438,14 +469,17 @@ if $FLG_R; then
 fi
 
 # install gh command if root enabled
-if !$FLG_R; then
-    install_gh
-fi
+# if !$FLG_R; then
+#     install_gh
+# fi
 
-# tmux and ripgrep are always installed to local
+# other tools are always installed to local
 install_tmux
 install_peco
 install_rg
+install_gh
+install_lsd
+install_dust
 
 #
 # Config Setup
@@ -589,9 +623,6 @@ if ! $FLG_R && ! $FLG_M; then
         # rustup component add rls-preview rust-analysis rust-src
         cargo install cargo-update
         cargo install cargo-script
-        # cargo install ripgrep
-        cargo install exa
-        cargo install tokei
     fi
 
     # nvm setup
