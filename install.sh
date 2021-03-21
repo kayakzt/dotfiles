@@ -615,9 +615,9 @@ if ! $FLG_R && ! $FLG_M; then
     goenv install "$GO_VERSION"
     goenv global "$GO_VERSION"
 
-    go install golang.org/x/tools/gopls
-    go install github.com/go-delve/delve/cmd/dlv
-    go install github.com/mattn/efm-langserver
+    # go install golang.org/x/tools/gopls@latest
+    go install github.com/go-delve/delve/cmd/dlv@latest
+    go install github.com/mattn/efm-langserver@latest
 
     if $INSTALL_RUST; then
         # rustup (stable channel) setup
