@@ -666,8 +666,10 @@ if ! $FLG_R && ! $FLG_M; then
     fi
     npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod \
         coc-json \
+        coc-diagnostic \
         coc-snippets \
         coc-neosnippet \
+        coc-sh \
         coc-python \
         coc-go \
         coc-rls \
