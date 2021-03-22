@@ -631,7 +631,7 @@ hook_add = '''
 " inoremap <expr> . smartchr#loop('.', '. ', '..', '...')
 inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
 inoremap <expr> ! smartchr#loop('!', '!!', ' != ')
-inoremap <expr> : smartchr#loop(':', ': ', ' := ')
+inoremap <expr> : smartchr#loop(':', '::', ' := ')
 inoremap <expr> + smartchr#loop('+', ' + ', '++')
 inoremap <expr> - smartchr#loop('-', ' - ', '--')
 inoremap <expr> * smartchr#loop('*', ' * ')

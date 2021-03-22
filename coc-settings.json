@@ -9,7 +9,10 @@
         "scss",
         "javascript",
         "typescript",
-        "vue"
+        "vue",
+        "rust",
+        "python",
+        "go:,"
     ],
     "diagnostic.infoSign": ">",
     "diagnostic.hintSign": "?",
@@ -130,6 +133,7 @@
     "python.linting.enabled": false,
     "python.jediEnabled": false,
     "python.analysis.diagnosticEnabled": false,
+    "rust.racer_completion": true,
     "go.checkForUpdates": "ask",
     "go.goplsOptions": {
         "completeUnimported": true

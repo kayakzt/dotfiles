@@ -41,7 +41,7 @@ export path=($GOPATH/bin(N-/) $path)
 export path=($HOME/.cargo/bin(N-/) $path)
 if command -v rustc > /dev/null; then
     export RUST_ROOT=$(rustc --print sysroot)
-    export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/src/
+    export RUST_SRC_PATH=${RUST_ROOT}/lib/rustlib/src/rust/library
 fi
 
 # nvm & node path
