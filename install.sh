@@ -670,7 +670,7 @@ if ! $FLG_R && ! $FLG_M; then
         coc-snippets \
         coc-neosnippet \
         coc-sh \
-        coc-python \
+        coc-pyright \
         coc-go \
         coc-rls \
         coc-tsserver \
