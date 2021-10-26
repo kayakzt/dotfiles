@@ -24,7 +24,6 @@
     "diagnostic.enableHighlightLineNumber": true,
     "suggest.floatEnable": true,
     "suggest.enablePreview": true,
-    "suggest.maxPreviewWidth": 80,
     "suggest.detailMaxLength": 80,
     "snippets.ultisnips.directories": ["~/.config/dotfiles/snippets"],
     "snippets.ultisnips.enable": true,
