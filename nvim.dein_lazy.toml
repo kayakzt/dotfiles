@@ -366,7 +366,7 @@ augroup cocfunc
 
   " format settings
   autocmd BufWritePre *.py CocFormatBuf
-  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+  "autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
   autocmd BufWritePre *.go CocFormatBuf
 
 augroup end
@@ -594,7 +594,7 @@ on_event = 'CursorMoved'
 
 [[plugins]] # highlights trailing whitespace
 repo = 'bronson/vim-trailing-whitespace'
-on_event = 'BufReadPost'
+on_event = 'VimEnter'
 hook_add = '''
 " delete white_space at end of line when file was saved.
 autocmd BufWritePre * :FixWhitespace
