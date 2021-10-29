@@ -623,7 +623,7 @@ if ! $FLG_R && ! $FLG_M; then
         # rustup (stable channel) setup
         echo "$password" | sudo -S echo ""
         # curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y --default-toolchain nightly
-        curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path -y
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y
         # ru ncurl -L https://static.rust-lang.org/rustup.sh | sudo sh
         export PATH=$PATH:$HOME/.cargo/bin
         # cargo +nightly install racer # racer must be installed under the nightly channel from 2.1
