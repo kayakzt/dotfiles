@@ -582,7 +582,8 @@ if ! $FLG_R && ! $FLG_M; then
     poetry completions zsh > ~/.zfunc/_poetry
 
     # install python modules
-    pip install wheel \
+    pip install --use-deprecated=legacy-resolver \
+        wheel \
         flake8 \
         pep8 \
         pylint \
