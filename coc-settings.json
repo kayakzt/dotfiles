@@ -12,7 +12,7 @@
         "vue",
         "rust",
         "python",
-        "go:,"
+        "go,"
     ],
     "diagnostic.infoSign": ">",
     "diagnostic.hintSign": "?",
@@ -131,7 +131,10 @@
     },
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
     "python.linting.pylintEnabled": true,
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pydocstyleEnabled": true,
     "python.formatting.provider": "black",
     "rust.racer_completion": true,
     "go.checkForUpdates": "ask",

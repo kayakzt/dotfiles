@@ -585,19 +585,18 @@ if ! $FLG_R && ! $FLG_M; then
     pip install wheel \
         flake8 \
         pep8 \
-        yapf \
-        mypy \
         pylint \
-        wheel \
-        jedi \
         numpy \
+        pandas \
         scipy \
         scikit-learn \
         matplotlib \
-        jupyter \
         seaborn \
+        jupyter \
         'python-language-server[all]' \
         pyls-isort \
+        pyls-mypy \
+        pyls-black \
         pynvim \
         yamllint \
         vim-vint
