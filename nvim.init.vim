@@ -195,7 +195,7 @@ augroup MyAutoCmd
     autocmd FileType godoc nnoremap <buffer> q <C-w>c
 
     " show preview window during the completion mode
-    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+    " autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
     autocmd FileType vue syntax sync fromstart
 
     " completion settings
