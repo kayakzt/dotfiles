@@ -501,6 +501,9 @@ let g:quickrun_config._ = {
       \ 'outputter/buffer/split'  : ':rightbelow 8sp',
       \ 'outputter/buffer/close_on_empty' : 1,
       \ }
+let g:quickrun_config.rust = {
+      \ 'exec' : 'cargo run',
+      \ }
 
 " q: close quickfix
 au FileType qf nnoremap <silent><buffer>q :quit<CR>
