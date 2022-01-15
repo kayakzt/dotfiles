@@ -725,6 +725,10 @@ on_cmd = 'Obsession'
 repo = 'mattn/sonictemplate-vim'
 on_cmd = 'Template'
 
+[[plugins]] # enables transparent pasting into vim
+repo = 'ConradIrwin/vim-bracketed-paste'
+on_event = 'BufEnter'
+
 [[plugins]] # vim doc in japanese
 repo = 'vim-jp/vimdoc-ja'
 on_ft = 'help'

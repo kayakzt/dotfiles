@@ -15,6 +15,10 @@ let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CON
 " Initialization
 if !&compatible
     set nocompatible
+    map ^[OA ^[ka
+    map ^[OB ^[ja
+    map ^[OC ^[la
+    map ^[OD ^[ha
 endif
 
 let g:python_host_skip_check = 1
