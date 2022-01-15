@@ -705,13 +705,17 @@ if ! $FLG_R && ! $FLG_C; then
     # install GUI apps
     sudo apt install gufw
 
-    sudo add-apt-repository -y ppa:papirus/papirus
-    sudo apt update
-    sudo apt install -y papirus-icon-theme
-
     git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant
     git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody
     git clone https://github.com/EliverLara/Ant-Dracula.git ~/.themes/Ant-Dracula
+
+    # install icons
+    wget https://github.com/vinceliuice/Fluent-icon-theme/raw/master/release/Fluent.tar.xz
+    tar Jxf Fluent.tar.xz
+    mkdir -p ~/.local/share/icons
+    run mv Fluent ~/.local/share/icons/Fluent
+    run mv Fluent-dark ~/.local/share/icons/Fluent-dark
+    rm -rf Fluent.tar.xz
 
     # install fonts
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
