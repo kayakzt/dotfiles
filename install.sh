@@ -748,7 +748,7 @@ if ! $FLG_R && ! $FLG_C; then
     if [ ! -e "$HOME/.config/gtk-3.0" ]; then
         run mkdir "$HOME/.config/gtk-3.0"
     fi
-    printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = papirus\n" \
+    printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Fluent\n" \
     > "$HOME/.config/gtk-3.0/settings.ini"
 fi
 
