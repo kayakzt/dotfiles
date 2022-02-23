@@ -312,7 +312,6 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         jq \
         exuberant-ctags \
         direnv \
-        neovim
         # python3-venv \
         # python-dev python-pip python3-dev python3-pip \
 
@@ -348,6 +347,20 @@ install_peco() {
     tar -zxvf ${RELEASE}
 
     mv peco_linux_amd64/peco $HOME/dev/bin/peco
+    chmod u+x $HOME/dev/bin/peco
+    run rm ${RELEASE}
+    run rm -rf peco_linux_amd64
+}
+
+install_nvim() {
+    LATEST=$(curl -sSL "https://api.github.com/repos/neovim/neovim/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/neovim/neovim/releases/download/${LATEST}/"
+    RELEASE="nvim.appimage"
+
+    run wget ${PECO_REPO}${RELEASE}
+
+    chmod u+x ${RELEASE}
+    mv ${RELEASE} $HOME/dev/bin/${RELEASE}
     chmod u+x $HOME/dev/bin/peco
     run rm ${RELEASE}
     run rm -rf peco_linux_amd64
@@ -492,6 +505,7 @@ fi
 # other tools are always installed to local
 install_tmux
 install_peco
+install_nvim
 install_rg
 install_gh
 install_ghq

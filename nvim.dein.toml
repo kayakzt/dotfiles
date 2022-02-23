@@ -57,14 +57,11 @@ on_ft = 'toml'
 [[plugins]]
 repo = 'joshdick/onedark.vim'
 hook_add = '''
-" let g:onedark_termcolors=256
 let g:onedark_color_overrides = {
 \ "comment_grey": {"gui": "#67727D", "cterm": "59", "cterm16" : "15"}
 \}
 let g:airline_theme='onedark'
-syntax enable
 colorscheme onedark
-" au MyAutoCmd VimEnter * nested colorscheme onedark
 '''
 
 # Completion
