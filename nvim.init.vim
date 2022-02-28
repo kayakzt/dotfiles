@@ -149,6 +149,9 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Y y$
 
+nnoremap gn :bn<cr>
+nnoremap gp :bp<cr>
+
 " for japanese input
 
 " 矢印キーでなら行内を動けるように
