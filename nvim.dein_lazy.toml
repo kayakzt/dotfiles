@@ -493,9 +493,10 @@ on_event = 'BufEnter'
 hook_add = '''
 let g:quickrun_config = get(g:, 'quickrun_config', {})
 let g:quickrun_config._ = {
-      \ 'runner'    : 'vimproc',
-      \ 'runner/vimproc/updatetime' : 40,
-      \ 'outputter/buffer/split'  : ':rightbelow 8sp',
+      \ 'runner'                          : 'vimproc',
+      \ 'runner/vimproc/sleep'            : 200,
+      \ 'runner/vimproc/updatetime'       : 80,
+      \ 'outputter/buffer/opener'         : ':botright 12new',
       \ 'outputter/buffer/close_on_empty' : 1,
       \ }
 let g:quickrun_config.rust = {
@@ -506,9 +507,9 @@ let g:quickrun_config.rust = {
 au FileType qf nnoremap <silent><buffer>q :quit<CR>
 " \r: save and execute quickrun (excluding go file type)
 let g:quickrun_no_default_key_mappings = 1
-autocmd Filetype * nnoremap <buffer> <Leader><Leader> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+autocmd Filetype * nnoremap <buffer> <Leader><Leader> :cclose<CR>:write<CR>:QuickRun<CR>
 " autocmd Filetype * if &ft!="go"|nnoremap <buffer> <Leader><Leader> :cclose<CR>:write<CR>:QuickRun -mode n<CR>|endif
-autocmd Filetype * xnoremap <buffer> <Leader><Leader> :<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>
+autocmd Filetype * xnoremap <buffer> <Leader><Leader> :<C-U>cclose<CR>:write<CR>:QuickRun -mode v<CR>
 " nnoremap \r :cclose<CR>:write<CR>:QuickRun -mode n<CR>
 " xnoremap \r :<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>
 " C-c: stop quickrun
