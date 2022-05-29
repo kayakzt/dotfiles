@@ -47,7 +47,7 @@
             "args": [],
             /* custom config path                           */
             /* "args": ["-c", "/path/to/your/config.yaml"], */
-            "filetypes": ["vim", "eruby", "markdown", "yaml"]
+            "filetypes": ["vim", "eruby"]
         },
         /* "golang": {             */
         /*     "command": "gopls", */
@@ -141,5 +141,11 @@
     "go.checkForUpdates": "ask",
     "go.goplsOptions": {
         "completeUnimported": true
+    },
+    "markdownlint.config": { "line-length": false },
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/composer/composer/main/res/composer-schema.json": [
+            "/*"
+        ]
     }
 }

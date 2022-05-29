@@ -693,6 +693,9 @@ if ! $FLG_R && ! $FLG_M; then
         coc-vetur \
         coc-html \
         coc-css \
+        coc-markdownlint \
+        coc-yaml \
+        coc-toml \
         coc-calc
     cd "$WORKING_DIR"
 

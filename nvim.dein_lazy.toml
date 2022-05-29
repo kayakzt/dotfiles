@@ -385,6 +385,7 @@ set statusline^=%{coc#status()}
 " coc keymaps
 nmap [coc] <Nop>
 map <C-k> [coc]
+nmap <silent> [coc]a :<C-u>CocAction<cr>
 nmap <silent> [coc]<C-f> :<C-u>CocFormatBuf<cr>
 nmap <silent> [coc]f     <Plug>(coc-format-selected)
 xmap <silent> [coc]f     <Plug>(coc-format-selected)
