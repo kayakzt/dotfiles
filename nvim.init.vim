@@ -92,7 +92,9 @@ set virtualedit=block
 set list
 set listchars=tab:¦_,trail:-,nbsp:%,eol:↲,extends:❯,precedes:❮
 " set showbreak=↪
-set ambiwidth=double
+if exists('&ambw')
+    set ambiwidth=double
+endif
 
 " Cursor
 "set backspace=indent,eol,start

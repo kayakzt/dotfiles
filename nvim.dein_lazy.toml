@@ -736,3 +736,7 @@ hook_add = '''
 set helplang=ja,en
 '''
 
+[[plugins]] # set auto ambiwidth
+repo = 'rbtnn/vim-ambiwidth'
+on_event = 'VimEnter'
+
