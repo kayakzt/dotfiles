@@ -644,7 +644,7 @@ on_cmd = 'Gist'
 repo = 'nathanaelkane/vim-indent-guides'
 on_event = 'VimEnter'
 hook_add = '''
-let g:indent_guides_guide_size = 1
+let g:indent_guides_guide_size = 0
 let g:indent_guides_enable_on_vim_startup = 0
 let g:indent_guides_start_level = 2
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'tagbar', 'denite']
@@ -657,14 +657,14 @@ on_event = 'InsertCharPre'
 hook_add = '''
 " inoremap <expr> , smartchr#loop(', ', ',')
 " inoremap <expr> . smartchr#loop('.', '. ', '..', '...')
-inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
-inoremap <expr> ! smartchr#loop('!', '!!', ' != ')
-inoremap <expr> : smartchr#loop(':', '::', ' := ')
-inoremap <expr> + smartchr#loop('+', ' + ', '++')
-inoremap <expr> - smartchr#loop('-', ' - ', '--')
-inoremap <expr> * smartchr#loop('*', ' * ')
-inoremap <expr> / smartchr#loop('/', ' / ', '// ')
-inoremap <expr> & smartchr#loop('&', ' & ', ' && ')
+" inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
+" inoremap <expr> ! smartchr#loop('!', '!!', ' != ')
+" inoremap <expr> : smartchr#loop(':', '::', ' := ')
+" inoremap <expr> + smartchr#loop('+', ' + ', '++')
+" inoremap <expr> - smartchr#loop('-', ' - ', '--')
+" inoremap <expr> * smartchr#loop('*', ' * ')
+" inoremap <expr> / smartchr#loop('/', ' / ', '// ')
+" inoremap <expr> & smartchr#loop('&', ' & ', ' && ')
 " inoremap <expr> | smartchr#loop('|', ' | ', ' || ')
 '''
 
@@ -722,12 +722,17 @@ autocmd Filetype markdown nnoremap gt :Toc<CR>
 # autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
 # '''
 
-[[plugins]] # for realtime preview for Markdown Documents
-repo = 'previm/previm'
-on_cmd = 'PrevimOpen'
-on_ft = 'md'
-on_event = 'BufEnter'
-depends = ['vim-markdown', 'open-browser.vim']
+# [[plugins]] # for realtime preview for Markdown Documents
+# repo = 'previm/previm'
+# on_cmd = 'PrevimOpen'
+# on_ft = 'md'
+# on_event = 'BufEnter'
+# depends = ['vim-markdown', 'open-browser.vim']
+
+[[plugins]] # for the real-time preview for markdown files
+repo = 'iamcco/markdown-preview.nvim'
+on_ft = ['markdown','pandoc.markdown','rmd']
+build = 'sh -c "cd app && yarn install"'
 
 [[plugins]] # Continuously updated session files
 repo = 'tpope/vim-obsession'
