@@ -8,6 +8,9 @@ if (has("termguicolors"))
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
+" set mapleader
+let mapleader = "\<Space>"
+
 " XDG Set
 let g:cache_home = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_HOME
 let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CONFIG_HOME
@@ -27,6 +30,7 @@ let g:python_host_skip_check = 1
 augroup MyAutoCmd
     autocmd!
 augroup END
+
 
 " dein settings {{{
 
@@ -77,7 +81,6 @@ endfunction"}}}
 
 set encoding=utf8
 set conceallevel=0
-let mapleader = "\<Space>"
 
 " set python path for neovim
 let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
