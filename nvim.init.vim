@@ -93,8 +93,7 @@ set cursorline
 set showmatch
 set virtualedit=block
 set list
-set listchars=tab:¦_,trail:-,nbsp:%,eol:↲,extends:❯,precedes:❮
-" set showbreak=↪
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 set ambiwidth=single
 
 " Cursor

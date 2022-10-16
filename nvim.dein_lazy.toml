@@ -751,5 +751,5 @@ set helplang=ja,en
 
 [[plugins]] # set auto ambiwidth
 repo = 'rbtnn/vim-ambiwidth'
-on_event = 'VimEnter'
+on_event = 'BufEnter'
 
