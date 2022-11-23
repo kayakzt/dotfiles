@@ -302,16 +302,16 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         wget \
         tree \
         git \
-        zsh \
         xclip \
         gawk \
         terminator \
         ansible \
         openssh-server \
-        silversearcher-ag \
         jq \
         exuberant-ctags \
         direnv \
+        # zsh \
+        # silversearcher-ag \
         # python3-venv \
         # python-dev python-pip python3-dev python3-pip \
 

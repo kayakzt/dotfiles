@@ -20,6 +20,22 @@ let g:git_messenger_no_default_mappings=v:true
 nnoremap <silent> [git]gm :GitMessenger<CR>
 '''
 
+# [[plugins]]
+# repo = 'stevearc/dressing.nvim'
+# on_event = 'VimEnter'
+# hook_add = '''
+# '''
+#
+# [[plugins]]
+# repo = 'nvim-lua/plenary.nvim'
+# on_source = ['telescope.nvim']
+#
+# [[plugins]]
+# repo = 'nvim-telescope/telescope.nvim'
+# rev = '0.1.0'
+# on_event = 'VimEnter'
+# depends = ['plenary.nvim']
+
 [[plugins]] # get recent buffer in denite.vim
 repo = 'Shougo/neomru.vim'
 on_source = ['denite.nvim']
