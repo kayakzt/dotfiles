@@ -403,14 +403,14 @@ install_tmux() {
 # zsh install
 install_zsh() {
     mkdir $HOME/local
-    wget "http://sourceforge.net/projects/zsh/files/zsh/5.7.1/zsh-5.7.1.tar.gz/download"
+    wget "http://sourceforge.net/projects/zsh/files/zsh/5.8.1/zsh-5.8.1.tar.gz/download"
     tar xzvf download
-    cd zsh-5.7.1
+    cd zsh-5.8.1
     ./configure --prefix=$HOME/.local --enable-multibyte --enable-locale
     make
     make install
     cd $WORKING_DIR
-    rm -rf zsh-5.7.1
+    rm -rf zsh-5.8.1
 }
 
 # ripgrep install
