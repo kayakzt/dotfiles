@@ -339,11 +339,11 @@ fi
 
 # peco install ('go get' is not recommended)
 install_peco() {
-    PECO_LATEST=$(curl -sSL "https://api.github.com/repos/peco/peco/releases/latest" | jq --raw-output .tag_name)
-    PECO_REPO="https://github.com/peco/peco/releases/download/${PECO_LATEST}/"
+    LATEST=$(curl -sSL "https://api.github.com/repos/peco/peco/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/peco/peco/releases/download/${LATEST}/"
     RELEASE="peco_linux_amd64.tar.gz"
 
-    run wget ${PECO_REPO}${RELEASE}
+    run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
     mv peco_linux_amd64/peco $HOME/dev/bin/peco
@@ -357,13 +357,11 @@ install_nvim() {
     REPO="https://github.com/neovim/neovim/releases/download/${LATEST}/"
     RELEASE="nvim.appimage"
 
-    run wget ${PECO_REPO}${RELEASE}
+    run wget ${REPO}${RELEASE}
 
     chmod u+x ${RELEASE}
     mv ${RELEASE} $HOME/dev/bin/${RELEASE}
     chmod u+x $HOME/dev/bin/peco
-    run rm ${RELEASE}
-    run rm -rf peco_linux_amd64
 }
 
 # tmux install
