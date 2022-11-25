@@ -412,7 +412,7 @@ install_tmux() {
 install_zsh() {
     mkdir $HOME/local
     wget "https://sourceforge.net/projects/zsh/files/zsh/5.8.1/zsh-5.8.1.tar.xz/download"
-    tar xzvf download
+    tar Jxvf download
     cd zsh-5.8.1
     ./configure --prefix=/usr/local --enable-multibyte --enable-locale
     make
