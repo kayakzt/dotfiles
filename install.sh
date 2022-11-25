@@ -105,6 +105,8 @@ FLG_C=false
 FLG_V=false
 FLG_H=false
 USE_REPO_JAPAN=false
+INSTALL_PYTHON=false
+INSTALL_GO=false
 INSTALL_RUST=false
 
 usage_exit() {
@@ -153,6 +155,8 @@ yes_or_no "Do you wanna minimum install?" && FLG_M=true
 yes_or_no "Do you wanna rootless install?" && FLG_R=true
 yes_or_no "Is this a CUI environment?" && FLG_C=true
 yes_or_no "Do you want to use repository in Japan?" && USE_REPO_JAPAN=true
+yes_or_no "Do you want to install python language?" && INSTALL_PYTHON=true
+yes_or_no "Do you want to install go language?" && INSTALL_GO=true
 yes_or_no "Do you want to install rust language?" && INSTALL_RUST=true
 yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
@@ -177,6 +181,12 @@ if $FLG_H; then
 fi
 if $USE_REPO_JAPAN; then
     echo -n $(colored $yellow "japan-repo, ")
+fi
+if $INSTALL_PYTHON; then
+    echo -n $(colored $yellow "install_python, ")
+fi
+if $INSTALL_GO; then
+    echo -n $(colored $yellow "install_go, ")
 fi
 if $INSTALL_RUST; then
     echo -n $(colored $yellow "install_rust, ")
@@ -360,8 +370,8 @@ install_nvim() {
     run wget ${REPO}${RELEASE}
 
     chmod u+x ${RELEASE}
-    mv ${RELEASE} $HOME/dev/bin/${RELEASE}
-    chmod u+x $HOME/dev/bin/peco
+    mv ${RELEASE} $HOME/dev/bin/nvim
+    chmod u+x $HOME/dev/bin/nvim
 }
 
 # tmux install
@@ -404,7 +414,7 @@ install_zsh() {
     wget "http://sourceforge.net/projects/zsh/files/zsh/5.8.1/zsh-5.8.1.tar.gz/download"
     tar xzvf download
     cd zsh-5.8.1
-    ./configure --prefix=$HOME/.local --enable-multibyte --enable-locale
+    ./configure --prefix=/usr/local --enable-multibyte --enable-locale
     make
     make install
     cd $WORKING_DIR
@@ -487,21 +497,27 @@ install_dust() {
     chmod u+x $HOME/dev/bin/dust
 
     run rm ${RELEASE}
-    run rm -rf dust-${LATEST}-x86_64-unknown-linux-gnu/dust
+    run rm -rf dust-${LATEST}-x86_64-unknown-linux-gnu
 }
 
-# install zsh to local in the rootless mode
-if $FLG_R; then
-    install_zsh
-fi
+install_efm-langserver() {
+    LATEST=$(curl -sSL "https://api.github.com/repos/mattn/efm-langserver/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/mattn/efm-langserver/releases/download/${LATEST}/"
+    RELEASE="efm-langserver_${LATEST}_linux_amd64.tar.gz"
 
-# install gh command if root enabled
-# if !$FLG_R; then
-#     install_gh
-# fi
+    run wget ${REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
 
-# other tools are always installed to local
+    mv efm-langserver_${LATEST}_linux_amd64/efm-langserver $HOME/dev/bin/efm-langserver
+    chmod u+x $HOME/dev/bin/efm-langserver
+
+    run rm ${RELEASE}
+    run rm -rf efm-langserver_${LATEST}_linux_amd64
+}
+
+# install tools
 install_tmux
+install_zsh
 install_peco
 install_nvim
 install_rg
@@ -579,57 +595,61 @@ if ! $FLG_R && ! $FLG_M; then
     export my_dev_dir=~/dev
 
     # python
-    # install pyenv
-    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init --path)"
-    export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '*3\.10\.[0-9]$' | tail -n -2 | head -n 1 | tr -d ' ')"
-    pyenv install ${python_version}
-    pyenv global ${python_version}
+    if ! $INSTALL_PYTHON; then
+        # install pyenv
+        git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+        export PYENV_ROOT="$HOME/.pyenv"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init --path)"
+        export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '*3\.10\.[0-9]$' | tail -n -2 | head -n 1 | tr -d ' ')"
+        pyenv install ${python_version}
+        pyenv global ${python_version}
 
-    # install poetry
-    curl -sSL https://install.python-poetry.org | python -
-    export PATH="$HOME/.local/bin:$PATH"
-    poetry completions zsh > ~/.zfunc/_poetry
+        # install poetry
+        curl -sSL https://install.python-poetry.org | python -
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry completions zsh > ~/.zfunc/_poetry
 
-    # install python modules
-    pip install --use-deprecated=legacy-resolver \
-        wheel \
-        flake8 \
-        pep8 \
-        pylint \
-        numpy \
-        pandas \
-        scipy \
-        scikit-learn \
-        matplotlib \
-        seaborn \
-        jupyter \
-        'python-language-server[all]' \
-        pyls-isort \
-        pyls-mypy \
-        pyls-black \
-        pynvim \
-        yamllint \
-        vim-vint
-    pip install  --upgrade pip
+        # install python modules
+        pip install --use-deprecated=legacy-resolver \
+            wheel \
+            flake8 \
+            pep8 \
+            pylint \
+            numpy \
+            pandas \
+            scipy \
+            scikit-learn \
+            matplotlib \
+            seaborn \
+            jupyter \
+            'python-language-server[all]' \
+            pyls-isort \
+            pyls-mypy \
+            pyls-black \
+            pynvim \
+            yamllint \
+            vim-vint
+        pip install  --upgrade pip
+    fi
 
-    # goenv & setup
-    echo "$password" | sudo -S echo ""
-    export GOENV_ROOT=$HOME/.goenv
-    export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
-    git clone https://github.com/syndbg/goenv.git ~/.goenv
-    # export GOPATH=$HOME/dev
-    export PATH=$PATH:$GOENV_ROOT/bin
-    eval "$(goenv init -)"
-    GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
-    goenv install "$GO_VERSION"
-    goenv global "$GO_VERSION"
+    # go
+    if ! $INSTALL_GO; then
+        # goenv & setup
+        echo "$password" | sudo -S echo ""
+        export GOENV_ROOT=$HOME/.goenv
+        export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
+        git clone https://github.com/syndbg/goenv.git ~/.goenv
+        # export GOPATH=$HOME/dev
+        export PATH=$PATH:$GOENV_ROOT/bin
+        eval "$(goenv init -)"
+        GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
+        goenv install "$GO_VERSION"
+        goenv global "$GO_VERSION"
 
-    # go install golang.org/x/tools/gopls@latest
-    go install github.com/go-delve/delve/cmd/dlv@latest
-    go install github.com/mattn/efm-langserver@latest
+        # go install golang.org/x/tools/gopls@latest
+        go install github.com/go-delve/delve/cmd/dlv@latest
+    fi
 
     if $INSTALL_RUST; then
         # rustup (stable channel) setup
@@ -652,13 +672,13 @@ if ! $FLG_R && ! $FLG_M; then
     fi
 
     # nvm setup
-    export NVM_DIR=$HOME/.nvm
-    git clone https://github.com/creationix/nvm.git $NVM_DIR
-    cd $NVM_DIR
-    git checkout $(git tag | sort -V | tail -n 1) # set latest tag
+    export NVM_DIR="$HOME/.nvm" && (
+      git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+      cd "$NVM_DIR"
+      git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+    ) && \. "$NVM_DIR/nvm.sh"
     cd $WORKING_DIR
 
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     nvm install --lts --latest-npm
     nvm alias default lts/*
     # nvm use --lts
