@@ -589,8 +589,8 @@ if ! $FLG_R && ! $FLG_M; then
     pyenv global ${python_version}
 
     # install poetry
-    curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-    export PATH="$HOME/.poetry/bin:$PATH"
+    curl -sSL https://install.python-poetry.org | python -
+    export PATH="$HOME/.local/bin:$PATH"
     poetry completions zsh > ~/.zfunc/_poetry
 
     # install python modules
