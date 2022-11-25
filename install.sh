@@ -347,6 +347,12 @@ elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
         readline-devel
 fi
 
+install_fzf() {
+    FZF_ROOT="${HOME}/.fzf"
+    git clone --depth 1 https://github.com/junegunn/fzf.git ${FZF_ROOT}
+    ${FZF_ROOT}/install --bin
+}
+
 # peco install ('go get' is not recommended)
 install_peco() {
     LATEST=$(curl -sSL "https://api.github.com/repos/peco/peco/releases/latest" | jq --raw-output .tag_name)
@@ -410,15 +416,29 @@ install_tmux() {
 
 # zsh install
 install_zsh() {
-    mkdir $HOME/local
+    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+        echo "$password" | sudo -S echo ""
+    else
+        mkdir $HOME/.local
+    fi
+
     wget "https://sourceforge.net/projects/zsh/files/zsh/5.8.1/zsh-5.8.1.tar.xz/download"
     tar Jxvf download
+
     cd zsh-5.8.1
-    ./configure --prefix=/usr/local --enable-multibyte --enable-locale
-    make
-    make install
+
+    if ! $FLG_R; then
+        ./configure --prefix=/usr/local --enable-multibyte --enable-locale
+        sudo make
+        sudo make install
+    else
+        ./configure --prefix=${HOME}/.local --enable-multibyte --enable-locale
+        make
+        make install
+    fi
+
     cd $WORKING_DIR
-    rm -rf zsh-5.8.1
+    run rm -rf zsh-5.8.1
 }
 
 # ripgrep install
@@ -436,7 +456,7 @@ install_rg() {
     sudo mandb
     # sudo mv complete/rg.bash-completion /usr/share/bash-completion/completions/rg
     cd $WORKING_DIR
-    rm -rf $TMPDIR
+    run rm -rf $TMPDIR
 }
 
 # gh install (using .deb file)
@@ -519,6 +539,7 @@ install_efm-langserver() {
 install_tmux
 install_zsh
 install_peco
+install_fzf
 install_nvim
 install_rg
 install_gh
