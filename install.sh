@@ -411,7 +411,7 @@ install_tmux() {
 # zsh install
 install_zsh() {
     mkdir $HOME/local
-    wget "http://sourceforge.net/projects/zsh/files/zsh/5.8.1/zsh-5.8.1.tar.gz/download"
+    wget "https://sourceforge.net/projects/zsh/files/zsh/5.8.1/zsh-5.8.1.tar.xz/download"
     tar xzvf download
     cd zsh-5.8.1
     ./configure --prefix=/usr/local --enable-multibyte --enable-locale
