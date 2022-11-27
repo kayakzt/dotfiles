@@ -15,6 +15,13 @@ export path=(/opt/local/bin(N-/) $path)
 export path=(~/.local/bin(N-/) $path)
 export path=(/snap/bin(N-/) $path)
 
+# fzf
+export FZF_ROOT="$HOME/.fzf"
+export path=($FZF_ROOT/bin(N-/) $path)
+# [[ $- == *i* ]] && source "${FZF_ROOT}/shell/completion.zsh" 2> /dev/null
+# source "${FZF_ROOT}/shell/key-bindings.zsh"
+
+
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export path=($PYENV_ROOT/bin(N-/) $path)

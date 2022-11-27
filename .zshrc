@@ -111,20 +111,161 @@ bindkey "^I" menu-complete   # 展開する前に補完候補を出させる(Ctr
 
 
 #
+# fzf configurations
+#
+export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --glob '!.git/*'"
+export FZF_DEFAULT_OPTS='
+  --prompt="[query] "
+  --height=60%
+  --margin=0,1
+  --layout=reverse
+  --inline-info
+  --tiebreak=index
+  --no-mouse
+  --border
+  --bind=ctrl-h:page-up,ctrl-l:page-down
+  --bind=ctrl-f:preview-half-page-down,ctrl-b:preview-half-page-up
+  --bind=ctrl-p:toggle-preview
+'
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+export FZF_CTRL_T_OPTS="
+  --select-1 --exit-0
+  --bind 'ctrl-l:execute(tmux splitw -h -- nvim {})'
+  --preview 'bat -r :100 --color=always --style=header,grid {}'"
+
+fzf-history-search() {
+  LBUFFER="${LBUFFER}$(__fzf_history_search)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+
+__fzf_history_search() {
+  BUFFER="$(history -nr 1 | fzf --query="$LBUFFER" --prompt="[history] " | sed 's/\\n/\n/')"
+  local ret=$?
+  # CURSOR=$#BUFFER
+  echo $BUFFER
+  return $ret
+}
+
+zle -N fzf-history-search
+bindkey '^R' fzf-history-search
+
+fzf-file-search() {
+  LBUFFER="${LBUFFER}$(__fzf_file_search)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+
+__fzf_file_search() {
+    local selected=$(eval "$FZF_DEFAULT_COMMAND" | \
+      fzf-tmux -p80%,90% --height="90%" \
+        --multi \
+        --prompt="[file search] " \
+        --preview="bat -H {2} --color=always --style=header,grid {1}" \
+        --preview-window='down:60%:+{2}-4'
+  )
+
+  local ret=$?
+
+  if [[ -n "$selected" ]]; then
+    local eargs=""
+    for line in ${(ps:\n:)selected}; do
+        # echo $line
+        eargs="${eargs}${line} "
+    done
+    echo "${EDITOR} ${eargs}"
+  fi
+
+  return $ret
+}
+
+zle -N fzf-file-search
+bindkey '^[f' fzf-file-search
+
+fzf-directory-search() {
+  LBUFFER="${LBUFFER}$(__fzf_directory_search)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+
+__fzf_directory_search() {
+    local cmd="find . -type d -name '.git' -prune -o -type d -print"
+    local selected=$(eval "$cmd" | \
+      fzf-tmux -p80%,90% --height="90%" \
+        --prompt="[directory search] " \
+        --preview="tree -C {} | head -200" \
+  )
+
+  local ret=$?
+
+  if [[ -n "$selected" ]]; then
+    echo "cd ${selected}"
+  fi
+
+  return $ret
+}
+
+zle -N fzf-directory-search
+bindkey '^[d' fzf-directory-search
+
+fzf-text-search() {
+  LBUFFER="${LBUFFER}$(__fzf_text_search)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+
+__fzf_text_search() {
+  local rg_cmd="rg --smart-case --crlf --hidden --line-number --color=always --trim --glob='!.git/*' "
+  local initial_query="${*:-}"
+  local selected=$(FZF_DEFAULT_COMMAND="$rg_cmd $(printf %q "$initial_query")" \
+      fzf-tmux -p80%,90% --bind "ctrl-r:reload($rg_cmd {q})" --header "Press CTRL-R to reload" \
+        --bind="ctrl-o:execute(tmux splitw -h -- nvim +/{q} {1} +{2})" \
+        --height="90%" \
+        --ansi --phony --multi \
+        --prompt="[text search] " \
+        --delimiter=":" \
+        --preview="bat -H {2} --color=always --style=header,grid {1}" \
+        --preview-window='down:60%:+{2}-4'
+  )
+
+  local ret=$?
+
+  if [[ -n "$selected" ]]; then
+    local eargs=""
+    for line in ${(ps:\n:)selected}; do
+        # echo $line
+        local file_path=${${(@s/:/)line}[1]}
+        # echo $file_path
+        eargs="${eargs}${file_path} "
+    done
+    echo "${EDITOR} ${eargs}"
+  fi
+
+  return $ret
+}
+
+zle -N fzf-text-search
+bindkey '^[t' fzf-text-search
+
+#
 # peco functions
 #
 
-function peco-select-history() {
-    # historyを番号なし、逆順、最初から表示。
-    # 順番を保持して重複を削除。
-    # カーソルの左側の文字列をクエリにしてpecoを起動
-    # \nを改行に変換
-    BUFFER="$(history -nr 1 | peco --select-1 --query "$LBUFFER" --prompt "[history]" | sed 's/\\n/\n/')"
-    CURSOR=$#BUFFER             # カーソルを文末に移動
-    zle -R -c                   # refresh
-}
-zle -N peco-select-history
-bindkey '^R' peco-select-history
+# function peco-select-history() {
+#     # historyを番号なし、逆順、最初から表示。
+#     # 順番を保持して重複を削除。
+#     # カーソルの左側の文字列をクエリにしてpecoを起動
+#     # \nを改行に変換
+#     BUFFER="$(history -nr 1 | peco --select-1 --query "$LBUFFER" --prompt "[history]" | sed 's/\\n/\n/')"
+#     CURSOR=$#BUFFER             # カーソルを文末に移動
+#     zle -R -c                   # refresh
+# }
+# zle -N peco-select-history
+# bindkey '^R' peco-select-history
 
 # function peco-cdr () {
 #     local selected_dir="$(cdr -l | sed 's/^[0-9]\+ \+//' | peco --select-1 --prompt="cdr >" --query "$LBUFFER")"
@@ -136,8 +277,8 @@ bindkey '^R' peco-select-history
 # zle -N peco-cdr
 # bindkey '^[r' peco-cdr
 
-function kill-peco() {
-    for pid in `ps aux | peco --prompt '[kill?]' | awk '{ print $2 }'`
+function fzf-kill() {
+    for pid in `ps aux | fzf --height="80%" --multi --prompt="[kill?] " | awk '{ print $2 }'`
     do
         kill $pid
         echo "Killed ${pid}"
@@ -145,7 +286,7 @@ function kill-peco() {
 }
 
 function github-star-import() {
-  # git, curl, jq, peco, ghq required
+  # git, curl, jq, fzf, ghq required
   if [ -n "$1" ]; then
     user_id=$1
   elif [ -n "$(git config --get github.user)" ]; then
@@ -158,27 +299,51 @@ function github-star-import() {
   fi
 
   urls=$(curl -s https://api.github.com/users/$user_id/starred\?per_page\=1000 | jq '.[] | .ssh_url' | awk '{gsub("\"", "");print $0;}')
-  echo $urls | peco | ghq import
+  echo $urls | fzf | ghq import
 }
 
 # This fuction depends on ripgrep
-function shell_search() {
-  local filepath="$(rg -p --smart-case --hidden --files --color never -g "!.git/" | peco --prompt '[search]')"
-  [ -z "$filepath" ] && return
-  if [ -n "$LBUFFER" ]; then
-    BUFFER="$LBUFFER$filepath"
-  else
-    if [ -d "$filepath" ]; then
-      BUFFER="cd $filepath"
-    else
-      BUFFER="$EDITOR $filepath"
-    fi
-  fi
-  CURSOR=$#BUFFER
-}
+# function shell_search() {
+#   local filepath="$(rg -p --smart-case --hidden --files --color never -g "!.git/" | peco --prompt '[search]')"
+#   [ -z "$filepath" ] && return
+#   if [ -n "$LBUFFER" ]; then
+#     BUFFER="$LBUFFER$filepath"
+#   else
+#     if [ -d "$filepath" ]; then
+#       BUFFER="cd $filepath"
+#     else
+#       BUFFER="$EDITOR $filepath"
+#     fi
+#   fi
+#   CURSOR=$#BUFFER
+# }
+#
+# zle -N shell_search
+# bindkey '^[s' shell_search
 
-zle -N shell_search
-bindkey '^[s' shell_search
+# This fuction depends on ripgrep
+# function search_text() {
+#
+#   read "RTEXT?Enter serch text: "
+#
+#   local filepath="$(rg --smart-case --hidden --no-heading --color=always -g="!.git/" ${RTEXT} | peco --prompt '[search]')"
+#   echo ${filepath}
+#   return
+#   [ -z "$filepath" ] && return
+#   if [ -n "$LBUFFER" ]; then
+#     BUFFER="$LBUFFER$filepath"
+#   else
+#     if [ -d "$filepath" ]; then
+#       BUFFER="cd $filepath"
+#     else
+#       BUFFER="$EDITOR $filepath"
+#     fi
+#   fi
+#   CURSOR=$#BUFFER
+# }
+#
+# zle -N search_text
+# bindkey '^[t' search_text
 
 #
 # Alias
@@ -200,22 +365,19 @@ alias -g @h='| head'
 alias -g @t='| tail'
 alias -g @s='| sed'
 alias -g @c='| less -XF'
-alias -g @p='| peco'
+# alias -g @p='| peco'
+alias -g @f='| fzf'
 alias -g @em='| emojify'
 
 alias ls='ls --color'
 alias la='ls --color -lahF'
 alias ll='ls --color -lhF'
 
-alias al='ag --pager "less -R"'
-alias agh='ag --hidden'
-alias alh='ag --pager "less -R" --hidden'
-
 alias ripl='(){rg -p $@ | less -R}'
 
-alias -g gbl='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
+alias -g gbl='`git branch | fzf --prompt "[branch] " | head -n 1 | sed -e "s/^\*\s*//g"`'
 alias dps='docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.RunningFor}}"'
-alias dex='docker exec -it `dps | peco | cut -f 1` /bin/bash'
+alias dex='docker exec -it `dps | fzf | cut -f 1` /bin/bash'
 
 alias termi='terminator -l medium'
 alias termis='terminator -l small'
@@ -231,10 +393,10 @@ alias sht='date & time'
 alias di='dicto'
 alias de='dicto -e'
 
-# ghq & hub alias (with peco)
-alias cdg='cd $(ghq root)/$(ghq list | peco --prompt "[ghq src]")'
-alias ghq-cd='cd $(ghq root)/$(ghq list | peco --prompt "[ghq src]")'
-alias hubb='hub browse $(ghq list | peco --prompt "[browse src]" | cut -d "/" -f 2,3)'
+# ghq & hub alias (with fzf)
+alias cdg='cd $(ghq root)/$(ghq list | fzf --prompt "[ghq src] ")'
+alias ghq-cd='cd $(ghq root)/$(ghq list | fzf --prompt "[ghq src] ")'
+alias hubb='hub browse $(ghq list | fzf --prompt "[browse src] " | cut -d "/" -f 2,3)'
 
 alias apt-update='sudo apt-get update \
                     && sudo apt-get upgrade \
@@ -289,12 +451,12 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
 
   # Variables
   export ENHANCD_DIR="$HOME/.config/shell/enhancd"
-  export ENHANCD_FILTER="peco:fzf:fzy"
+  export ENHANCD_FILTER="fzf:peco"
   export ENHANCD_COMMAND="cd"
   export ENHANCD_HYPHEN_ARG="ls"
   export ENHANCD_DOT_ARG="up"
   export EMOJI_CLI_KEYBIND="^[em"
-  export EMOJI_CLI_FILTER="peco:fzf:fzy"
+  export EMOJI_CLI_FILTER="fzf:peco"
   export EMOJI_CLI_USE_EMOJI=0
 
   # Plugins
@@ -304,6 +466,8 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   zplug "b4b4r07/enhancd", use:init.sh, at:v2.2.4
   zplug "b4b4r07/emoji-cli"
   zplug "mrowa44/emojify", as:command
+  zplug "paulirish/git-open", as:plugin
+  zplug "junegunn/fzf-git.sh", use:fzf-git.sh
   # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
   # Install plugins if there are plugins that have not been installed
@@ -316,6 +480,15 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
 
   # Then, source plugins and add commands to $PATH
   zplug load
+
+  # override fzf-git.sh
+  _fzf_git_fzf() {
+    fzf-tmux -p80%,60% -- \
+      --layout=reverse --multi --height=50% --min-height=20 --border \
+      --color='header:italic:underline' \
+      --preview-window='right,50%,border-left' \
+      --bind='ctrl-/:change-preview-window(down,50%,border-top|hidden|)' "$@"
+  }
 fi
 
 

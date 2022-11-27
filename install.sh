@@ -520,6 +520,21 @@ install_dust() {
     run rm -rf dust-${LATEST}-x86_64-unknown-linux-gnu
 }
 
+install_bat() {
+    LATEST=$(curl -sSL "https://api.github.com/repos/sharkdp/bat/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/sharkdp/bat/releases/download/${LATEST}/"
+    RELEASE="bat-${LATEST}-aarch64-unknown-linux-gnu.tar.gz"
+
+    run wget ${REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
+
+    mv bat-${LATEST}-aarch64-unknown-linux-gnu/bat $HOME/dev/bin/bat
+    chmod u+x $HOME/dev/bin/bat
+
+    run rm ${RELEASE}
+    run rm -rf bat-${LATEST}-aarch64-unknown-linux-gnu
+}
+
 install_efm-langserver() {
     LATEST=$(curl -sSL "https://api.github.com/repos/mattn/efm-langserver/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/mattn/efm-langserver/releases/download/${LATEST}/"
@@ -538,7 +553,7 @@ install_efm-langserver() {
 # install tools
 install_tmux
 install_zsh
-install_peco
+# install_peco
 install_fzf
 install_nvim
 install_rg
@@ -546,6 +561,7 @@ install_gh
 install_ghq
 install_lsd
 install_dust
+install_bat
 
 #
 # Config Setup
@@ -569,9 +585,9 @@ fi
 if [ ! -e "$CONF_PATH/fontconfig" ]; then
         run mkdir "$CONF_PATH/fontconfig"
 fi
-if [ ! -e "$CONF_PATH/peco" ]; then
-        run mkdir "$CONF_PATH/peco"
-fi
+# if [ ! -e "$CONF_PATH/peco" ]; then
+#         run mkdir "$CONF_PATH/peco"
+# fi
 if [ ! -e "$CONF_PATH/terminator" ]; then
         run mkdir "$CONF_PATH/terminator"
 fi
@@ -593,7 +609,7 @@ run ln -snf "$DOT_PATH/nvim.dein.toml" "$CONF_PATH/nvim/dein.toml"
 run ln -snf "$DOT_PATH/nvim.dein_lazy.toml" "$CONF_PATH/nvim/dein_lazy.toml"
 run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
 run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.yaml"
-run ln -snf "$DOT_PATH/peco.config.json" "$CONF_PATH/peco/config.json"
+# run ln -snf "$DOT_PATH/peco.config.json" "$CONF_PATH/peco/config.json"
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
 
