@@ -632,7 +632,7 @@ if ! $FLG_R && ! $FLG_M; then
     export my_dev_dir=~/dev
 
     # python
-    if ! $INSTALL_PYTHON; then
+    if $INSTALL_PYTHON; then
         # install pyenv
         git clone https://github.com/pyenv/pyenv.git ~/.pyenv
         export PYENV_ROOT="$HOME/.pyenv"
@@ -671,7 +671,7 @@ if ! $FLG_R && ! $FLG_M; then
     fi
 
     # go
-    if ! $INSTALL_GO; then
+    if $INSTALL_GO; then
         # goenv & setup
         echo "$password" | sudo -S echo ""
         export GOENV_ROOT=$HOME/.goenv
