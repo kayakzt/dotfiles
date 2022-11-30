@@ -781,10 +781,10 @@ if ! $FLG_R && ! $FLG_C; then
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    Fluent-icon-theme-${LATEST}/install.sh --round --dark --all
+    Fluent-icon-theme-${LATEST}/install.sh --round --dark
 
     run rm ${RELEASE}
-    run rm -rf Fluent-icon-theme-${RELEASE}
+    run rm -rf Fluent-icon-theme-${LATEST}
 
     # install fonts
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
