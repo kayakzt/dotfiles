@@ -1,6 +1,7 @@
 {
     "suggest.noselect": true,
     "coc.preferences.extensionUpdateCheck": "weekly",
+    "coc.preferences.formatOnSave": true,
     "coc.preferences.formatOnSaveFiletypes": [
         "json",
         "jsonc",
@@ -24,9 +25,8 @@
     /* "diagnostic.refreshAfterSave": false, */
     "diagnostic.refreshOnInsertMode": false,
     "diagnostic.enableHighlightLineNumber": true,
-    "suggest.floatEnable": true,
-    "suggest.enablePreview": true,
-    "suggest.detailMaxLength": 80,
+    "suggest.enableFloat": true,
+    "suggest.labelMaxLength": 80,
     "snippets.ultisnips.directories": ["~/.config/dotfiles/snippets"],
     "snippets.ultisnips.enable": true,
     "list.insertMappings": {
@@ -128,9 +128,9 @@
             "args": ["--stdio"]
         }
     },
-    "diagnostic-languageserver.filetypes": {
-        "sh": "shellcheck"
-    },
+    // "diagnostic-languageserver.filetypes": {
+    //     "sh": "shellcheck"
+    // },
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": false,
     // "python.linting.flake8Args": ["--ignore=E501,F401,F841"],
@@ -139,7 +139,6 @@
     "python.linting.pycodestyleEnabled": false,
     "python.linting.pydocstyleEnabled": false,
     "python.formatting.provider": "black",
-    "rust.racer_completion": true,
     "go.checkForUpdates": "ask",
     "go.goplsOptions": {
         "completeUnimported": true
