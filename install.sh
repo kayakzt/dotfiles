@@ -709,11 +709,11 @@ if ! $FLG_R && ! $FLG_M; then
     fi
 
     # nvm setup
-    export NVM_DIR="$HOME/.nvm" && (
-      git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
-      cd "$NVM_DIR"
-      git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
-    ) && \. "$NVM_DIR/nvm.sh"
+    export NVM_DIR="$HOME/.nvm"
+    git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+    cd "$NVM_DIR"
+    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+    \. "$NVM_DIR/nvm.sh"
     cd $WORKING_DIR
 
     nvm install --lts --latest-npm
@@ -753,15 +753,6 @@ if ! $FLG_R && ! $FLG_M; then
         coc-toml \
         coc-calc
     cd "$WORKING_DIR"
-
-    # rbenv setup
-    # git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
-    # git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
-    # export PATH=$PATH:$HOME/.rbenv/bin
-    # eval "$(rbenv init -)"
-    # RUBY_VERSION=$(rbenv install -l | grep -v -e ruby -e - | tail -n 1 | tr -d ' ')
-    # rbenv install $RUBY_VERSION
-    # rbenv global $RUBY_VERSION
 fi
 
 
@@ -782,12 +773,18 @@ if ! $FLG_R && ! $FLG_C; then
     git clone https://github.com/EliverLara/Ant-Dracula.git ~/.themes/Ant-Dracula
 
     # install icons
-    wget https://github.com/vinceliuice/Fluent-icon-theme/raw/master/release/Fluent.tar.xz
-    tar Jxf Fluent.tar.xz
-    mkdir -p ~/.local/share/icons
-    run mv Fluent ~/.local/share/icons/Fluent
-    run mv Fluent-dark ~/.local/share/icons/Fluent-dark
-    rm -rf Fluent.tar.xz
+    # Fluent-icon-theme
+    LATEST=$(curl -sSL "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
+    RELEASE="${LATEST}.tar.gz"
+
+    run wget ${REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
+
+    Fluent-icon-theme-${LATEST}/install.sh --round --dark --all
+
+    run rm ${RELEASE}
+    run rm -rf Fluent-icon-theme-${RELEASE}
 
     # install fonts
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
