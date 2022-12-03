@@ -523,12 +523,12 @@ install_dust() {
 install_bat() {
     LATEST=$(curl -sSL "https://api.github.com/repos/sharkdp/bat/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/sharkdp/bat/releases/download/${LATEST}/"
-    RELEASE="bat-${LATEST}-aarch64-unknown-linux-gnu.tar.gz"
+    RELEASE="bat-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv bat-${LATEST}-aarch64-unknown-linux-gnu/bat $HOME/dev/bin/bat
+    mv bat-${LATEST}-x86_64-unknown-linux-gnu/bat $HOME/dev/bin/bat
     chmod u+x $HOME/dev/bin/bat
 
     run rm ${RELEASE}
