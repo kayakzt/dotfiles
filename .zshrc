@@ -29,6 +29,8 @@ fi
 
 # Keybindings
 bindkey -e
+bindkey -r '^q'
+bindkey -r '^o'
 setopt IGNOREEOF # prevent ctrl+d shell exit
 
 # cdr Settings
@@ -107,7 +109,7 @@ setopt always_last_prompt    # カーソル位置は保持したままファイ�
 setopt extended_glob  # 拡張グロブで補完(~とか^とか。例えばless *.txt~memo.txt ならmemo.txt 以外の *.txt にマッチ)
 setopt globdots # 明確なドットの指定なしで.から始まるファイルをマッチ
 
-bindkey "^I" menu-complete   # 展開する前に補完候補を出させる(Ctrl-iで補完)
+bindkey "^i" menu-complete   # 展開する前に補完候補を出させる(Ctrl-iで補完)
 
 
 #
@@ -134,7 +136,7 @@ export FZF_CTRL_T_OPTS="
   --preview 'bat -r :100 --color=always --style=header,grid {}'"
 
 fzf-history-search() {
-  LBUFFER="${LBUFFER}$(__fzf_history_search)"
+  LBUFFER="$(__fzf_history_search)"
   local ret=$?
   zle reset-prompt
   return $ret
@@ -143,18 +145,18 @@ fzf-history-search() {
 __fzf_history_search() {
   BUFFER="$(history -nr 1 | fzf --query="$LBUFFER" --prompt="[history] " | sed 's/\\n/\n/')"
   local ret=$?
-  # CURSOR=$#BUFFER
+  CURSOR=$#BUFFER
   echo $BUFFER
   return $ret
 }
 
 zle -N fzf-history-search
-bindkey '^R' fzf-history-search
+bindkey '^r' fzf-history-search
 
 fzf-file-search() {
   LBUFFER="${LBUFFER}$(__fzf_file_search)"
   local ret=$?
-  zle reset-prompt
+  # zle reset-prompt
   return $ret
 }
 
@@ -175,14 +177,15 @@ __fzf_file_search() {
         # echo $line
         eargs="${eargs}${line} "
     done
-    echo "${EDITOR} ${eargs}"
+    echo "${eargs}"
   fi
 
   return $ret
 }
 
 zle -N fzf-file-search
-bindkey '^[f' fzf-file-search
+bindkey '^o^f' fzf-file-search
+bindkey '^of' fzf-file-search
 
 fzf-directory-search() {
   LBUFFER="${LBUFFER}$(__fzf_directory_search)"
@@ -202,14 +205,16 @@ __fzf_directory_search() {
   local ret=$?
 
   if [[ -n "$selected" ]]; then
-    echo "cd ${selected}"
+    echo "${selected}"
   fi
 
   return $ret
 }
 
 zle -N fzf-directory-search
-bindkey '^[d' fzf-directory-search
+# bindkey '^[d' fzf-directory-search
+bindkey '^o^d' fzf-directory-search
+bindkey '^od' fzf-directory-search
 
 fzf-text-search() {
   LBUFFER="${LBUFFER}$(__fzf_text_search)"
@@ -249,7 +254,25 @@ __fzf_text_search() {
 }
 
 zle -N fzf-text-search
-bindkey '^[t' fzf-text-search
+# bindkey '^[t' fzf-text-search
+bindkey '^o^t' fzf-text-search
+bindkey '^ot' fzf-text-search
+
+
+fzf-ghq-search() {
+  selected=`ghq list | fzf --prompt="ghq search "`
+  if [[ -n "$selected" ]]; then
+    target_dir="`ghq root`/$selected"
+    cd $target_dir
+    zle accept-line
+  else
+    zle reset-prompt
+  fi
+}
+
+zle -N fzf-ghq-search
+bindkey '^o^g' fzf-ghq-search
+bindkey '^og' fzf-ghq-search
 
 #
 # peco functions
@@ -302,48 +325,6 @@ function github-star-import() {
   echo $urls | fzf | ghq import
 }
 
-# This fuction depends on ripgrep
-# function shell_search() {
-#   local filepath="$(rg -p --smart-case --hidden --files --color never -g "!.git/" | peco --prompt '[search]')"
-#   [ -z "$filepath" ] && return
-#   if [ -n "$LBUFFER" ]; then
-#     BUFFER="$LBUFFER$filepath"
-#   else
-#     if [ -d "$filepath" ]; then
-#       BUFFER="cd $filepath"
-#     else
-#       BUFFER="$EDITOR $filepath"
-#     fi
-#   fi
-#   CURSOR=$#BUFFER
-# }
-#
-# zle -N shell_search
-# bindkey '^[s' shell_search
-
-# This fuction depends on ripgrep
-# function search_text() {
-#
-#   read "RTEXT?Enter serch text: "
-#
-#   local filepath="$(rg --smart-case --hidden --no-heading --color=always -g="!.git/" ${RTEXT} | peco --prompt '[search]')"
-#   echo ${filepath}
-#   return
-#   [ -z "$filepath" ] && return
-#   if [ -n "$LBUFFER" ]; then
-#     BUFFER="$LBUFFER$filepath"
-#   else
-#     if [ -d "$filepath" ]; then
-#       BUFFER="cd $filepath"
-#     else
-#       BUFFER="$EDITOR $filepath"
-#     fi
-#   fi
-#   CURSOR=$#BUFFER
-# }
-#
-# zle -N search_text
-# bindkey '^[t' search_text
 
 #
 # Alias
@@ -388,14 +369,13 @@ alias termil='terminator -l large'
 alias nv='nvim'
 
 alias showtime='date & time'
-alias sht='date & time'
 
 alias di='dicto'
 alias de='dicto -e'
 
 # ghq & hub alias (with fzf)
-alias cdg='cd $(ghq root)/$(ghq list | fzf --prompt "[ghq src] ")'
 alias ghq-cd='cd $(ghq root)/$(ghq list | fzf --prompt "[ghq src] ")'
+
 alias hubb='hub browse $(ghq list | fzf --prompt "[browse src] " | cut -d "/" -f 2,3)'
 
 alias apt-update='sudo apt-get update \
