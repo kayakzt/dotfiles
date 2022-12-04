@@ -156,17 +156,17 @@ bindkey '^r' fzf-history-search
 fzf-file-search() {
   LBUFFER="${LBUFFER}$(__fzf_file_search)"
   local ret=$?
-  # zle reset-prompt
+  zle reset-prompt
   return $ret
 }
 
 __fzf_file_search() {
-    local selected=$(eval "$FZF_DEFAULT_COMMAND" | \
-      fzf-tmux -p80%,90% --height="90%" \
-        --multi \
-        --prompt="[file search] " \
-        --preview="bat -H {2} --color=always --style=header,grid {1}" \
-        --preview-window='down:60%:+{2}-4'
+  local selected=$(eval "$FZF_DEFAULT_COMMAND" | \
+    fzf-tmux -p80%,90% --height="90%" \
+      --multi \
+      --prompt="[file search] " \
+      --preview="bat -H {2} --color=always --style=header,grid {1}" \
+      --preview-window='down:60%:+{2}-4'
   )
 
   local ret=$?
@@ -195,8 +195,8 @@ fzf-directory-search() {
 }
 
 __fzf_directory_search() {
-    local cmd="find . -type d -name '.git' -prune -o -type d -print"
-    local selected=$(eval "$cmd" | \
+  local cmd="find . -type d -name '.git' -prune -o -type d -print"
+  local selected=$(eval "$cmd" | \
       fzf-tmux -p80%,90% --height="90%" \
         --prompt="[directory search] " \
         --preview="tree -C {} | head -200" \
@@ -260,9 +260,9 @@ bindkey '^ot' fzf-text-search
 
 
 fzf-ghq-search() {
-  selected=`ghq list | fzf --prompt="ghq search "`
+  local selected=`ghq list | fzf --prompt="ghq search "`
   if [[ -n "$selected" ]]; then
-    target_dir="`ghq root`/$selected"
+    local target_dir="`ghq root`/$selected"
     cd $target_dir
     zle accept-line
   else
