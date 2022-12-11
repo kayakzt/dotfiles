@@ -1,8 +1,5 @@
 " Set Color Mode
-if (has("nvim"))
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-if (has("termguicolors"))
+if (has('termguicolors'))
     set termguicolors
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -16,13 +13,14 @@ let g:cache_home = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_
 let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CONFIG_HOME
 
 " Initialization
-if !&compatible
-    set nocompatible
-    map ^[OA ^[ka
-    map ^[OB ^[ja
-    map ^[OC ^[la
-    map ^[OD ^[ha
-endif
+set nocompatible
+
+" if !&compatible
+"     map ^[OA ^[ka
+"     map ^[OB ^[ja
+"     map ^[OC ^[la
+"     map ^[OD ^[ha
+" endif
 
 let g:python_host_skip_check = 1
 
@@ -41,7 +39,7 @@ let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if !isdirectory(s:dein_repo_dir)
     call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
 endif
-let &runtimepath = s:dein_repo_dir .",". &runtimepath
+let &runtimepath = s:dein_repo_dir .','. &runtimepath
 " プラグイン読み込み＆キャッシュ作成
 let s:toml = '~/.config/nvim/dein.toml'
 let s:toml_lazy = '~/.config/nvim/dein_lazy.toml'
@@ -50,12 +48,23 @@ if dein#load_state(s:dein_dir)
     call dein#load_toml(s:toml,{'lazy' : 0})
     call dein#load_toml(s:toml_lazy,{'lazy' : 1})
     call dein#end()
-    call dein#save_state()
+    " call dein#save_state()
 endif
 
 " automatic plugin installation
-if has('vim_starting') && dein#check_install()
+if dein#check_install()
     call dein#install()
+endif
+
+" set colorscheme
+colorscheme onedark
+
+if has('filetype')
+    filetype indent plugin on
+endif
+
+if has('syntax')
+    syntax on
 endif
 
 " }}}
@@ -86,7 +95,6 @@ set conceallevel=0
 let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
 
 " Display
-" syntax on
 set number
 set cursorline
 "set cursorcolumn
@@ -118,13 +126,12 @@ set incsearch
 set ignorecase
 set smartcase
 set wrapscan
-set gdefault
 
 " Tab / Indent
 set expandtab
 set tabstop=4
-set shiftwidth=0
 set softtabstop=-1
+set shiftwidth=0
 set autoindent
 set smartindent
 
@@ -220,12 +227,12 @@ function! TermToggle(height)
         hide
     else
         botright new
-        exec "resize " . a:height
+        exec 'resize ' . a:height
         try
-            exec "buffer " . g:term_buf
+            exec 'buffer ' . g:term_buf
         catch
-            call termopen($SHELL, {"detach": 0})
-            let g:term_buf = bufnr("")
+            call termopen($SHELL, {'detach': 0})
+            let g:term_buf = bufnr('')
             set nonumber
             set norelativenumber
             set signcolumn=no

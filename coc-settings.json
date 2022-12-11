@@ -47,9 +47,16 @@
         "efm": {
             "command": "efm-langserver",
             "args": [],
-            /* custom config path                           */
-            /* "args": ["-c", "/path/to/your/config.yaml"], */
-            "filetypes": ["vim", "eruby"]
+            "filetypes": [
+                "vim",
+                "text",
+                "markdown",
+                "html",
+                "asciidoc",
+                "rst",
+                "help",
+                "review"
+            ]
         },
         /* "golang": {             */
         /*     "command": "gopls", */
@@ -129,7 +136,8 @@
         }
     },
     // "diagnostic-languageserver.filetypes": {
-    //     "sh": "shellcheck"
+    // "vim": "vint"
+    // "sh": "shellcheck",
     // },
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": false,
@@ -145,6 +153,9 @@
     },
     "markdownlint.config": { "line-length": false },
     "yaml.schemas": {
+        "https://raw.githubusercontent.com/mattn/efm-langserver/master/schema.json": [
+            "efm-langserver.yaml"
+        ],
         "https://raw.githubusercontent.com/composer/composer/main/res/composer-schema.json": [
             "/*"
         ]

@@ -1,366 +1,457 @@
+[[plugins]] # show status line
+repo = 'vim-airline/vim-airline'
+on_event = "VimEnter"
+depends = ['vim-fugitive','coc.nvim', 'vim-ambiwidth']
+hook_source = '''
+let g:airline#extensions#coc#enabled = 1
+set laststatus=2
+let g:airline_powerline_fonts = 0
+let g:airline#extensions#tabline#enabled = 1
+let airline#extensions#coc#error_symbol = 'E:'
+let airline#extensions#coc#warning_symbol = 'W:'
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+"
+let g:airline_symbols.crypt = 'ɦ'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.spell = 'Ꞩ'
+'''
+
+[[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+merged = 0
+on_event = 'BufEnter'
+hook_post_update = 'TSUpdate'
+hook_source = '''
+lua << EOF
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {
+    "bash",
+    "c",
+    "cmake",
+    "comment",
+    "cpp",
+    "css",
+    "dart",
+    "diff",
+    "dockerfile",
+    "git_rebase",
+    "go",
+    "html",
+    "javascript",
+    "jq",
+    "json",
+    "jsonc",
+    "latex",
+    "lua",
+    "make",
+    "python",
+    "rust",
+    "scss",
+    "typescript",
+    "toml",
+    "vim",
+    "vue",
+    "yaml",
+  },
+
+  sync_install = false,
+  auto_install = false,
+  ignore_install = {},
+
+  highlight = {
+    enable = true,
+    disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+            return true
+        end
+    end,
+
+    additional_vim_regex_highlighting = false,
+  },
+}
+
+EOF
+'''
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter-context'
+on_event = 'BufEnter'
+depends = ['nvim-treesitter']
+
+# [[plugins]]
+# repo = 'nvim-tree/nvim-web-devicons'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope-fzf-native.nvim'
+build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope-file-browser.nvim'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope-symbols.nvim'
+
+[[plugins]]
+repo = 'tami5/sqlite.lua'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope-frecency.nvim'
+depends = ['sqlite.lua']
+
+[[plugins]]
+repo = 'fhill2/telescope-ultisnips.nvim'
+
+[[plugins]]
+repo = 'fannheyward/telescope-coc.nvim'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope-ui-select.nvim'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope.nvim'
+rev = '0.1.x'
+depends = [
+    # 'nvim-web-devicons',
+    'plenary.nvim',
+    'telescope-fzf-native.nvim',
+    'telescope-file-browser.nvim',
+    'telescope-frecency.nvim',
+    'telescope-ui-select.nvim',
+    'telescope-symbols.nvim',
+    'telescope-coc.nvim',
+    'telescope-ultisnips.nvim',
+]
+on_event = 'VimEnter'
+
+hook_add = '''
+nnoremap [telescope] <Nop>
+nmap <Leader>f [telescope]
+nnoremap <silent> [telescope]f :Telescope find_files <CR>
+nnoremap <silent> [telescope]r :Telescope frecency <CR>
+nnoremap <silent> [telescope]g :Telescope live_grep <CR>
+nnoremap <silent> [telescope]v :Telescope git_files <CR>
+nnoremap <silent> [telescope]b :Telescope buffers <CR>
+nnoremap <silent> [telescope]j :Telescope jumplist <CR>
+nnoremap <silent> [telescope]t :Telescope filetypes <CR>
+nnoremap <silent> [telescope]y :Telescope registers <CR>
+nnoremap <silent> [telescope]m :Telescope marks <CR>
+nnoremap <silent> [telescope]q :Telescope command_history <CR>
+" nnoremap <silent> [telescope]o :Telescope treesitter <CR>
+
+nnoremap <silent> [telescope]c :Telescope git_commits <CR>
+nnoremap <silent> [telescope]e :lua require('telescope.builtin').symbols{ sources = {'emoji'} } <CR>
+
+nnoremap <silent> [telescope]s :SessionManager load_current_dir_session<CR>
+nnoremap <silent> [telescope]S :SessionManager load_session<CR>
+'''
+
+hook_post_source = '''
+lua << EOF
+
+local actions = require("telescope.actions")
+local transform_mod = require("telescope.actions.mt").transform_mod
+local action_state = require('telescope.actions.state')
+local action_layout = require("telescope.actions.layout")
+local fb_actions = require("telescope").extensions.file_browser.actions
+
+-- multi open function
+local function multiopen(prompt_bufnr, method)
+  local edit_file_cmd_map = {
+    vertical = "vsplit",
+    horizontal = "split",
+    tab = "tabedit",
+    default = "edit",
+  }
+  local edit_buf_cmd_map = {
+    vertical = "vert sbuffer",
+    horizontal = "sbuffer",
+    tab = "tab sbuffer",
+    default = "buffer",
+  }
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  local multi_selection = picker:get_multi_selection()
+
+  if #multi_selection > 1 then
+    require("telescope.pickers").on_close_prompt(prompt_bufnr)
+    pcall(vim.api.nvim_set_current_win, picker.original_win_id)
+
+    for i, entry in ipairs(multi_selection) do
+      local filename, row, col
+
+      if entry.path or entry.filename then
+        filename = entry.path or entry.filename
+
+        row = entry.row or entry.lnum
+        col = vim.F.if_nil(entry.col, 1)
+      elseif not entry.bufnr then
+        local value = entry.value
+        if not value then
+          return
+        end
+
+        if type(value) == "table" then
+          value = entry.display
+        end
+
+        local sections = vim.split(value, ":")
+
+        filename = sections[1]
+        row = tonumber(sections[2])
+        col = tonumber(sections[3])
+      end
+
+      local entry_bufnr = entry.bufnr
+
+      if entry_bufnr then
+        if not vim.api.nvim_buf_get_option(entry_bufnr, "buflisted") then
+          vim.api.nvim_buf_set_option(entry_bufnr, "buflisted", true)
+        end
+        local command = i == 1 and "buffer" or edit_buf_cmd_map[method]
+        pcall(vim.cmd, string.format("%s %s", command, vim.api.nvim_buf_get_name(entry_bufnr)))
+      else
+        local command = i == 1 and "edit" or edit_file_cmd_map[method]
+        if vim.api.nvim_buf_get_name(0) ~= filename or command ~= "edit" then
+          filename = require("plenary.path"):new(vim.fn.fnameescape(filename)):normalize(vim.loop.cwd())
+          pcall(vim.cmd, string.format("%s %s", command, filename))
+        end
+      end
+
+      if row and col then
+        pcall(vim.api.nvim_win_set_cursor, 0, { row, col })
+      end
+    end
+  else
+    actions["select_" .. method](prompt_bufnr)
+  end
+end
+
+local custom_actions = transform_mod({
+    multi_selection_open_vertical = function(prompt_bufnr)
+        multiopen(prompt_bufnr, "vertical")
+    end,
+    multi_selection_open_horizontal = function(prompt_bufnr)
+        multiopen(prompt_bufnr, "horizontal")
+    end,
+    multi_selection_open_tab = function(prompt_bufnr)
+        multiopen(prompt_bufnr, "tab")
+    end,
+    multi_selection_open = function(prompt_bufnr)
+        multiopen(prompt_bufnr, "default")
+    end,
+})
+
+local function stopinsert(callback)
+    return function(prompt_bufnr)
+        vim.cmd.stopinsert()
+        vim.schedule(function()
+            callback(prompt_bufnr)
+        end)
+    end
+end
+
+local multi_open_mappings = {
+  i = {
+    ["<C-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
+    ["<C-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
+    ["<C-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
+    ["<CR>"]  = stopinsert(custom_actions.multi_selection_open),
+  },
+  n = {
+    ["<C-v>"] = custom_actions.multi_selection_open_vertical,
+    ["<C-s>"] = custom_actions.multi_selection_open_horizontal,
+    ["<C-t>"] = custom_actions.multi_selection_open_tab,
+    ["<CR>"] = custom_actions.multi_selection_open,
+  },
+}
+
+require("telescope").setup {
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+        ["<C-u>"] = actions.results_scrolling_up,
+        ["<C-d>"] = actions.results_scrolling_down,
+        ["<C-f>"] = actions.preview_scrolling_down,
+        ["<C-b>"] = actions.preview_scrolling_up,
+        ["<M-p>"] = action_layout.toggle_preview,
+      },
+      n = {
+        ["j"] = actions.move_selection_next,
+        ["k"] = actions.move_selection_previous,
+        ["<C-u>"] = actions.results_scrolling_up,
+        ["<C-d>"] = actions.results_scrolling_down,
+        ["<C-f>"] = actions.preview_scrolling_down,
+        ["<C-b>"] = actions.preview_scrolling_up,
+        ["<M-p>"] = action_layout.toggle_preview,
+      },
+    },
+    vimgrep_arguments = {
+      'rg',
+      '--no-heading',
+      '--with-filename',
+      '--line-number',
+      '--column',
+      '--hidden',
+      '--smart-case',
+      '--glob',
+      '!**/node_modules/*',
+      '--glob',
+      '!**/.git/*',
+      '--glob',
+      '!**/.venv/*',
+      '--trim',
+    },
+    file_ignore_patterns = {"node_modules", ".git", ".venv"},
+  },
+  pickers = {
+    find_files = {
+      find_command = {
+        'rg',
+        '--files',
+        '--hidden',
+        '--smart-case',
+        '--glob',
+        '!**/node_modules/*',
+        '--glob',
+        '!**/.git/*',
+        '--glob',
+        '!**/.venv/*',
+      },
+      mappings = {
+        i = {
+          ["<C-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
+          ["<C-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
+          ["<C-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
+          ["<CR>"]  = stopinsert(custom_actions.multi_selection_open),
+        },
+        n = {
+          ["<C-v>"] = custom_actions.multi_selection_open_vertical,
+          ["<C-s>"] = custom_actions.multi_selection_open_horizontal,
+          ["<C-t>"] = custom_actions.multi_selection_open_tab,
+          ["<CR>"] = custom_actions.multi_selection_open,
+          ["cd"] = function(prompt_bufnr)
+            local selection = require("telescope.actions.state").get_selected_entry()
+            local dir = vim.fn.fnamemodify(selection.path, ":p:h")
+            require("telescope.actions").close(prompt_bufnr)
+            vim.cmd(string.format("silent cd %s", dir))
+            vim.cmd(":Telescope find_files")
+          end
+        },
+      },
+    },
+    buffers = {
+        sort_mru = true,
+        mappings = multi_open_mappings,
+    },
+    live_grep = {
+        mappings = multi_open_mappings,
+    },
+  },
+  extensions = {
+    fzf = {
+      fuzzy = true,
+      override_generic_sorter = true,
+      override_file_sorter = true,
+      case_mode = "smart_case",
+    },
+    file_browser = {
+      -- theme = "ivy",
+      hidden = true,
+      hijack_netrw = true,
+      mappings = {
+        i = {
+          ["<C-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
+          ["<C-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
+          ["<C-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
+          ["<CR>"]  = stopinsert(custom_actions.multi_selection_open),
+          ["<C-h>"] = fb_actions.goto_parent_dir,
+          ["<C-.>"] = fb_actions.toggle_hidden,
+        },
+        n = {
+          ["<C-v>"] = custom_actions.multi_selection_open_vertical,
+          ["<C-s>"] = custom_actions.multi_selection_open_horizontal,
+          ["<C-t>"] = custom_actions.multi_selection_open_tab,
+          ["<CR>"] = custom_actions.multi_selection_open,
+          ["h"] = fb_actions.goto_parent_dir,
+          ["."] = fb_actions.toggle_hidden,
+        },
+      },
+    },
+    coc = {
+      -- theme = 'ivy',
+      prefer_locations = true,
+    },
+  },
+}
+
+require('telescope').load_extension('fzf')
+require('telescope').load_extension('frecency')
+require('telescope').load_extension('file_browser')
+require('telescope').load_extension('ui-select')
+require('telescope').load_extension('coc')
+require('telescope').load_extension('ultisnips')
+
+EOF
+'''
+
 [[plugins]] # enable to do git operation in vim
 repo = 'tpope/vim-fugitive'
 on_event = 'VimEnter'
 hook_add = '''
 nnoremap [git]  <Nop>
 nmap <space>g [git]
-nnoremap <silent> [git]s :Gstatus<CR><C-w>T
-nnoremap <silent> [git]a :Gwrite<CR>
-nnoremap <silent> [git]c :Gcommit<CR>
-nnoremap <silent> [git]b :Gblame<CR>
-nnoremap <silent> [git]d :Gdiff<CR>
-nnoremap <silent> [git]m :Gmerge<CR>
+nnoremap <silent> [git]s :Git status<CR><C-w>T
+nnoremap <silent> [git]a :Git write<CR>
+nnoremap <silent> [git]c :Git commit<CR>
+nnoremap <silent> [git]b :Git blame<CR>
+nnoremap <silent> [git]d :Git diff<CR>
+nnoremap <silent> [git]m :Git merge<CR>
 '''
 
 [[plugins]] # git-messenger shows message from last commit
 repo = 'rhysd/git-messenger.vim'
-on_event = 'BufReadPost'
+on_event = 'VimEnter'
 hook_add = '''
 let g:git_messenger_no_default_mappings=v:true
 nnoremap <silent> [git]gm :GitMessenger<CR>
 '''
 
-# [[plugins]]
-# repo = 'stevearc/dressing.nvim'
-# on_event = 'VimEnter'
-# hook_add = '''
-# '''
-#
-# [[plugins]]
-# repo = 'nvim-lua/plenary.nvim'
-# on_source = ['telescope.nvim']
-#
-# [[plugins]]
-# repo = 'nvim-telescope/telescope.nvim'
-# rev = '0.1.0'
-# on_event = 'VimEnter'
-# depends = ['plenary.nvim']
-
-[[plugins]] # get recent buffer in denite.vim
-repo = 'Shougo/neomru.vim'
-on_source = ['denite.nvim']
-
-[[plugins]] # get yank history in denite.vim
-repo = 'Shougo/neoyank.vim'
-on_if = 1
-on_event = 'TextYankPost'
-on_source = ['denite.nvim']
-# on_path = '.*'
-
-[[plugins]] # vim emoji support
-repo = 'junegunn/vim-emoji'
-
-[[plugins]] # vim emoji support for denite
-repo = 'pocari/vim-denite-emoji'
-depends = ['vim-emoji']
-on_source = ['denite.nvim', 'vim-emoji']
-
-[[plugins]] # for file search + open
-repo = 'Shougo/denite.nvim'
+[[plugins]]
+repo = 'sindrets/diffview.nvim'
+# depends = ['nvim-web-devicons']
 on_event = 'VimEnter'
-depends = ['neomru.vim', 'neoyank.vim']
-hook_source = '''
-if executable('rg')
-  call denite#custom#var('file/rec', 'command',
-        \ ['rg', '--files', '--hidden', '--glob', '!.git', '--glob', '!node_modules/*'])
-  call denite#custom#var('grep', 'command', ['rg', '--threads', '1'])
-  call denite#custom#var('grep', 'recursive_opts', [])
-  call denite#custom#var('grep', 'final_opts', [])
-  call denite#custom#var('grep', 'separator', ['--'])
-  call denite#custom#var('grep', 'default_opts',
-        \ ['--vimgrep', '--no-heading'])
-else
-  call denite#custom#var('file/rec', 'command',
-        \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-  call denite#custom#var('grep', 'command', ['ag'])
-  call denite#custom#var('grep', 'recursive_opts', [])
-  call denite#custom#var('grep', 'final_opts', [])
-  call denite#custom#var('grep', 'separator', [])
-  call denite#custom#var('grep', 'default_opts',
-        \ ['--nocolor', '--nogroup'])
-endif
+hook_post_source = '''
+lua << EOF
 
-call denite#custom#alias('source', 'file/git', 'file/rec')
-call denite#custom#var('file/git', 'command',
-      \ ['git', 'ls-files', '-c', '--exclude-standard'])
+require("diffview").setup({
+  use_icons = false,
+})
 
-let s:denite_win_width_percent = 0.85
-let s:denite_win_height_percent = 0.7
+EOF
 
-call denite#custom#option('default', {
-      \ 'prompt': '>',
-      \ 'source_names': 'short',
-      \ 'auto_resize': v:false,
-      \ 'split': "floating",
-      \ 'winwidth': float2nr(&columns * s:denite_win_width_percent),
-      \ 'wincol': float2nr((&columns - (&columns * s:denite_win_width_percent)) / 2),
-      \ 'winheight': float2nr(&lines * s:denite_win_height_percent),
-      \ 'winrow': float2nr((&lines - (&lines * s:denite_win_height_percent)) / 2),
-      \ 'filter_split_direction': "aboveleft",
-      \ })
-
-call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-      \ [ '.git/', 'build/', '*.make', '*.o', '*.exe', '.ropeproject/',
-      \ '__pycache__/', 'bin/', 'venv/', 'images/', '*.min.*',
-      \ 'img/', 'fonts/', 'vendor/', 'node_modules/'])
-'''
-hook_add = '''
-nnoremap [denite] <Nop>
-nmap <Leader>u [denite]
-nnoremap <silent> [denite]t :Denite filetype <CR>
-nnoremap <silent> [denite]v :Denite file/git <CR>
-nnoremap <silent> [denite]f :Denite file/rec <CR>
-nnoremap <silent> [denite]h :Denite file_mru <CR>
-nnoremap <silent> [denite]d :Denite directory_rec <CR>
-nnoremap <silent> [denite]r :Denite directory_mru <CR>
-nnoremap <silent> [denite]l :Denite line <CR>
-nnoremap <silent> [denite]g :Denite grep -buffer-name=grep-buffer-denite <CR>
-nnoremap <silent> [denite]c :Denite change <CR>
-nnoremap <silent> [denite]o :Denite -split=vertical -winwidth=64 -auto-resize outline <CR>
-nnoremap <silent> [denite]] :DeniteCursorWord grep <CR>
-nnoremap <silent> [denite]b :Denite buffer <CR>
-nnoremap <silent> [denite]j :Denite jump <CR>
-nnoremap <silent> [denite]y :Denite neoyank <CR>
-nnoremap <silent> [denite]e :Denite emoji <CR>
-nnoremap <silent> [denite]u :Denite -resume <CR>
-nnoremap <silent> [denite]n :Denite -buffer-name=grep-buffer-denite -resume -immediately -cursor_pos=+1 <CR>
-nnoremap <silent> [denite]p :Denite -buffer-name=grep-buffer-denite -resume -immediately -cursor_pos=-1 <CR>
-
-" denite key map
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-    nnoremap <silent><buffer><expr> <CR>    denite#do_map('do_action')
-    nnoremap <silent><buffer><expr> <Tab>   denite#do_map('choose_action')
-    nnoremap <silent><buffer><expr> a       denite#do_map('open_filter_buffer')
-    nnoremap <silent><buffer><expr> i       denite#do_map('open_filter_buffer')
-    nnoremap <silent><buffer><expr> d       denite#do_map('do_action', 'delete')
-    nnoremap <silent><buffer><expr> p       denite#do_map('do_action', 'preview')
-    nnoremap <silent><buffer><expr> q       denite#do_map('quit')
-    nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
-    nnoremap <silent><buffer><expr> <Esc>   denite#do_map('quit')
-    nnoremap <silent><buffer><expr> <C-t>   denite#do_map('toggle_select').'j'
-    nnoremap <silent><buffer><expr> <C-h>   denite#do_map('move_up_path')
-endfunction
-
-autocmd FileType denite-filter call s:denite_filter_my_settings()
-function! s:denite_filter_my_settings() abort
-    inoremap <silent><buffer><expr> <C-h>   denite#do_map('move_up_path')
-    inoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
-    nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
-endfunction
-
-" transparent denite window
-" augroup transparent-windows
-"   autocmd!
-"   autocmd FileType denite set winblend=10
-"   autocmd FileType denite-filter set winblend=10
-" augroup END
-
-" if has('nvim')
-" autocmd FileType denite call s:denite_change_cursorline()
-" function! s:denite_change_cursorline() abort
-"   let output = execute('hi Cursorline')
-"   let guibg = matchstr(output, '\(guibg=\)\@<=#[a-zA-Z0-9]\+')
-"   hi CursorLine guibg=yellow
-"   execute 'autocmd BufLeave <buffer> hi Cursorline guibg=' . guibg
-" endfunction
-" endif
+nnoremap <silent> [git]d :DiffviewOpen<CR>
 '''
 
-[[plugins]] # file manager
-repo = 'Shougo/defx.nvim'
+[[plugins]]
+repo = 'lewis6991/gitsigns.nvim'
 on_event = 'VimEnter'
-hook_add = '''
-let g:defx_icons_enable_syntax_highlight = 1
-" let g:defx_icons_column_length = 2
+hook_post_source = '''
+lua << EOF
 
-nnoremap [defx] <Nop>
-nmap <Space>f [defx]
-nnoremap <silent> [defx] :Defx <CR>
-" autocmd VimEnter * execute 'Defx'
+require("gitsigns").setup()
 
-autocmd FileType defx call s:defx_settings()
-
-function! s:defx_settings() abort
-    nnoremap <silent><buffer><expr> <CR>
-    \ defx#is_directory() ?
-    \ defx#do_action('open_directory') :
-    \ defx#async_action('multi', ['drop', 'quit'])
-
-    nnoremap <silent><buffer><expr> s
-    \ defx#do_action('multi', [['drop', 'split'], 'quit'])
-
-    nnoremap <silent><buffer><expr> v
-    \ defx#do_action('multi', [['drop', 'vsplit'], 'quit'])
-
-    nnoremap <silent><buffer><expr> m
-    \ defx#do_action('toggle_select') . 'j'
-
-    nnoremap <silent><buffer><expr> *
-    \ defx#do_action('toggle_select_all')
-
-    nnoremap <silent><buffer><expr> c
-    \ defx#do_action('clear_select_all')
-
-    nnoremap <silent><buffer><expr> x
-    \ defx#do_action('execute_system')
-
-    nnoremap <silent><buffer><expr> p
-    \ defx#do_action('preview')
-
-    nnoremap <silent><buffer><expr> .
-    \ defx#do_action('toggle_ignored_files')
-
-    nnoremap <silent><buffer><expr> <Esc>
-    \ defx#do_action('quit')
-    nnoremap <silent><buffer><expr> q
-    \ defx#do_action('quit')
-
-    nnoremap <silent><buffer><expr> j
-    \ line('.') == line('$') ? 'gg' : 'j'
-
-    nnoremap <silent><buffer><expr> k
-    \ line('.') == 1 ? 'G' : 'k'
-
-    nnoremap <silent><buffer><expr> l
-    \ defx#do_action('open_directory')
-
-    nnoremap <silent><buffer><expr> h
-    \ defx#do_action('cd', ['..'])
-
-    nnoremap <silent><buffer><expr> f
-    \ defx#do_action('change_filtered_files')
-
-    nnoremap <silent><buffer><expr> i
-    \ defx#do_action('change_ignored_files')
-
-    nnoremap <silent><buffer><expr> N
-    \ defx#do_action('new_file')
-
-    nnoremap <silent><buffer><expr> K
-    \ defx#do_action('new_directory')
-
-    nnoremap <silent><buffer><expr> R
-    \ defx#do_action('rename')
-
-    nnoremap <silent><buffer><expr> C
-    \ defx#do_action('copy')
-
-    nnoremap <silent><buffer><expr> P
-    \ defx#do_action('paste')
-
-    nnoremap <silent><buffer><expr> M
-    \ defx#do_action('move')
-
-    nnoremap <silent><buffer><expr> D
-    \ defx#do_action('remove')
-
-    nnoremap <silent><buffer><expr> o
-    \ defx#do_action('open_or_close_tree')
-
-    nnoremap <silent><buffer><expr> O
-    \ defx#do_action('open_tree_recursive')
-
-    nnoremap <silent><buffer><expr> yy
-    \ defx#do_action('yank_path')
-
-    nnoremap <silent><buffer><expr> ~
-    \ defx#do_action('cd')
-
-    nnoremap <silent><buffer><expr> cd
-    \ defx#do_action('change_vim_cwd')
-endfunction
+EOF
 '''
-hook_source = '''
-call defx#custom#column('mark', {
-    \ 'readonly_icon': '✗',
-    \ 'selected_icon': '✓',
-    \ })
-
-call defx#custom#column('icon', {
-    \ 'directory_icon': '▸',
-    \ 'opened_icon': '▾',
-    \ 'root_icon': ' ',
-    \ })
-
-call defx#custom#column('filename', {
-    \ 'min_width': 28,
-    \ 'max_width_percent': 33,
-    \ })
-
-call defx#custom#option('_', {
-    \ 'columns': 'mark:indent:git:icon:filename:type:size:time',
-    \ 'winwidth': 48,
-    \ 'winheight': &lines,
-    \ 'split': 'floating',
-    \ 'wincol': &columns - 48,
-    \ 'direction': 'topleft',
-    \ 'show_ignored_files': 0,
-    \ 'toggle': 1,
-    \ 'resume': 1,
-    \ })
-'''
-
-# LSP
-
-# [[plugins]]
-# repo = 'prabirshrestha/async.vim'
-# on_event = 'VimEnter'
-
-# [[plugins]] # a vim client for language server protocol (LSP)
-# repo = 'prabirshrestha/vim-lsp'
-# depends = ['async.vim']
-# on_event = 'VimEnter'
-# hook_add = '''
-# let g:pyls_path = $PYENV_ROOT . '/shims/pyls' "reffer pyls in pyenv.
-# if executable('pyls')
-#     autocmd User lsp_setup call lsp#register_server({
-#        \ 'name': 'pyls',
-#        \ 'cmd': {server_info->['pyls']},
-#        \ 'whitelist': ['python'],
-#        \ 'priority': 2,
-#        \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}}}}
-#        \ })
-#     autocmd FileType python setlocal omnifunc=lsp#complete
-# endif
-#
-# if executable('gopls')
-#     au User lsp_setup call lsp#register_server({
-#       \ 'name': 'gopls',
-#       \ 'cmd': {server_info->['gopls']},
-#       \ 'whitelist': ['go'],
-#       \ 'priority': 2,
-#       \ })
-#     autocmd FileType go setlocal omnifunc=lsp#complete
-# endif
-#
-# if executable('rls')
-#     au User lsp_setup call lsp#register_server({
-#        \ 'name': 'rls',
-#        \ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
-#        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'Cargo.toml'))},
-#        \ 'whitelist': ['rust'],
-#        \ 'priority': 2,
-#        \ })
-#     autocmd FileType rust setlocal omnifunc=lsp#complete
-# endif
-#
-# let g:lsp_auto_enable = 1
-# let g:lsp_diagnostics_enabled = 0
-#
-# " setlocal omnifunc=lsp#complete
-# autocmd Filetype * nnoremap <buffer> <Leader>d :<C-u>LspDefinition<CR>
-# autocmd Filetype * nnoremap <buffer> <Leader>R :<C-u>LspReferences<CR>
-# autocmd Filetype * nnoremap <buffer> <Leader>s :<C-u>LspDocumentSymbol<CR>
-# autocmd Filetype * nnoremap <buffer> <Leader>S :<C-u>LspWorksspaceSymbol<CR>
-# autocmd Filetype * nnoremap <buffer> <Leader>f :<C-u>LspDocumentFormat<CR>
-# autocmd Filetype * vnoremap <buffer> <Leader>F :LspDocumentRangeFormat<CR>
-# autocmd Filetype * nnoremap <buffer> <Leader>h :<C-u>LspHover<CR>
-# autocmd Filetype * nnoremap <buffer> <Leader>i :<C-u>LspImplementation<CR>
-# autocmd Filetype * nnoremap <buffer> <Leader>r :<C-u>LspRename<CR>
-# '''
-
-# Completion
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
@@ -414,16 +505,18 @@ set statusline^=%{coc#status()}
 " coc keymaps
 nmap [coc] <Nop>
 map <C-k> [coc]
-nmap <silent> [coc]a :<C-u>CocAction<cr>
-nmap <silent> [coc]<C-f> :<C-u>CocFormatBuf<cr>
+" nmap <silent> [coc]a :<C-u>CocAction<cr>
+nmap <silent> [coc]a     :Telescope coc commands<cr>
+nmap <silent> [coc]F :<C-u>CocFormatBuf<cr>
 nmap <silent> [coc]f     <Plug>(coc-format-selected)
 xmap <silent> [coc]f     <Plug>(coc-format-selected)
 nmap <silent> [coc]p     <Plug>(coc-diagnostic-prev)
 nmap <silent> [coc]n     <Plug>(coc-diagnostic-next)
 nmap <silent> [coc]x     <Plug>(coc-fix-current)
 nmap <silent> [coc]d     :<C-u>CocList diagnostics<cr>
+" nmap <silent> [coc]d     :Telescope coc diagnostics<cr>
 nmap <silent> [coc]r     <Plug>(coc-rename)
-nmap <silent> [coc]h     :call CocAction('doHover')<cr>
+nmap <silent> [coc]h     <Plug>(coc-codeaction)
 nmap <silent> [coc]o     :<C-u>CocList outline<cr>
 nmap <silent> [coc]y     :<C-u>CocList -I symbols<cr>
 
@@ -462,37 +555,33 @@ function! s:show_documentation()
 endfunction
 '''
 
-# [[plugins]]
-# repo = 'lighttiger2505/deoplete-vim-lsp'
-# depends = ['deoplete.nvim']
-# on_event = 'InsertEnter'
+[[plugins]]
+repo = 'rlane/pounce.nvim'
+on_event = 'VimEnter'
+hook_add = '''
+noremap [motion] <Nop>
+map <S-m> [motion]
 
-# [[plugins]]
-# repo = 'Shougo/neosnippet.vim'
-# on_event = 'InsertEnter'
-# depends = ['context_filetype.vim']
-# hook_source = '''
-# imap <C-e> <Plug>(neosnippet_expand_or_jump)
-# smap <C-e> <Plug>(neosnippet_expand_or_jump)
-# xmap <C-e> <Plug>(neosnippet_expand_target)
-#
-# smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-#\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-#
-# " if has('conceal')
-# "   set conceallevel=2 concealcursor=niv
-# " endif
-# let g:neosnippet#snippets_directory = '~/.config/dotfiles/snippets'
-# '''
+nmap [motion] <cmd>Pounce <CR>
+vmap [motion] <cmd>Pounce <CR>
+omap [motion] <cmd>Pounce <CR>
+'''
+hook_post_source = '''
+lua << EOF
 
-# [[plugins]]
-# repo = 'Shougo/neosnippet-snippets'
-# on_event = 'InsertEnter'
-# depends = ['neosnippet.vim']
+require("pounce").setup({
+  accept_keys = "JFKDLSAHGNUVRBYTMICEOXWPQZ",
+  accept_best_key = "<enter>",
+  multi_window = true,
+  debug = false,
+})
+
+EOF
+'''
 
 [[plugins]]
 repo = 'SirVer/ultisnips'
-on_event = 'BufEnter'
+on_event = 'VimEnter'
 hook_source = '''
 let g:UltiSnipsExpandTrigger = "<C-e>"
 let g:UltiSnipsJumpForwardTrigger = "<C-j>"
@@ -505,12 +594,12 @@ let g:ultisnips_python_syle = "google"
 
 [[plugins]]
 repo = 'honza/vim-snippets'
-on_event = 'BufEnter'
+on_event = 'VimEnter'
 depends = ['ultisnips']
 
 [[plugins]] # Auto close parentheses
 repo = 'cohama/lexima.vim'
-on_event = 'InsertEnter'
+on_event = 'VimEnter'
 hook_add = '''
 "call lexima#add_rule({'char': '$', 'input_after': '$', 'filetype': 'latex'})
 "call lexima#add_rule({'char': '$', 'at': '\%#\$', 'leave': 1, 'filetype': 'latex'})
@@ -519,7 +608,7 @@ hook_add = '''
 
 [[plugins]] # enable to buffer execution on vim
 repo = 'thinca/vim-quickrun'
-on_event = 'BufEnter'
+on_event = 'VimEnter'
 hook_add = '''
 let g:quickrun_config = get(g:, 'quickrun_config', {})
 let g:quickrun_config._ = {
@@ -552,106 +641,46 @@ autocmd FileType qf nnoremap <silent><buffer>q :quit<CR>
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "<Leader><C-c>"
 '''
 
-# Lint
-
-# [[plugins]] # Golang syntax+lint
-# repo = 'fatih/vim-go'
-# on_event = 'VimEnter'
-# on_ft = 'go'
-# hook_add = '''
-# let g:go_test_timeout = '10s'
-#
-# let g:go_highlight_functions = 1
-# let g:go_highlight_methods = 1
-# let g:go_highlight_fields = 1
-# let g:go_highlight_types = 1
-# let g:go_highlight_operators = 1
-# let g:go_highlight_build_constraints = 1
-# let g:go_term_mode = 'split'
-# let g:go_version_warning = 0
-#
-# let g:go_auto_type_info = 0
-# let g:go_auto_sameids = 1
-#
-# let g:go_fmt_command = 'goimports'
-# let g:go_def_mode = 'gopls'
-# let g:go_def_mapping_enabled = 0
-#
-# autocmd FileType go nmap <Leader>r  <Plug>(go-run)
-# autocmd FileType go nmap <Leader>t  <Plug>(go-test)
-# " autocmd FileType go nmap <Leader>b :<C-u>call <SID>build_go_files()<CR>
-# autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-# " autocmd FileType go nmap <Leader>i <Plug>(go-info)
-# " autocmd FileType go nmap <leader>s <Plug>(go-def-split)
-# " autocmd FileType go nmap <leader>v <Plug>(go-def-vertical)
-# autocmd Filetype go command! -bang GoA call go#alternate#Switch(<bang>0, 'edit')
-# autocmd Filetype go command! -bang GoAV call go#alternate#Switch(<bang>0, 'vsplit')
-# autocmd Filetype go command! -bang GoAS call go#alternate#Switch(<bang>0, 'split')
-# autocmd Filetype go command! -bang GoAT call go#alternate#Switch(<bang>0, 'tabe')
-# '''
-
-# [[plugins]] # Simpler golang support plugin
-# repo = 'arp242/gopher.vim'
-# on_event = 'BufEnter'
-# on_ft = 'go'
-# hook_add = '''
-# command GoBuild :setl makeprg=go\ build | :make
-# command GoRun :setl makeprg=go\ run | :make %:h/*.go
-# command GoTest :compiler gotest | :make
-#
-# autocmd FileType go nnoremap <Leader>b :GoBuild<CR>
-# autocmd FileType go nnoremap <Leader>r :GoRun<CR>
-# autocmd FileType go nnoremap <Leader>t :GoTest<CR>
-# autocmd FileType go nnoremap <Leader>c :GoCoverage toggle<CR>
-# '''
-
 [[plugins]] # Neovim/Vim integration for Delve
 repo = 'sebdah/vim-delve'
-on_event = 'BufEnter'
+on_event = 'VimEnter'
 on_ft = 'go'
 hook_add = '''
 autocmd FileType go nnoremap <Leader>d :DlvDebug<CR>
 autocmd FileType go nnoremap <Leader>p :DlvToggleBreakpoint<CR>
 '''
 
-# Display
+[[plugins]] # get file type for Shougo-san's plugins
+repo = 'Shougo/context_filetype.vim'
+on_event = 'VimEnter'
 
-# [[plugins]] # get file type for Shougo-san's plugins
-# repo = 'Shougo/context_filetype.vim'
-# on_event = 'BufReadPost'
-
-# [[plugins]] # swhitch buffer file type according to cursor position
-# repo = 'osyo-manga/vim-precious'
-# depends = ['context_filetype.vim']
-# on_event = 'BufReadPost'
-# hook_add ='''
-# '''
-
-# [[plugins]] # syntax highlighting for Vue Components
-# repo = 'posva/vim-vue'
-# on_ft = 'vue'
-# on_event = 'BufReadPost'
-
-# Other
+[[plugins]] # swhitch buffer file type according to cursor position
+repo = 'osyo-manga/vim-precious'
+depends = ['context_filetype.vim']
+on_event = 'VimEnter'
+hook_add ='''
+'''
 
 [[plugins]] # enhance text object
 repo = 'tpope/vim-surround'
-on_event = 'CursorMoved'
-
-# [[plugins]] # plugin for GoDecls command in vim-go
-# repo = 'ctrlpvim/ctrlp.vim'
-# on_event = 'BufEnter'
+on_event = 'VimEnter'
 
 [[plugins]] # highlights trailing whitespace
 repo = 'bronson/vim-trailing-whitespace'
 on_event = 'VimEnter'
 hook_add = '''
-" delete white_space at end of line when file was saved.
+let g:extra_whitespace_ignored_filetypes = [
+            \ 'help',
+            \ 'diff',
+            \ 'TelescopePrompt',
+            \ 'Telescope'
+            \ ]
 autocmd BufWritePre * :FixWhitespace
 '''
 
 [[plugins]] # plugin for alignment words
 repo = 'h1mesuke/vim-alignta'
+on_event = 'VimEnter'
 on_cmd = 'Alignta'
 
 [[plugins]] # a plugin for using web-api in vim
@@ -662,15 +691,22 @@ repo = 'mattn/gist-vim'
 depends = ['webapi-vim']
 on_cmd = 'Gist'
 
-[[plugins]] # for visualize indent
-repo = 'nathanaelkane/vim-indent-guides'
+[[plugins]]
+repo = 'lukas-reineke/indent-blankline.nvim'
 on_event = 'VimEnter'
-hook_add = '''
-let g:indent_guides_guide_size = 0
-let g:indent_guides_enable_on_vim_startup = 0
-let g:indent_guides_start_level = 2
-let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'tagbar', 'denite']
-"IndentGuidesEnable
+hook_post_source = '''
+lua << EOF
+
+vim.opt.listchars:append "space:⋅"
+vim.opt.listchars:append "eol:↴"
+
+require("indent_blankline").setup {
+    space_char_blankline = " ",
+    show_end_of_line = true,
+    show_current_context = true,
+}
+
+EOF
 '''
 
 [[plugins]] # auto insert space around '=' & ','
@@ -679,7 +715,7 @@ on_event = 'InsertCharPre'
 hook_add = '''
 " inoremap <expr> , smartchr#loop(', ', ',')
 " inoremap <expr> . smartchr#loop('.', '. ', '..', '...')
-" inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
+inoremap <expr> = smartchr#loop('=', ' = ', ' == ', ' === ')
 " inoremap <expr> ! smartchr#loop('!', '!!', ' != ')
 " inoremap <expr> : smartchr#loop(':', '::', ' := ')
 " inoremap <expr> + smartchr#loop('+', ' + ', '++')
@@ -691,11 +727,19 @@ hook_add = '''
 '''
 
 [[plugins]] # comment out / decomment plugin
-repo = 'tyru/caw.vim'
-on_event = 'BufEnter'
-hook_add = '''
-  nmap  gc <Plug>(caw:hatpos:toggle)
-  xmap  gc <Plug>(caw:hatpos:toggle)
+repo = 'numToStr/Comment.nvim'
+on_event = 'VimEnter'
+hook_post_source = '''
+lua << EOF
+
+require('Comment').setup({
+  mappings = {
+    basic = true,
+    extra = true,
+  }
+})
+
+EOF
 '''
 
 [[plugins]] # for enabling display & edit binary file in vim
@@ -712,28 +756,28 @@ hook_source = 'let g:impsort_highlight_imported = 0'
 [[plugins]] # for url open in browser & search word
 repo = 'tyru/open-browser.vim'
 on_map = ['<Plug>(openbrowser-smart-search)']
-on_event = 'BufEnter'
+on_event = 'VimEnter'
 hook_add = '''
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 '''
 
-[[plugins]] # set syntax highlights and commands for markdown
-repo = 'plasticboy/vim-markdown'
-on_ft = ['markdown','pandoc.markdown','rmd']
-on_event = 'BufEnter'
-hook_add = '''
-let g:vim_markdown_math = 1
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_toml_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
-let g:vim_markdown_conceal=0
-let g:vim_markdown_folding_disabled=1
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_toc_autofit = 1
-
-autocmd Filetype markdown nnoremap gt :Toc<CR>
-'''
+# [[plugins]] # set syntax highlights and commands for markdown
+# repo = 'plasticboy/vim-markdown'
+# on_ft = ['markdown','pandoc.markdown','rmd']
+# on_event = 'BufEnter'
+# hook_add = '''
+# let g:vim_markdown_math = 1
+# let g:vim_markdown_frontmatter = 1
+# let g:vim_markdown_toml_frontmatter = 1
+# let g:vim_markdown_json_frontmatter = 1
+# let g:vim_markdown_conceal=0
+# let g:vim_markdown_folding_disabled=1
+# let g:vim_markdown_folding_style_pythonic = 1
+# let g:vim_markdown_toc_autofit = 1
+#
+# autocmd Filetype markdown nnoremap gt :Toc<CR>
+# '''
 
 [[plugins]] # for the real-time preview for markdown files
 repo = 'iamcco/markdown-preview.nvim'
@@ -745,27 +789,85 @@ repo = 'dhruvasagar/vim-table-mode'
 on_ft = ['markdown','pandoc.markdown','rmd']
 on_event = 'VimEnter'
 
-[[plugins]] # Continuously updated session files
-repo = 'tpope/vim-obsession'
-on_cmd = 'Obsession'
+[[plugins]] # Automated session manager
+repo = 'Shatur/neovim-session-manager'
+depends = ['plenary.nvim']
+on_event = 'VimEnter'
+hook_post_source = '''
+
+lua << EOF
+
+local Path = require('plenary.path')
+require('session_manager').setup({
+  autoload_mode = require('session_manager.config').AutoloadMode.Disabled, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
+  autosave_last_session = true, -- Automatically save last session on exit and on session switch.
+  autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+  autosave_ignore_dirs = {
+    "/",
+    "~/",
+  }, -- A list of directories where the session will not be autosaved.
+  autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
+    'gitcommit',
+  },
+  autosave_only_in_session = true, -- Always autosaves session. If true, only autosaves after a session is active.
+})
+
+EOF
+'''
 
 [[plugins]] # call :Template to get template each file types
 repo = 'mattn/sonictemplate-vim'
 on_cmd = 'Template'
 
-[[plugins]] # enables transparent pasting into vim
-repo = 'ConradIrwin/vim-bracketed-paste'
-on_event = 'BufEnter'
-
-[[plugins]] # vim doc in japanese
-repo = 'vim-jp/vimdoc-ja'
-on_ft = 'help'
+[[plugins]]
+repo = 'glepnir/zephyr-nvim'
 on_event = 'VimEnter'
-hook_add = '''
-set helplang=ja,en
-'''
 
 [[plugins]] # set auto ambiwidth
 repo = 'rbtnn/vim-ambiwidth'
+on_event = 'BufReadPre'
+
+[[plugins]] # EditorConfig
+repo = 'editorconfig/editorconfig-vim'
+on_event = 'BufReadPre'
+on_path = '.*'
+
+[[plugins]] # indent based folding and motion
+repo = 'pseewald/vim-anyfold'
 on_event = 'BufEnter'
+hook_add = '''
+filetype plugin indent on
+syntax on
+
+" activate anyfold by default
+augroup anyfold
+    autocmd!
+    autocmd Filetype * AnyFoldActivate
+augroup END
+
+" disable anyfold for large files
+let g:LargeFile = 1000000 " file is large if size greater than 1MB
+autocmd BufReadPre,BufRead * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
+function LargeFile()
+    augroup anyfold
+        autocmd! " remove AnyFoldActivate
+        autocmd Filetype * setlocal foldmethod=indent " fall back to indent folding
+    augroup END
+endfunction
+" autocmd Filetype * AnyFoldActivate
+
+set foldlevel=20
+'''
+
+[[plugins]] # accelerate up-down moving
+repo = 'rhysd/accelerated-jk'
+on_event = 'BufEnter'
+hook_add = '''
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
+'''
+
+[[plugins]] # logging command output
+repo = 'tyru/capture.vim'
+on_event = 'VimEnter'
 

@@ -1,17 +1,6 @@
 #
 # .zshrc
 #
-# This script depends on following script/directory
-#
-# # * cdr [$HOME/.cache/shell/]
-# * enchancd [$HOME/.cache/shell/enhancd/]
-# * peco [/usr/local/bin/peco]
-# * zplug [$HOME/.zplug/]
-# * go [$HOME/go]
-# * cargo [$HOME/.cargo/bin]
-# * nvm [$HOME/.nvm/]
-# * rbenv [$HOME/.rbenv/]
-#
 
 
 #
@@ -32,16 +21,6 @@ bindkey -e
 bindkey -r '^q'
 bindkey -r '^o'
 setopt IGNOREEOF # prevent ctrl+d shell exit
-
-# cdr Settings
-# autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-# add-zsh-hook chpwd chpwd_recent_dirs
-# zstyle ':completion:*' recent-dirs-insert both
-# zstyle ':chpwd:*' recent-dirs-max 500
-# zstyle ':chpwd:*' recent-dirs-default true
-# zstyle ':chpwd:*' recent-dirs-file "$HOME/.cache/shell/chpwd-recent-dirs"
-# zstyle ':chpwd:*' recent-dirs-pushd true
-
 
 #
 # Prompt Settings
@@ -100,7 +79,6 @@ setopt mark_dirs             # ファイル名の展開でディレクトリに�
 setopt list_types            # 補完候補一覧でファイルの種別を識別マーク表示 (訳注:ls -F の記号)
 setopt auto_menu             # 補完キー連打で順に補完候補を自動で補完
 setopt auto_param_keys       # カッコの対応などを自動的に補完
-setopt interactive_comments  # コマンドラインでも # 以降をコメントと見なす
 setopt magic_equal_subst     # コマンドラインの引数で --prefix=/usr などの = 以降でも補完できる
 
 setopt complete_in_word      # 語の途中でもカーソル位置で補完
@@ -254,7 +232,6 @@ __fzf_text_search() {
 }
 
 zle -N fzf-text-search
-# bindkey '^[t' fzf-text-search
 bindkey '^o^t' fzf-text-search
 bindkey '^ot' fzf-text-search
 
@@ -274,38 +251,19 @@ zle -N fzf-ghq-search
 bindkey '^o^g' fzf-ghq-search
 bindkey '^og' fzf-ghq-search
 
-#
-# peco functions
-#
-
-# function peco-select-history() {
-#     # historyを番号なし、逆順、最初から表示。
-#     # 順番を保持して重複を削除。
-#     # カーソルの左側の文字列をクエリにしてpecoを起動
-#     # \nを改行に変換
-#     BUFFER="$(history -nr 1 | peco --select-1 --query "$LBUFFER" --prompt "[history]" | sed 's/\\n/\n/')"
-#     CURSOR=$#BUFFER             # カーソルを文末に移動
-#     zle -R -c                   # refresh
-# }
-# zle -N peco-select-history
-# bindkey '^R' peco-select-history
-
-# function peco-cdr () {
-#     local selected_dir="$(cdr -l | sed 's/^[0-9]\+ \+//' | peco --select-1 --prompt="cdr >" --query "$LBUFFER")"
-#     if [ -n "$selected_dir" ]; then
-#         BUFFER="cd ${selected_dir}"
-#        zle accept-line
-#     fi
-# }
-# zle -N peco-cdr
-# bindkey '^[r' peco-cdr
-
 function fzf-kill() {
     for pid in `ps aux | fzf --height="80%" --multi --prompt="[kill?] " | awk '{ print $2 }'`
     do
         kill $pid
         echo "Killed ${pid}"
     done
+}
+
+function fzf-git-branch() {
+    branch_name=`git branch | fzf --prompt "[branch] " | head -n 1 | sed -e "s/^\*\s*//g"`
+    if [ -n "$target_dir" ]; then
+        git switch $target_dir
+    fi
 }
 
 function github-star-import() {
@@ -336,7 +294,7 @@ alias '..'='cd ..'
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
-alias cdh='cd $HOME'
+alias cdh='cd ${HOME}'
 
 alias -g @g='| grep'
 alias -g @l='| less -R'
@@ -346,7 +304,6 @@ alias -g @h='| head'
 alias -g @t='| tail'
 alias -g @s='| sed'
 alias -g @c='| less -XF'
-# alias -g @p='| peco'
 alias -g @f='| fzf'
 alias -g @em='| emojify'
 
@@ -354,18 +311,17 @@ alias ls='ls --color'
 alias la='ls --color -lahF'
 alias ll='ls --color -lhF'
 
-alias ripl='(){rg -p $@ | less -R}'
+alias rgl='(){rg -p $@ | less -R}'
 
-alias -g gbl='`git branch | fzf --prompt "[branch] " | head -n 1 | sed -e "s/^\*\s*//g"`'
-alias dps='docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.RunningFor}}"'
-alias dex='docker exec -it `dps | fzf | cut -f 1` /bin/bash'
+alias -g gbranch='fzf-git-branch'
+alias dockps='docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.RunningFor}}"'
+alias dockex='docker exec -it `dps | fzf | cut -f 1` /bin/bash'
 
 alias termi='terminator -l medium'
 alias termis='terminator -l small'
 alias termim='terminator -l medium'
 alias termil='terminator -l large'
 
-# alias tmux='env TERM=xterm-256color tmux'
 alias nv='nvim'
 
 alias showtime='date & time'
@@ -440,14 +396,13 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   export EMOJI_CLI_USE_EMOJI=0
 
   # Plugins
-  # zplug "~/.zsh", from:local
-  zplug "zsh-users/zsh-completions", depth:1
+  zplug "zsh-users/zsh-completions", depth:1, lazy:true
   zplug "zsh-users/zsh-syntax-highlighting", defer:2
   zplug "b4b4r07/enhancd", use:init.sh, at:v2.2.4
-  zplug "b4b4r07/emoji-cli"
-  zplug "mrowa44/emojify", as:command
-  zplug "paulirish/git-open", as:plugin
-  zplug "junegunn/fzf-git.sh", use:fzf-git.sh
+  zplug "b4b4r07/emoji-cli", lazy:true
+  zplug "mrowa44/emojify", as:command, lazy:true
+  zplug "paulirish/git-open", as:plugin, lazy:true
+  zplug "junegunn/fzf-git.sh", use:fzf-git.sh, lazy:true
   # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
   # Install plugins if there are plugins that have not been installed
@@ -479,8 +434,7 @@ fi
 setopt no_beep
 setopt transient_rprompt
 setopt auto_cd
-setopt auto_pushd
-setopt pushd_ignore_dups
+
 eval "$(direnv hook zsh)"
 
 # X forwarding Settings

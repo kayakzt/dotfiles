@@ -1,5 +1,58 @@
+version: 2
+root-markers:
+  - .git/
+  - package.json
+
+commands:
+  - title: Editor (gedit)
+    os: linux
+    command: gedit
+    arguments:
+      - ${FILENAME}
+  - title: Open (system default)
+    os: linux
+    command: xdg-open
+    arguments:
+      - ${FILENAME}
+
+tools:
+  textlint-lint: &textlint-lint
+    prefix: textlint
+    lint-command: 'npx textlint -f unix --no-color --stdin'
+    lint-stdin: true
+    lint-formats:
+      - '%f:%l:%c: %m [%trror/%r]'
+      - '%f:%l:%c: 【%r】 %m'
+      - '%E%f:%l:%c: %m'
+      - '%Z%m [%trror/%r]'
+      - '%C%m'
+    root-markers:
+      - package.json
+      - .textlintrc
+    commands:
+      - title: 'textlint fix'
+        command: 'npx textlint --fix ${INPUT}'
+
+  vint-lint: &vint-lint
+    lint-command: 'vint --enable-neovim --style-problem ${INPUT}'
+    lint-formats:
+      - '%f:%l:%c: %m'
+
 languages:
   vim:
-    lint-command: 'vint -'
-    lint-stdin: true
+    - <<: *vint-lint
+  text:
+    - <<: *textlint-lint
+  markdown:
+    - <<: *textlint-lint
+  html:
+    - <<: *textlint-lint
+  rst:
+    - <<: *textlint-lint
+  help:
+    - <<: *textlint-lint
+  asciidoc:
+    - <<: *textlint-lint
+  review:
+    - <<: *textlint-lint
 
