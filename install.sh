@@ -296,6 +296,8 @@ fi
 run mkdir -p "$HOME"/dev
 run mkdir -p "$HOME"/dev/bin
 run mkdir -p "$HOME"/dev/src
+run mkdir -p "$HOME"/.local
+run mkdir -p "$HOME"/.local/share
 
 if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
@@ -320,10 +322,6 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         jq \
         exuberant-ctags \
         direnv \
-        # zsh \
-        # silversearcher-ag \
-        # python3-venv \
-        # python-dev python-pip python3-dev python3-pip \
 
 elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
     sudo yum install -y wget \
@@ -351,21 +349,6 @@ install_fzf() {
     FZF_ROOT="${HOME}/.fzf"
     git clone --depth 1 https://github.com/junegunn/fzf.git ${FZF_ROOT}
     ${FZF_ROOT}/install --bin
-}
-
-# peco install ('go get' is not recommended)
-install_peco() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/peco/peco/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/peco/peco/releases/download/${LATEST}/"
-    RELEASE="peco_linux_amd64.tar.gz"
-
-    run wget ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
-
-    mv peco_linux_amd64/peco $HOME/dev/bin/peco
-    chmod u+x $HOME/dev/bin/peco
-    run rm ${RELEASE}
-    run rm -rf peco_linux_amd64
 }
 
 install_nvim() {
@@ -553,7 +536,6 @@ install_efm-langserver() {
 # install tools
 install_tmux
 install_zsh
-# install_peco
 install_fzf
 install_nvim
 install_rg
@@ -723,7 +705,7 @@ if ! $FLG_R && ! $FLG_M; then
     # install needed npm packages
     npm install -g npm
     npm install -g npm-check-updates
-    npm install -g markdownlint-cli \
+    npm install -g markdownlint-cli  textlint\
         vue-cli
 
     # install coc-extensions for neovim
