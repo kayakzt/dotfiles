@@ -402,7 +402,7 @@ if [ -f $ZPLUG_HOME/init.zsh ]; then
   zplug "b4b4r07/emoji-cli", lazy:true
   zplug "mrowa44/emojify", as:command, lazy:true
   zplug "paulirish/git-open", as:plugin, lazy:true
-  zplug "junegunn/fzf-git.sh", use:fzf-git.sh, lazy:true
+  zplug "junegunn/fzf-git.sh", use:fzf-git.sh
   # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
   # Install plugins if there are plugins that have not been installed
