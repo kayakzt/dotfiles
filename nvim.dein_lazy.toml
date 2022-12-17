@@ -308,10 +308,14 @@ require("telescope").setup {
       '--glob',
       '!**/.git/*',
       '--glob',
+      '!.gitignore',
+      '--glob',
       '!**/.venv/*',
+      '--glob',
+      '!**/*.lock',
       '--trim',
     },
-    file_ignore_patterns = {"node_modules", ".git", ".venv"},
+    file_ignore_patterns = {"node_modules", ".git", ".gitignore", ".venv", "*.lock"},
   },
   pickers = {
     find_files = {
