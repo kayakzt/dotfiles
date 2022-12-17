@@ -515,7 +515,7 @@ install_bat() {
     chmod u+x $HOME/dev/bin/bat
 
     run rm ${RELEASE}
-    run rm -rf bat-${LATEST}-aarch64-unknown-linux-gnu
+    run rm -rf bat-${LATEST}-x86_64-unknown-linux-gnu
 }
 
 install_efm-langserver() {
