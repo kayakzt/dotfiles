@@ -548,6 +548,7 @@ install_nvim
 install_rg
 install_gh
 install_ghq
+install_efm-langserver
 install_lsd
 install_dust
 install_bat
