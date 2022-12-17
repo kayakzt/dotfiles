@@ -436,7 +436,11 @@ install_rg() {
     wget -O - ${REPO}${RELEASE} | tar zxf - --strip-component=1
     sudo mv rg /usr/local/bin/
     sudo mv doc/rg.1 /usr/local/share/man/man1/
-    sudo mandb
+
+    if $FLG_C; then
+        sudo mandb
+    fi
+
     # sudo mv complete/rg.bash-completion /usr/share/bash-completion/completions/rg
     cd $WORKING_DIR
     run rm -rf $TMPDIR
