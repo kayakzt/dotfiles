@@ -424,6 +424,7 @@ install_zsh() {
 
     cd $WORKING_DIR
     run rm -rf zsh-5.8.1
+    run rm download
 }
 
 # ripgrep install
