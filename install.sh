@@ -311,6 +311,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         libbz2-dev \
         libsqlite3-dev \
         zlib1g-dev \
+        unzip \
         wget \
         tree \
         git \
