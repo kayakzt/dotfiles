@@ -310,6 +310,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         libffi-dev \
         libbz2-dev \
         libsqlite3-dev \
+        libfuse2 \
         zlib1g-dev \
         unzip \
         wget \
