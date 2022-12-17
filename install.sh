@@ -440,7 +440,7 @@ install_rg() {
     sudo mv rg /usr/local/bin/
     sudo mv doc/rg.1 /usr/local/share/man/man1/
 
-    if $FLG_C; then
+    if ! $FLG_C; then
         sudo mandb
     fi
 
