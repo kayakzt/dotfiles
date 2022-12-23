@@ -762,8 +762,8 @@ repo = 'tyru/open-browser.vim'
 on_map = ['<Plug>(openbrowser-smart-search)']
 on_event = 'VimEnter'
 hook_add = '''
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
+nmap gs <Plug>(openbrowser-smart-search)
+vmap gs <Plug>(openbrowser-smart-search)
 '''
 
 # [[plugins]] # set syntax highlights and commands for markdown
