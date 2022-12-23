@@ -1,3 +1,6 @@
+set encoding=utf8
+scriptencoding utf-8
+
 " Set Color Mode
 if (has('termguicolors'))
     set termguicolors
@@ -81,14 +84,13 @@ function! s:open_junk_file()
     endif
 
     let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
-    if l:filename != ''
+    if l:filename !=# ''
         execute 'edit ' . l:filename
     endif
 endfunction"}}}
 
 " vim settings
 
-set encoding=utf8
 set conceallevel=0
 
 " set python path for neovim
@@ -196,7 +198,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " custom vimgrep
-if executable("rg")
+if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif

@@ -413,7 +413,7 @@ repo = 'tpope/vim-fugitive'
 on_event = 'VimEnter'
 hook_add = '''
 nnoremap [git]  <Nop>
-nmap <space>g [git]
+nmap <Leader>g [git]
 nnoremap <silent> [git]s :Git status<CR><C-w>T
 nnoremap <silent> [git]a :Git write<CR>
 nnoremap <silent> [git]c :Git commit<CR>
