@@ -73,17 +73,23 @@ endif
 " }}}
 
 " Rename function
-command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
+command! -nargs=1 -complete=file FileRename f <args>|call delete(expand('#'))
 
-" Open junk file."{{{
-command! -nargs=0 JunkFile call s:open_junk_file()
-function! s:open_junk_file()
-    let l:junk_dir = $HOME . '/.junk'. strftime('/%Y/%m')
-    if !isdirectory(l:junk_dir)
-        call mkdir(l:junk_dir, 'p')
+" Copy function
+command! -nargs=1 -complete=file FileCopy f <args>
+
+" Delete function
+command! -nargs=0 FileDelete call delete(expand('#'))
+
+" Open note file."{{{
+command! -nargs=0 NoteCreate call s:open_note_file()
+function! s:open_note_file()
+    let l:note_dir = $MY_NOTE_DIR. strftime('/%Y/%m')
+    if !isdirectory(l:note_dir)
+        call mkdir(l:note_dir, 'p')
     endif
 
-    let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+    let l:filename = input('Note: ', l:note_dir.strftime('/%Y-%m-%d-%H%M%S'). '.md')
     if l:filename !=# ''
         execute 'edit ' . l:filename
     endif

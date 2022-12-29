@@ -145,6 +145,8 @@ nnoremap <silent> [telescope]t :Telescope filetypes <CR>
 nnoremap <silent> [telescope]y :Telescope registers <CR>
 nnoremap <silent> [telescope]m :Telescope marks <CR>
 nnoremap <silent> [telescope]q :Telescope command_history <CR>
+nnoremap <silent> [telescope]n :Telescope find_files cwd=$MY_NOTE_DIR <CR>
+nnoremap <silent> [telescope]N :Telescope live_grep cwd=$MY_NOTE_DIR <CR>
 " nnoremap <silent> [telescope]o :Telescope treesitter <CR>
 
 nnoremap <silent> [telescope]c :Telescope git_commits <CR>
