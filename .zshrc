@@ -451,11 +451,13 @@ if [ -n "$SSH_CONNECTION" ] ; then
   #   fcitx -d > /dev/null 2>&1 &
   # fi
 
-  if [ -z "$XMODIFIERS" ]; then
-    export XMODIFIERS=@im=ibus
-    ibus-daemon -drx
-  else
-    ibus-daemon -dr
+  if command -v ibus-daemon > /dev/null; then
+    if [ -z "$XMODIFIERS" ]; then
+      export XMODIFIERS=@im=ibus
+      ibus-daemon -drx
+    else
+      ibus-daemon -dr
+    fi
   fi
 fi
 
