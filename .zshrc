@@ -143,7 +143,7 @@ __fzf_file_search() {
     fzf-tmux -p80%,90% --height="90%" \
       --multi \
       --prompt="[file search] " \
-      --preview="bat -H {2} --color=always --style=header,grid {1}" \
+      --preview="bat --color=always --style=header,grid {1}" \
       --preview-window='down:60%:+{2}-4'
   )
 
