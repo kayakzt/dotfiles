@@ -103,7 +103,7 @@ export FZF_DEFAULT_OPTS='
   --tiebreak=index
   --no-mouse
   --border
-  --bind=ctrl-h:page-up,ctrl-l:page-down
+  --bind=ctrl-u:page-up,ctrl-d:page-down
   --bind=ctrl-f:preview-half-page-down,ctrl-b:preview-half-page-up
   --bind=ctrl-p:toggle-preview
 '
