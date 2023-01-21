@@ -354,15 +354,22 @@ install_fzf() {
 }
 
 install_nvim() {
+    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+        echo "$password" | sudo -S echo ""
+    fi
     LATEST=$(curl -sSL "https://api.github.com/repos/neovim/neovim/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/neovim/neovim/releases/download/${LATEST}/"
     RELEASE="nvim.appimage"
 
     run wget ${REPO}${RELEASE}
 
-    chmod u+x ${RELEASE}
-    mv ${RELEASE} $HOME/dev/bin/nvim
-    chmod u+x $HOME/dev/bin/nvim
+    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+        sudo mv ${RELEASE} /usr/local/bin/nvim
+        sudo chmod uo+x /usr/local/bin/nvim
+    else
+        mv ${RELEASE} ${HOME}/dev/bin/nvim
+        chmod u+x ${HOME}/dev/bin/nvim
+    fi
 }
 
 # tmux install
