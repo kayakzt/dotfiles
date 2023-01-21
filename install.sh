@@ -365,7 +365,8 @@ install_nvim() {
 
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         sudo mv ${RELEASE} /usr/local/bin/nvim
-        sudo chmod uo+x /usr/local/bin/nvim
+        sudo chmod ugo+x /usr/local/bin/nvim
+        sudo chmod g-w /usr/local/bin/nvim
     else
         mv ${RELEASE} ${HOME}/dev/bin/nvim
         chmod u+x ${HOME}/dev/bin/nvim
