@@ -151,6 +151,7 @@ nnoremap <silent> [telescope]N :Telescope live_grep cwd=$MY_NOTE_DIR <CR>
 
 nnoremap <silent> [telescope]c :Telescope git_commits <CR>
 nnoremap <silent> [telescope]e :lua require('telescope.builtin').symbols{ sources = {'emoji'} } <CR>
+nnoremap <silent> [telescope]o :Telescope file_browser <CR>
 
 nnoremap <silent> [telescope]s :SessionManager load_current_dir_session<CR>
 nnoremap <silent> [telescope]S :SessionManager load_session<CR>
@@ -317,7 +318,7 @@ require("telescope").setup {
       '!**/*.lock',
       '--trim',
     },
-    file_ignore_patterns = {"node_modules", ".git", ".gitignore", ".venv", "*.lock"},
+    file_ignore_patterns = {"^node_modules/", "^./.git/", "^./.venv/"},
   },
   pickers = {
     find_files = {
@@ -382,6 +383,7 @@ require("telescope").setup {
           ["<CR>"]  = stopinsert(custom_actions.multi_selection_open),
           ["<C-h>"] = fb_actions.goto_parent_dir,
           ["<C-.>"] = fb_actions.toggle_hidden,
+          ["<C-p>"] = fb_actions.change_cwd,
         },
         n = {
           ["<C-v>"] = custom_actions.multi_selection_open_vertical,
@@ -390,6 +392,7 @@ require("telescope").setup {
           ["<CR>"] = custom_actions.multi_selection_open,
           ["h"] = fb_actions.goto_parent_dir,
           ["."] = fb_actions.toggle_hidden,
+          ["p"] = fb_actions.change_cwd,
         },
       },
     },
@@ -628,6 +631,10 @@ let g:quickrun_config._ = {
 
 let g:quickrun_config.rust = {
       \ 'exec' : 'cargo run',
+      \ }
+
+let g:quickrun_config.go = {
+      \ 'exec' : 'go run .',
       \ }
 
 let g:quickrun_no_default_key_mappings = 1
