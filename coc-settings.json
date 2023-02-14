@@ -149,7 +149,7 @@
     "python.formatting.provider": "black",
     "pyright.organizeimports.provider": "isort",
     "python.sortImports.args": ["--profile", "black"],
-    "pyright.testing.provider": "pytest"",
+    "pyright.testing.provider": "pytest",
     "go.checkForUpdates": "ask",
     "go.goplsOptions": {
         "completeUnimported": true
@@ -158,9 +158,6 @@
     "yaml.schemas": {
         "https://raw.githubusercontent.com/mattn/efm-langserver/master/schema.json": [
             "efm-langserver.yaml"
-        ],
-        "https://raw.githubusercontent.com/composer/composer/main/res/composer-schema.json": [
-            "/*"
         ]
     }
 }
