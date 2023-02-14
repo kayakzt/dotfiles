@@ -93,7 +93,7 @@ bindkey "^i" menu-complete   # 展開する前に補完候補を出させる(Ctr
 #
 # fzf configurations
 #
-export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --glob '!**/.git/*' --glob '!**/.venv/*' "
+export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --glob '!**/.git/*' --glob '!**/.venv/*' -uu "
 export FZF_DEFAULT_OPTS='
   --prompt="[query] "
   --height=60%
@@ -202,7 +202,7 @@ fzf-text-search() {
 }
 
 __fzf_text_search() {
-  local rg_cmd="rg --smart-case --crlf --hidden --line-number --color=always --trim --glob '!**/.git/*' --glob '!**/.venv/*' --glob '!.gitignore' --glob '!**/*.lock'"
+  local rg_cmd="rg --smart-case --crlf --hidden --line-number --color=always --trim --glob '!**/.git/*' --glob '!**/.venv/*' --glob '!.gitignore' --glob '!**/*.lock' -uu"
   local initial_query="${*:-}"
   local selected=$(FZF_DEFAULT_COMMAND="$rg_cmd $(printf %q "$initial_query")" \
       fzf-tmux -p80%,90% --bind "ctrl-r:reload($rg_cmd {q})" --header "Press CTRL-R to reload" \

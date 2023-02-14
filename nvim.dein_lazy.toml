@@ -136,6 +136,7 @@ hook_add = '''
 nnoremap [telescope] <Nop>
 nmap <Leader>f [telescope]
 nnoremap <silent> [telescope]f :Telescope find_files <CR>
+nnoremap <silent> [telescope]F :Telescope find_files no_ignore=true<CR>
 nnoremap <silent> [telescope]r :Telescope frecency <CR>
 nnoremap <silent> [telescope]g :Telescope live_grep <CR>
 nnoremap <silent> [telescope]v :Telescope git_files <CR>
