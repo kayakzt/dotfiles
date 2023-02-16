@@ -725,6 +725,7 @@ if ! $FLG_R && ! $FLG_M; then
     # install needed npm packages
     npm install -g npm
     npm install -g npm-check-updates
+    npm install -g yarn
     npm install -g markdownlint-cli  textlint\
         vue-cli
 
