@@ -1,6 +1,6 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
-rev = '*'
+rev = 'release'
 hook_add = '''
 command! DeinUpdate  call s:dein_update()
 
@@ -11,12 +11,11 @@ endfunction
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
-rev = '*'
+rev = 'ver10.*'
 build = 'make'
 
 [[plugins]]
 repo = 'joshdick/onedark.vim'
-rev = '*'
 hook_add = '''
 let g:onedark_color_overrides = {
 \ "comment_grey": {"gui": "#67727D", "cterm": "59", "cterm16" : "15"}

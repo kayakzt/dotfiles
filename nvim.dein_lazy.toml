@@ -21,11 +21,9 @@ let g:airline_symbols.spell = 'Ꞩ'
 
 [[plugins]]
 repo = 'nvim-lua/plenary.nvim'
-rev = '*'
 
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter'
-rev = '*'
 merged = 0
 on_event = 'BufEnter'
 hook_post_update = 'TSUpdate'
@@ -120,7 +118,7 @@ repo = 'nvim-telescope/telescope-ui-select.nvim'
 
 [[plugins]]
 repo = 'nvim-telescope/telescope.nvim'
-rev = '0.1.x'
+rev = 'v0.1.*'
 depends = [
     # 'nvim-web-devicons',
     'plenary.nvim',
