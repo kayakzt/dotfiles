@@ -681,7 +681,6 @@ on_event = 'VimEnter'
 
 [[plugins]] # highlights trailing whitespace
 repo = 'bronson/vim-trailing-whitespace'
-rev = '*'
 on_event = 'VimEnter'
 hook_add = '''
 let g:extra_whitespace_ignored_filetypes = [
