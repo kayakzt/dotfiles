@@ -837,9 +837,19 @@ on_cmd = 'Template'
 repo = 'glepnir/zephyr-nvim'
 on_event = 'VimEnter'
 
-# [[plugins]] # set auto ambiwidth
-# repo = 'rbtnn/vim-ambiwidth'
-# on_event = 'BufReadPre'
+[[plugins]] # set auto ambiwidth
+repo = 'delphinus/cellwidths.nvim'
+on_event = 'VimEnter'
+hook_post_source = '''
+
+lua << EOF
+
+require("cellwidths").setup {
+  name = "default",
+}
+
+EOF
+'''
 
 [[plugins]] # EditorConfig
 repo = 'editorconfig/editorconfig-vim'
