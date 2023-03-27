@@ -625,7 +625,7 @@ if ! $FLG_R && ! $FLG_M; then
     # install apps for building c++ code + shellcheck
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
         sudo apt install -y gdb valgrind strace ltrace \
-        make cmake scons libhdf5-dev shellcheck
+        make cmake scons libhdf5-dev shellcheck clangd
         # for matplotlib build
         sudo apt install -y libfreetype6-dev pkg-config libpng-dev
     fi

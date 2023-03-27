@@ -3,6 +3,8 @@
     "coc.preferences.extensionUpdateCheck": "weekly",
     "coc.preferences.formatOnSave": true,
     "coc.preferences.formatOnSaveFiletypes": [
+        "c",
+        "cpp",
         "json",
         "jsonc",
         "html",
@@ -20,7 +22,7 @@
     "diagnostic.infoSign": ">",
     "diagnostic.hintSign": "?",
     "diagnostic.warningSign": "!",
-    "diagnostic.errorSign": "☓",
+    "diagnostic.errorSign": "X",
     /* "diagnostic.signOffset": 500,         */
     /* "diagnostic.refreshAfterSave": false, */
     "diagnostic.refreshOnInsertMode": false,
@@ -36,14 +38,6 @@
         "q": "do:exit"
     },
     "languageserver": {
-        "ccls": {
-            "command": "ccls",
-            "filetypes": ["c", "cpp", "objc", "objcpp"],
-            "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
-            "initializationOptions": {
-                "directory": "/tmp/ccls"
-            }
-        },
         "efm": {
             "command": "efm-langserver",
             "args": [],
@@ -139,6 +133,7 @@
     // "vim": "vint"
     // "sh": "shellcheck",
     // },
+    "clangd.arguments": ["--fallback-style=Google"],
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": false,
     // "python.linting.flake8Args": ["--ignore=E501,F401,F841"],
