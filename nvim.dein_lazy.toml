@@ -264,15 +264,15 @@ end
 
 local multi_open_mappings = {
   i = {
-    ["<C-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
-    ["<C-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
-    ["<C-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
+    ["<M-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
+    ["<M-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
+    ["<M-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
     ["<CR>"]  = stopinsert(custom_actions.multi_selection_open),
   },
   n = {
-    ["<C-v>"] = custom_actions.multi_selection_open_vertical,
-    ["<C-s>"] = custom_actions.multi_selection_open_horizontal,
-    ["<C-t>"] = custom_actions.multi_selection_open_tab,
+    ["<M-v>"] = custom_actions.multi_selection_open_vertical,
+    ["<M-s>"] = custom_actions.multi_selection_open_horizontal,
+    ["<M-t>"] = custom_actions.multi_selection_open_tab,
     ["<CR>"] = custom_actions.multi_selection_open,
   },
 }
@@ -337,15 +337,15 @@ require("telescope").setup {
       },
       mappings = {
         i = {
-          ["<C-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
-          ["<C-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
-          ["<C-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
+          ["<M-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
+          ["<M-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
+          ["<M-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
           ["<CR>"]  = stopinsert(custom_actions.multi_selection_open),
         },
         n = {
-          ["<C-v>"] = custom_actions.multi_selection_open_vertical,
-          ["<C-s>"] = custom_actions.multi_selection_open_horizontal,
-          ["<C-t>"] = custom_actions.multi_selection_open_tab,
+          ["<M-v>"] = custom_actions.multi_selection_open_vertical,
+          ["<M-s>"] = custom_actions.multi_selection_open_horizontal,
+          ["<M-t>"] = custom_actions.multi_selection_open_tab,
           ["<CR>"] = custom_actions.multi_selection_open,
           ["cd"] = function(prompt_bufnr)
             local selection = require("telescope.actions.state").get_selected_entry()
@@ -378,22 +378,22 @@ require("telescope").setup {
       hijack_netrw = true,
       mappings = {
         i = {
-          ["<C-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
-          ["<C-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
-          ["<C-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
+          ["<M-v>"] = stopinsert(custom_actions.multi_selection_open_vertical),
+          ["<M-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
+          ["<M-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
           ["<CR>"]  = stopinsert(custom_actions.multi_selection_open),
-          ["<C-h>"] = fb_actions.goto_parent_dir,
-          ["<C-.>"] = fb_actions.toggle_hidden,
-          ["<C-p>"] = fb_actions.change_cwd,
+          ["<M-h>"] = fb_actions.goto_parent_dir,
+          ["<M-.>"] = fb_actions.toggle_hidden,
+          ["<M-p>"] = fb_actions.change_cwd,
         },
         n = {
-          ["<C-v>"] = custom_actions.multi_selection_open_vertical,
-          ["<C-s>"] = custom_actions.multi_selection_open_horizontal,
-          ["<C-t>"] = custom_actions.multi_selection_open_tab,
+          ["<M-v>"] = custom_actions.multi_selection_open_vertical,
+          ["<M-s>"] = custom_actions.multi_selection_open_horizontal,
+          ["<M-t>"] = custom_actions.multi_selection_open_tab,
           ["<CR>"] = custom_actions.multi_selection_open,
-          ["h"] = fb_actions.goto_parent_dir,
-          ["."] = fb_actions.toggle_hidden,
-          ["p"] = fb_actions.change_cwd,
+          ["<M-h>"] = fb_actions.goto_parent_dir,
+          ["<M-.>"] = fb_actions.toggle_hidden,
+          ["<M-p>"] = fb_actions.change_cwd,
         },
       },
     },
