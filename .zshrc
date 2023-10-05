@@ -20,6 +20,9 @@ fi
 bindkey -e
 bindkey -r '^q'
 bindkey -r '^o'
+bindkey "^[[3~" delete-char
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
 setopt IGNOREEOF # prevent ctrl+d shell exit
 
 #
