@@ -2,7 +2,6 @@
 # .zshrc
 #
 
-
 #
 # Initial Settings
 #
@@ -11,10 +10,21 @@
 autoload -U colors && colors
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
-# autocompile
-if [ ! -f ~/.zshrc.zwc -o ~/.zshrc -nt ~/.zshrc.zwc ]; then
-  zcompile ~/.zshrc
-fi
+# function source {
+#   ensure_zcompiled $1
+#   builtin source $1
+# }
+
+function ensure_zcompiled {
+  local compiled="$1.zwc"
+  if [[ ! -r "$compiled" || "$1" -nt "$compiled" ]]; then
+    echo "\033[1;36mCompiling\033[m $1"
+    zcompile $1
+  fi
+}
+
+# autocompile myself
+ensure_zcompiled ~/.zshrc
 
 # Keybindings
 bindkey -e
@@ -24,6 +34,45 @@ bindkey "^[[3~" delete-char
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 setopt IGNOREEOF # prevent ctrl+d shell exit
+
+
+#
+# Package Manager
+#
+
+# Variable for packages
+export ENHANCD_DIR="$HOME/.config/shell/enhancd"
+export ENHANCD_FILTER="fzf:peco"
+export ENHANCD_COMMAND="cd"
+export ENHANCD_ARG_DOUBLE_DOT="up"
+export ENHANCD_ARG_SINGLE_DOT="ls"
+export EMOJI_CLI_KEYBIND="^oe"
+export EMOJI_CLI_FILTER="fzf:peco"
+export EMOJI_CLI_USE_EMOJI=0
+
+# load sheldon source
+cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}
+sheldon_cache="$cache_dir/sheldon.zsh"
+sheldon_toml="$HOME/.config/sheldon/plugins.toml"
+
+# キャッシュがない、またはキャッシュが古い場合にキャッシュを作成
+if [[ ! -r "$sheldon_cache" || "$sheldon_toml" -nt "$sheldon_cache" ]]; then
+  mkdir -p $cache_dir
+  sheldon source > $sheldon_cache
+fi
+
+source "$sheldon_cache" # load cached source file
+unset cache_dir sheldon_cache sheldon_toml
+
+# override fzf-git.sh
+_fzf_git_fzf() {
+fzf-tmux -p80%,60% -- \
+  --layout=reverse --multi --height=50% --min-height=20 --border \
+  --color='header:italic:underline' \
+  --preview-window='right,50%,border-left' \
+  --bind='ctrl-/:change-preview-window(down,50%,border-top|hidden|)' "$@"
+}
+
 
 #
 # Prompt Settings
@@ -43,7 +92,7 @@ zstyle ':vcs_info:*' actionformats '%F{cyan} [%b|%F{magenta}%a%F{cyan}]'
 # prompt
 PROMPT="%B%{$fg[green]%}• %{$fg[yellow]%}• %{$fg[red]%}• %b%{$reset_color%}"
 RPROMPT="%{$fg[white]%}[%~]%{$reset_color%}"
-RPROMPT=$RPROMPT'${vcs_info_msg_0_}'
+RPROMPT=$RPROMPT'$(git_super_status)'
 
 
 #
@@ -351,10 +400,6 @@ alias pip-update-all='pip freeze --local \
                     | grep -v "^\-e" \
                     | cut -d = -f 1 \
                     | xargs pip install -U --user'
-# alias pip3-update-all='pip3 freeze --local \
-#                     | grep -v "^\-e" \
-#                     | cut -d = -f 1 \
-#                     | xargs pip3 install -U --user'
 
 # auto unzip function
 function auto_unzip() {
@@ -374,60 +419,36 @@ function auto_unzip() {
 }
 alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=auto_unzip
 
-#
-# Package Manager
-#
-
 # zplug
-export ZPLUG_HOME=~/.zplug
-export ZPLUG_CACHE_DIR=~/.cache/zplug
-if [ ! -d $ZPLUG_HOME ]; then
-  git clone https://github.com/zplug/zplug $ZPLUG_HOME
-fi
+# export ZPLUG_HOME=~/.zplug
+# export ZPLUG_CACHE_DIR=~/.cache/zplug
+# if [ ! -d $ZPLUG_HOME ]; then
+#   git clone https://github.com/zplug/zplug $ZPLUG_HOME
+# fi
 
-if [ -f $ZPLUG_HOME/init.zsh ]; then
-  source $ZPLUG_HOME/init.zsh
-
-  # Variables
-  export ENHANCD_DIR="$HOME/.config/shell/enhancd"
-  export ENHANCD_FILTER="fzf:peco"
-  export ENHANCD_COMMAND="cd"
-  export ENHANCD_HYPHEN_ARG="ls"
-  export ENHANCD_DOT_ARG="up"
-  export EMOJI_CLI_KEYBIND="^[em"
-  export EMOJI_CLI_FILTER="fzf:peco"
-  export EMOJI_CLI_USE_EMOJI=0
-
-  # Plugins
-  zplug "zsh-users/zsh-completions", depth:1, lazy:true
-  zplug "zsh-users/zsh-syntax-highlighting", defer:2
-  zplug "b4b4r07/enhancd", use:init.sh, at:v2.2.4
-  zplug "b4b4r07/emoji-cli", lazy:true
-  zplug "mrowa44/emojify", as:command, lazy:true
-  zplug "paulirish/git-open", as:plugin, lazy:true
-  zplug "junegunn/fzf-git.sh", use:fzf-git.sh
+# if [ -f $ZPLUG_HOME/init.zsh ]; then
+#   source $ZPLUG_HOME/init.zsh
+#
+#   # Plugins
+#   zplug "zsh-users/zsh-completions", depth:1
+#   zplug "zsh-users/zsh-syntax-highlighting", defer:2
+#   zplug "b4b4r07/enhancd", use:init.sh, at:v2.2.4
+#   zplug "b4b4r07/emoji-cli"
+#   zplug "mrowa44/emojify", as:command, lazy:true
+#   zplug "paulirish/git-open", as:plugin, lazy:true
+#   zplug "junegunn/fzf-git.sh", use:fzf-git.sh
   # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
   # Install plugins if there are plugins that have not been installed
-  if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-      echo; zplug install
-    fi
-  fi
-
-  # Then, source plugins and add commands to $PATH
-  zplug load
-
-  # override fzf-git.sh
-  _fzf_git_fzf() {
-    fzf-tmux -p80%,60% -- \
-      --layout=reverse --multi --height=50% --min-height=20 --border \
-      --color='header:italic:underline' \
-      --preview-window='right,50%,border-left' \
-      --bind='ctrl-/:change-preview-window(down,50%,border-top|hidden|)' "$@"
-  }
-fi
+  # if ! zplug check --verbose; then
+  #   printf "Install? [y/N]: "
+  #   if read -q; then
+  #     echo; zplug install
+  #   fi
+  # fi
+  #
+  # # Then, source plugins and add commands to $PATH
+  # zplug load
 
 
 #
@@ -464,3 +485,4 @@ if [ -n "$SSH_CONNECTION" ] ; then
   fi
 fi
 
+autoload -Uz compinit && compinit

@@ -373,6 +373,27 @@ install_nvim() {
     fi
 }
 
+install_sheldon() {
+    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+        echo "$password" | sudo -S echo ""
+    fi
+    LATEST=$(curl -sSL "https://api.github.com/repos/rossmacarthur/sheldon/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/rossmacarthur/sheldon/releases/download/${LATEST}/"
+    FILENAME="sheldon-${LATEST}-x86_64-unknown-linux-musl"
+    RELEASE="${FILENAME}.tar.gz"
+
+    run wget ${REPO}${RELEASE}
+
+    tar -zxvf ${RELEASE}
+
+    mv ${FILENAME}/sheldon $HOME/dev/bin/sheldon
+    chmod u+x ${HOME}/dev/bin/sheldon
+
+    run rm -rf ${FILENAME}
+    run rm ${RELEASE}
+
+}
+
 # tmux install
 install_tmux() {
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
@@ -555,6 +576,7 @@ install_efm-langserver() {
 # install tools
 install_tmux
 install_zsh
+install_sheldon
 install_fzf
 install_nvim
 install_rg
@@ -572,6 +594,10 @@ install_bat
 # zsh setup
 if [ ! -e "$HOME/.cache/shell/enhancd" ]; then
         run mkdir -p "$HOME/.config/shell/enhancd"
+fi
+
+if [ ! -e "$HOME/.config/sheldon" ]; then
+        run mkdir -p "$HOME/.config/sheldon"
 fi
 
 # neovim setup
@@ -601,6 +627,7 @@ fi
 run ln -snf "$DOT_PATH/.zshenv" "$HOME/.zshenv"
 run ln -snf "$DOT_PATH/.zshrc" "$HOME/.zshrc"
 run ln -snf "$DOT_PATH/.zsh_logout" "$HOME/.zsh_logout"
+run ln -snf "$DOT_PATH/sheldon-config.toml" "$CONF_PATH/sheldon/plugins.toml"
 run ln -snf "$DOT_PATH/tmux.conf" "$HOME/.tmux.conf"
 run ln -snf "$DOT_PATH/tmux.memory" "$HOME/dev/bin/tmux.memory"
 run ln -snf "$DOT_PATH/tmux.loadaverage" "$HOME/dev/bin/tmux.loadaverage"
@@ -611,7 +638,6 @@ run ln -snf "$DOT_PATH/nvim.dein.toml" "$CONF_PATH/nvim/dein.toml"
 run ln -snf "$DOT_PATH/nvim.dein_lazy.toml" "$CONF_PATH/nvim/dein_lazy.toml"
 run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
 run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.yaml"
-# run ln -snf "$DOT_PATH/peco.config.json" "$CONF_PATH/peco/config.json"
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
 
@@ -771,10 +797,6 @@ if ! $FLG_R && ! $FLG_C; then
     # install GUI apps
     sudo apt install gufw
 
-    git clone https://github.com/EliverLara/Ant.git ~/.themes/Ant
-    git clone https://github.com/EliverLara/Ant-Bloody.git ~/.themes/Ant-Bloody
-    git clone https://github.com/EliverLara/Ant-Dracula.git ~/.themes/Ant-Dracula
-
     # install icons
     # Fluent-icon-theme
     LATEST=$(curl -sSL "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
@@ -802,18 +824,23 @@ if ! $FLG_R && ! $FLG_C; then
             fonts-takao-mincho
     fi
 
-    # set customized noto sans cjk jp (Noto Sans CJK JP Kai)
-    # wget https://ja.osdn.net/downloads/users/17/17406/NSCJKaR.tar.xz
-    # tar xavf NSCJKaR.tar.xz && rm NSCJKaR.tar.xz
-    # wget https://ja.osdn.net/downloads/users/10/10745/fonts.conf && \
     run mkdir -p ~/.local/share/fonts/
     # run mkdir -p ~/.config/fontconfig/ && \
     # run mv fonts.conf ~/.config/fontconfig/
-    # run mv NSCJKaR/ ~/.local/share/fonts/
 
-    # set Ricty Diminished for PowerLine
-    git clone https://github.com/mzyy94/RictyDiminished-for-Powerline.git
-    run mv RictyDiminished-for-Powerline/ ~/.local/share/fonts/
+    # set up PlemolJPConsole_NF
+    LATEST=$(curl -sSL "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
+    RELEASE="PlemolJPConsole_NF_${LATEST}"
+
+    run wget "${REPO}${RELEASE}.zip"
+    run unzip "${RELEASE}.zip"
+
+    run mv ${RELEASE}/PlemolJPConsole_NF/*.ttf $HOME/.local/share/fonts
+
+    run rm "${RELEASE}.zip"
+    run rm -rf ${RELEASE}
+
     fc-cache -fv
 
     # set gtk3.0 theme & icon

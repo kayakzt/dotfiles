@@ -751,9 +751,6 @@ vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
 
 require("ibl").setup {
-    space_char_blankline = " ",
-    show_end_of_line = true,
-    show_current_context = true,
 }
 
 EOF
