@@ -448,7 +448,6 @@ install_zsh() {
 
         "/usr/local/bin/zsh" | sudo tee -a /etc/shells
         sudo chsh -s "/usr/local/bin/zsh" "${USER}"
-    done
     else
         ./configure --prefix=${HOME}/.local --enable-multibyte --enable-locale
         make
