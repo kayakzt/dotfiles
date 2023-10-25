@@ -377,6 +377,7 @@ install_sheldon() {
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     fi
+    run mkdir sheldon && cd sheldon
     LATEST=$(curl -sSL "https://api.github.com/repos/rossmacarthur/sheldon/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/rossmacarthur/sheldon/releases/download/${LATEST}/"
     FILENAME="sheldon-${LATEST}-x86_64-unknown-linux-musl"
@@ -386,12 +387,12 @@ install_sheldon() {
 
     tar -zxvf ${RELEASE}
 
-    mv ${FILENAME}/sheldon $HOME/dev/bin/sheldon
+    mv sheldon $HOME/dev/bin/sheldon
     chmod u+x ${HOME}/dev/bin/sheldon
 
-    run rm -rf ${FILENAME}
-    run rm ${RELEASE}
+    run cd $WORKING_DIR
 
+    run rm -rf sheldon
 }
 
 # tmux install
