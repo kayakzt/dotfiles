@@ -324,6 +324,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         jq \
         exuberant-ctags \
         direnv \
+        zsh \
 
 elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
     sudo yum install -y wget \
@@ -575,7 +576,7 @@ install_efm-langserver() {
 
 # install tools
 install_tmux
-install_zsh
+# install_zsh
 install_sheldon
 install_fzf
 install_nvim
