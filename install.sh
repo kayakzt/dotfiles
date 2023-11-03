@@ -832,7 +832,7 @@ if ! $FLG_R && ! $FLG_C; then
     # set up PlemolJPConsole_NF
     LATEST=$(curl -sSL "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
-    RELEASE="PlemolJPConsole_NF_${LATEST}"
+    RELEASE="PlemolJP_NF_${LATEST}"
 
     run wget "${REPO}${RELEASE}.zip"
     run unzip "${RELEASE}.zip"
