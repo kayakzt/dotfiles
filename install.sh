@@ -667,7 +667,7 @@ if ! $FLG_R && ! $FLG_M; then
         export PYENV_ROOT="$HOME/.pyenv"
         export PATH="$PYENV_ROOT/bin:$PATH"
         eval "$(pyenv init --path)"
-        export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '*3\.10\.[0-9]$' | tail -n -2 | head -n 1 | tr -d ' ')"
+        export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '*3\.11\.[0-9]$' | tail -n -2 | head -n 1 | tr -d ' ')"
         pyenv install ${python_version}
         pyenv global ${python_version}
 
