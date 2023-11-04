@@ -92,7 +92,8 @@ zstyle ':vcs_info:*' actionformats '%F{cyan} [%b|%F{magenta}%a%F{cyan}]'
 # prompt
 PROMPT="%B%{$fg[green]%}• %{$fg[yellow]%}• %{$fg[red]%}• %b%{$reset_color%}"
 RPROMPT="%{$fg[white]%}[%~]%{$reset_color%}"
-RPROMPT=$RPROMPT'$(git_super_status)'
+RPROMPT=$RPROMPT'${vcs_info_msg_0_}'
+# RPROMPT=$RPROMPT'$(git_super_status)'
 
 
 #
@@ -312,10 +313,11 @@ function fzf-kill() {
 }
 
 function fzf-git-branch() {
-    branch_name=`git branch | fzf --prompt "[branch] " | head -n 1 | sed -e "s/^\*\s*//g"`
-    if [ -n "$target_dir" ]; then
-        git switch $target_dir
-    fi
+    # branch_name=`git branch | fzf --prompt "[branch] " | head -n 1 | sed -e "s/^\*\s*//g"`
+    # if [ -n "$target_dir" ]; then
+    #     git switch $target_dir
+    # fi
+    _fzf_git_branches --no-multi | xargs git checkout
 }
 
 function github-star-import() {
@@ -365,7 +367,7 @@ alias ll='ls --color -lhF'
 
 alias rgl='(){rg -p $@ | less -R}'
 
-alias -g gbranch='fzf-git-branch'
+alias -g gb='fzf-git-branch'
 alias dockps='docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}\t{{.RunningFor}}"'
 alias dockex='docker exec -it `dps | fzf | cut -f 1` /bin/bash'
 

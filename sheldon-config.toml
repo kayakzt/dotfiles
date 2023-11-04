@@ -41,8 +41,8 @@ apply = ["defer"]
 [plugins.zsh-completions]
 github = "zsh-users/zsh-completions"
 
-[plugins.zsh-git-prompt]
-github = "olivierverdier/zsh-git-prompt"
+# [plugins.zsh-git-prompt]
+# github = "olivierverdier/zsh-git-prompt"
 
 [plugins.git-open]
 github = "paulirish/git-open"
