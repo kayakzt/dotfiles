@@ -17,7 +17,7 @@
   [[kaya]]
     background_color = "#122329"
     cursor_color = "#aaaaaa"
-    font = Ricty Diminished 12
+    font = PlemolJP Console NF weight=453 12
     foreground_color = "#dadada"
     show_titlebar = False
     scrollbar_position = hidden
