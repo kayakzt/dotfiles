@@ -438,10 +438,10 @@ install_zsh() {
         mkdir $HOME/.local
     fi
 
-    wget "https://sourceforge.net/projects/zsh/files/zsh/5.8.1/zsh-5.8.1.tar.xz/download"
+    wget "https://sourceforge.net/projects/zsh/files/zsh/5.9/zsh-5.9.tar.xz/download"
     tar Jxvf download
 
-    cd zsh-5.8.1
+    cd zsh-5.9
 
     if ! $FLG_R; then
         ./configure --prefix=/usr/local --enable-multibyte --enable-locale
