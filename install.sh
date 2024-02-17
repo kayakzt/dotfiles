@@ -559,6 +559,21 @@ install_bat() {
     run rm -rf bat-${LATEST}-x86_64-unknown-linux-gnu
 }
 
+install_delta() {
+    LATEST=$(curl -sSL "https://api.github.com/repos/dandavision/delta/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/dandavision/delta/releases/download/${LATEST}/"
+    RELEASE="delta-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
+
+    run wget ${REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
+
+    mv delta-${LATEST}-x86_64-unknown-linux-gnu/delta $HOME/dev/bin/delta
+    chmod u+x $HOME/dev/bin/delta
+
+    run rm ${RELEASE}
+    run rm -rf delta-${LATEST}-x86_64-unknown-linux-gnu
+}
+
 install_efm-langserver() {
     LATEST=$(curl -sSL "https://api.github.com/repos/mattn/efm-langserver/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/mattn/efm-langserver/releases/download/${LATEST}/"
@@ -576,7 +591,7 @@ install_efm-langserver() {
 
 # install tools
 install_tmux
-# install_zsh
+install_zsh
 install_sheldon
 install_fzf
 install_nvim
@@ -587,6 +602,7 @@ install_efm-langserver
 install_lsd
 install_dust
 install_bat
+install_delta
 
 #
 # Config Setup
@@ -691,7 +707,6 @@ if ! $FLG_R && ! $FLG_M; then
             jupyter \
             'python-language-server[all]' \
             pyls-isort \
-            pyls-mypy \
             pyls-black \
             pynvim \
             yamllint \

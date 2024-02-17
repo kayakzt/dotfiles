@@ -360,6 +360,10 @@ alias -g @s='| sed'
 alias -g @c='| less -XF'
 alias -g @f='| fzf'
 alias -g @em='| emojify'
+alias -g @d='| delta'
+
+alias delta-side-view='export DELTA_FEATURES=+side-by-side'
+alias delta-no-view='export DELTA_FEATURES=+'
 
 alias ls='ls --color'
 alias la='ls --color -lahF'

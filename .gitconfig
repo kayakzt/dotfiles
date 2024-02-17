@@ -46,18 +46,29 @@
     followTags = true
 [core]
     editor = nvim
+    pager = delta
     precomposeunicode = true
+[interactive]
+    diffFilter = delta --color-only
 [merge]
     conflictstyle = diff3
     tool = vimdiff
 [diff]
     compactionHeuristic = true
 	wordRegex = .
-[github]
-    user = kayakzt
-[ghq]
-    root = ~/dev/src
+    colorMoved = default
 [pull]
 	rebase = false
 [init]
 	defaultBranch = main
+[github]
+    user = kayakzt
+[ghq]
+    root = ~/dev/src
+[delta]
+    navigate = true
+    light = false
+    line-numbers = true
+    keep-plus-minus-markers = true
+    hunk-header-style = "omit"
+    diff-so-fancy=true
