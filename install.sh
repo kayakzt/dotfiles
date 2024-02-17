@@ -750,6 +750,8 @@ if ! $FLG_R && ! $FLG_M; then
         # rustup component add rls-preview rust-analysis rust-src
         cargo install cargo-update
         cargo install cargo-script
+        cargo install --locked cargo-outdated
+        cargo install cargo-audit
     fi
 
     # nvm setup
