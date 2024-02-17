@@ -560,8 +560,8 @@ install_bat() {
 }
 
 install_delta() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/dandavision/delta/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/dandavision/delta/releases/download/${LATEST}/"
+    LATEST=$(curl -sSL "https://api.github.com/repos/dandavison/delta/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/dandavison/delta/releases/download/${LATEST}/"
     RELEASE="delta-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
@@ -591,7 +591,7 @@ install_efm-langserver() {
 
 # install tools
 install_tmux
-install_zsh
+# install_zsh
 install_sheldon
 install_fzf
 install_nvim
