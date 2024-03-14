@@ -98,6 +98,9 @@ prepare_path() {
 
 prepare_path
 
+# arch_type
+ARCH_TYPE="$(uname -m)"
+
 # Aug Check
 FLG_M=false
 FLG_R=false
@@ -162,6 +165,9 @@ yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connecti
 
 echo -n "* OSNAME: "
 echo $(colored $yellow "$OSNAME")
+
+echo -n "* ARCH_TYPE: "
+echo "${ARCH_TYPE}"
 
 echo -n "* RUNTYPE: "
 if $FLG_M; then
@@ -381,7 +387,7 @@ install_sheldon() {
     run mkdir sheldon && cd sheldon
     LATEST=$(curl -sSL "https://api.github.com/repos/rossmacarthur/sheldon/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/rossmacarthur/sheldon/releases/download/${LATEST}/"
-    FILENAME="sheldon-${LATEST}-x86_64-unknown-linux-musl"
+    FILENAME="sheldon-${LATEST}-${ARCH_TYPE}-unknown-linux-musl"
     RELEASE="${FILENAME}.tar.gz"
 
     run wget ${REPO}${RELEASE}
@@ -466,7 +472,7 @@ install_rg() {
     # from https://gist.github.com/niftylettuce/a9f0a293289eb7274516bf2cb0455796
     REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
     RG_LATEST=$(curl -sSL "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
-    RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-x86_64-unknown-linux-musl.tar.gz"
+    RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-${ARCH_TYPE}-unknown-linux-musl.tar.gz"
 
     TMPDIR=$(mktemp -d)
     cd $TMPDIR
@@ -517,61 +523,61 @@ install_ghq() {
 install_lsd() {
     LATEST=$(curl -sSL "https://api.github.com/repos/Peltoche/lsd/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/Peltoche/lsd/releases/download/${LATEST}/"
-    RELEASE="lsd-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
+    RELEASE="lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv lsd-${LATEST}-x86_64-unknown-linux-gnu/lsd $HOME/dev/bin/lsd
+    mv lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/lsd $HOME/dev/bin/lsd
     chmod u+x $HOME/dev/bin/lsd
 
     run rm ${RELEASE}
-    run rm -rf lsd-${LATEST}-x86_64-unknown-linux-gnu
+    run rm -rf lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
 }
 
 install_dust() {
     LATEST=$(curl -sSL "https://api.github.com/repos/bootandy/dust/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/bootandy/dust/releases/download/${LATEST}/"
-    RELEASE="dust-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
+    RELEASE="dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv dust-${LATEST}-x86_64-unknown-linux-gnu/dust $HOME/dev/bin/dust
+    mv dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/dust $HOME/dev/bin/dust
     chmod u+x $HOME/dev/bin/dust
 
     run rm ${RELEASE}
-    run rm -rf dust-${LATEST}-x86_64-unknown-linux-gnu
+    run rm -rf dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
 }
 
 install_bat() {
     LATEST=$(curl -sSL "https://api.github.com/repos/sharkdp/bat/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/sharkdp/bat/releases/download/${LATEST}/"
-    RELEASE="bat-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
+    RELEASE="bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv bat-${LATEST}-x86_64-unknown-linux-gnu/bat $HOME/dev/bin/bat
+    mv bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/bat $HOME/dev/bin/bat
     chmod u+x $HOME/dev/bin/bat
 
     run rm ${RELEASE}
-    run rm -rf bat-${LATEST}-x86_64-unknown-linux-gnu
+    run rm -rf bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
 }
 
 install_delta() {
     LATEST=$(curl -sSL "https://api.github.com/repos/dandavison/delta/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/dandavison/delta/releases/download/${LATEST}/"
-    RELEASE="delta-${LATEST}-x86_64-unknown-linux-gnu.tar.gz"
+    RELEASE="delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv delta-${LATEST}-x86_64-unknown-linux-gnu/delta $HOME/dev/bin/delta
+    mv delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/delta $HOME/dev/bin/delta
     chmod u+x $HOME/dev/bin/delta
 
     run rm ${RELEASE}
-    run rm -rf delta-${LATEST}-x86_64-unknown-linux-gnu
+    run rm -rf delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
 }
 
 install_efm-langserver() {
