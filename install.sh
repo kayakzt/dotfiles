@@ -100,6 +100,9 @@ prepare_path
 
 # arch_type
 ARCH_TYPE="$(uname -m)"
+if [ "$ARCH_TYPE" = "arm64" ]; then
+    ARCH_TYPE="aarch64"
+fi
 
 # Aug Check
 FLG_M=false
@@ -492,31 +495,49 @@ install_rg() {
 install_gh() {
     LATEST=$(curl -sSL "https://api.github.com/repos/cli/cli/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/cli/cli/releases/download/${LATEST}/"
-    RELEASE="gh_${LATEST:1}_linux_amd64.tar.gz"
+
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        RELEASE="gh_${LATEST:1}_linux_amd64.tar.gz"
+    else
+        RELEASE="gh_${LATEST:1}_linux_arm64.tar.gz"
+    fi
 
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv gh_${LATEST:1}_linux_amd64/bin/gh $HOME/dev/bin/gh
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        mv gh_${LATEST:1}_linux_amd64/bin/gh $HOME/dev/bin/gh
+    else
+        mv gh_${LATEST:1}_linux_arm64/bin/gh $HOME/dev/bin/gh
+    fi
     chmod u+x $HOME/dev/bin/gh
 
-    run rm -rf gh_${LATEST:1}_linux_amd64
+    run rm -rf gh_${LATEST:1}_linux_*
     run rm ${RELEASE}
 }
 
 install_ghq() {
     LATEST=$(curl -sSL "https://api.github.com/repos/x-motemen/ghq/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/x-motemen/ghq/releases/download/${LATEST}/"
-    RELEASE="ghq_linux_amd64.zip"
+
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        RELEASE="ghq_linux_amd64.zip"
+    else
+        RELEASE="ghq_linux_arm64.zip"
+    fi
 
     run wget ${REPO}${RELEASE}
     unzip ${RELEASE}
 
-    mv ghq_linux_amd64/ghq $HOME/dev/bin/ghq
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        mv ghq_linux_amd64/ghq $HOME/dev/bin/ghq
+    else
+        mv ghq_linux_arm64/ghq $HOME/dev/bin/ghq
+    fi
     chmod u+x $HOME/dev/bin/ghq
 
     run rm ${RELEASE}
-    run rm -rf ghq_linux_amd64
+    run rm -rf ghq_linux_*
 }
 
 install_lsd() {
@@ -582,16 +603,25 @@ install_delta() {
 install_efm-langserver() {
     LATEST=$(curl -sSL "https://api.github.com/repos/mattn/efm-langserver/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/mattn/efm-langserver/releases/download/${LATEST}/"
-    RELEASE="efm-langserver_${LATEST}_linux_amd64.tar.gz"
+
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        RELEASE="efm-langserver_${LATEST}_linux_amd64.tar.gz"
+    else
+        RELEASE="efm-langserver_${LATEST}_linux_arm64.tar.gz"
+    fi
 
     run wget ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
-    mv efm-langserver_${LATEST}_linux_amd64/efm-langserver $HOME/dev/bin/efm-langserver
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        mv efm-langserver_${LATEST}_linux_amd64/efm-langserver $HOME/dev/bin/efm-langserver
+    else
+        mv efm-langserver_${LATEST}_linux_arm64/efm-langserver $HOME/dev/bin/efm-langserver
+    fi
     chmod u+x $HOME/dev/bin/efm-langserver
 
     run rm ${RELEASE}
-    run rm -rf efm-langserver_${LATEST}_linux_amd64
+    run rm -rf efm-langserver_${LATEST}_linux_*
 }
 
 # install tools
