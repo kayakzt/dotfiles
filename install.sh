@@ -325,7 +325,6 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         xclip \
         gawk \
         terminator \
-        ansible \
         openssh-server \
         jq \
         exuberant-ctags \
