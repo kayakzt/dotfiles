@@ -512,8 +512,8 @@ install_gh() {
     fi
     chmod u+x $HOME/dev/bin/gh
 
-    run rm -rf gh_${LATEST:1}_linux_*
     run rm ${RELEASE}
+    run rm -rf gh_${LATEST:1}_linux_*
 }
 
 install_ghq() {
