@@ -733,13 +733,6 @@ if ! $FLG_R && ! $FLG_M; then
             flake8 \
             pep8 \
             pylint \
-            numpy \
-            pandas \
-            scipy \
-            scikit-learn \
-            matplotlib \
-            seaborn \
-            jupyter \
             'python-language-server[all]' \
             pyls-isort \
             pyls-black \
