@@ -909,15 +909,15 @@ if $FLG_V; then
             linux-cloud-tools-virtual \
             linux-cloud-tools-lowlatency
     fi
-    if $FLG_H; then
-            sudo apt install -y xrdp
-            git clone https://github.com/Microsoft/linux-vm-tools.git ~/linux-vm-tools
-            cd ~/linux-vm-tools/ubuntu/18.04/
-            sudo chmod +x install.sh
-            sudo ./install.sh
-            cd "$WORKING_DIR"
+    # if $FLG_H; then
+            # sudo apt install -y xrdp
+            # git clone https://github.com/Microsoft/linux-vm-tools.git ~/linux-vm-tools
+            # cd ~/linux-vm-tools/ubuntu/18.04/
+            # sudo chmod +x install.sh
+            # sudo ./install.sh
+            # cd "$WORKING_DIR"
             # rm -rf ~/linux-vm-tools
-    fi
+    # fi
 fi
 
 #
