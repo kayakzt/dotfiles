@@ -866,15 +866,9 @@ if ! $FLG_R && ! $FLG_C; then
 
     # install fonts
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
-        sudo apt-get install -y fonts-ipafont \
-            fonts-ipafont-gothic \
-            fonts-ipafont-mincho \
-            fonts-noto-cjk \
+        sudo apt-get install -y fonts-noto-cjk \
             fonts-noto-color-emoji \
-            fonts-roboto \
-            fonts-takao \
-            fonts-takao-gothic \
-            fonts-takao-mincho
+            fonts-roboto
     fi
 
     run mkdir -p ~/.local/share/fonts/
