@@ -108,6 +108,7 @@ fi
 FLG_M=false
 FLG_R=false
 FLG_C=false
+FLG_D=false
 FLG_V=false
 FLG_H=false
 USE_REPO_JAPAN=false
@@ -149,6 +150,7 @@ do
         m) FLG_M=true ;;
         r) FLG_R=true ;;
         c) FLG_C=true ;;
+        d) FLG_D=true ;;
         v) FLG_V=true ;;
         h) FLG_H=true ;;
 
@@ -161,9 +163,12 @@ yes_or_no "Do you wanna minimum install?" && FLG_M=true
 yes_or_no "Do you wanna rootless install?" && FLG_R=true
 yes_or_no "Is this a CUI environment?" && FLG_C=true
 yes_or_no "Do you want to use repository in Japan?" && USE_REPO_JAPAN=true
-yes_or_no "Do you want to install python language?" && INSTALL_PYTHON=true
-yes_or_no "Do you want to install go language?" && INSTALL_GO=true
-yes_or_no "Do you want to install rust language?" && INSTALL_RUST=true
+yes_or_no "Do you want to install dev-tools?" && FLG_D=true
+if $FLG_D; then
+    yes_or_no "Do you want to install python language?" && INSTALL_PYTHON=true
+    yes_or_no "Do you want to install go language?" && INSTALL_GO=true
+    yes_or_no "Do you want to install rust language?" && INSTALL_RUST=true
+fi
 yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
 echo -n "* OSNAME: "
@@ -701,7 +706,7 @@ run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
 if ! $FLG_R && ! $FLG_M; then
     echo "$password" | sudo -S echo ""
     # install apps for building c++ code + shellcheck
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+    if $FLG_D && { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ;}; then
         sudo apt install -y gdb valgrind strace ltrace \
         make cmake scons libhdf5-dev shellcheck clangd
         # for matplotlib build
