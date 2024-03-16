@@ -828,6 +828,10 @@ if ! $FLG_R && ! $FLG_M; then
         coc-toml \
         coc-calc
     cd "$WORKING_DIR"
+# else
+#     echo "$password" | sudo -S echo ""
+#     sudo apt install python3-pip
+#     pip3 install pynvim
 fi
 
 
