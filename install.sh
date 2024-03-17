@@ -25,10 +25,11 @@ echo "--- Install Script Start! ---"
 #
 
 red=31
+green=32
 yellow=33
+blue=34
+maganta=35
 cyan=36
-green=42
-maganta=45
 
 colored() {
     color=$1
@@ -199,7 +200,7 @@ if $USE_REPO_JAPAN; then
     echo -n $(colored $yellow "japan-repo, ")
 fi
 if $FLG_D; then
-    echo -n $(colored $yellow "install_dev-tools( cpp")
+    echo -n $(colored $green "install_dev-tools( install_cpp ")
 fi
 if $INSTALL_PYTHON; then
     echo -n $(colored $green "install_python ")
@@ -211,7 +212,7 @@ if $INSTALL_RUST; then
     echo -n $(colored $green "install_rust ")
 fi
 if $FLG_D; then
-    echo -n $(colored $yellow ")")
+    echo -n $(colored $green "), ")
 fi
 echo " "
 
