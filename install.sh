@@ -727,6 +727,13 @@ if ! $FLG_R && ! $FLG_M; then
 
     # python
     if $INSTALL_PYTHON; then
+        # for python install
+        sudo apt install -y liblzma-dev
+
+        if ! $FLG_C; then
+            sudo apt install -y python3-tk tk-dev
+        fi
+
         # install pyenv
         git clone https://github.com/pyenv/pyenv.git ~/.pyenv
         export PYENV_ROOT="$HOME/.pyenv"
