@@ -27,6 +27,8 @@ echo "--- Install Script Start! ---"
 red=31
 yellow=33
 cyan=36
+green=42
+maganta=45
 
 colored() {
     color=$1
@@ -165,9 +167,9 @@ yes_or_no "Is this a CUI environment?" && FLG_C=true
 yes_or_no "Do you want to use repository in Japan?" && USE_REPO_JAPAN=true
 yes_or_no "Do you want to install dev-tools?" && FLG_D=true
 if $FLG_D; then
-    yes_or_no "Do you want to install python language?" && INSTALL_PYTHON=true
-    yes_or_no "Do you want to install go language?" && INSTALL_GO=true
-    yes_or_no "Do you want to install rust language?" && INSTALL_RUST=true
+    yes_or_no "[dev] Do you want to install python language?" && INSTALL_PYTHON=true
+    yes_or_no "[dev] Do you want to install go language?" && INSTALL_GO=true
+    yes_or_no "[dev] Do you want to install rust language?" && INSTALL_RUST=true
 fi
 yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
@@ -196,14 +198,20 @@ fi
 if $USE_REPO_JAPAN; then
     echo -n $(colored $yellow "japan-repo, ")
 fi
+if $FLG_D; then
+    echo -n $(colored $yellow "install_dev-tools( cpp")
+fi
 if $INSTALL_PYTHON; then
-    echo -n $(colored $yellow "install_python, ")
+    echo -n $(colored $green "install_python ")
 fi
 if $INSTALL_GO; then
-    echo -n $(colored $yellow "install_go, ")
+    echo -n $(colored $green "install_go ")
 fi
 if $INSTALL_RUST; then
-    echo -n $(colored $yellow "install_rust, ")
+    echo -n $(colored $green "install_rust ")
+fi
+if $FLG_D; then
+    echo -n $(colored $yellow ")")
 fi
 echo " "
 
