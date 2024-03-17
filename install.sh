@@ -380,7 +380,7 @@ install_nvim() {
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     fi
-    LATEST=$(curl -sSL "https://api.github.com/repos/neovim/neovim/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/neovim/neovim/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/neovim/neovim/releases/download/${LATEST}/"
     RELEASE="nvim.appimage"
 
@@ -401,7 +401,7 @@ install_sheldon() {
         echo "$password" | sudo -S echo ""
     fi
     run mkdir sheldon && cd sheldon
-    LATEST=$(curl -sSL "https://api.github.com/repos/rossmacarthur/sheldon/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/rossmacarthur/sheldon/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/rossmacarthur/sheldon/releases/download/${LATEST}/"
     FILENAME="sheldon-${LATEST}-${ARCH_TYPE}-unknown-linux-musl"
     RELEASE="${FILENAME}.tar.gz"
@@ -432,7 +432,7 @@ install_tmux() {
     fi
 
     cd ${WORKING_DIR}/tmux
-    LATEST_TAG=$(curl -sSL "https://api.github.com/repos/tmux/tmux/releases/latest" | jq --raw-output .tag_name)
+    LATEST_TAG=$(curl -sSL --retry 3 "https://api.github.com/repos/tmux/tmux/releases/latest" | jq --raw-output .tag_name)
 
     git checkout "$LATEST_TAG"
     sh autogen.sh
@@ -487,7 +487,7 @@ install_zsh() {
 install_rg() {
     # from https://gist.github.com/niftylettuce/a9f0a293289eb7274516bf2cb0455796
     REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
-    RG_LATEST=$(curl -sSL "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
+    RG_LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
     RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-${ARCH_TYPE}-unknown-linux-musl.tar.gz"
 
     TMPDIR=$(mktemp -d)
@@ -507,7 +507,7 @@ install_rg() {
 
 # gh install (using .deb file)
 install_gh() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/cli/cli/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/cli/cli/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/cli/cli/releases/download/${LATEST}/"
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
@@ -531,7 +531,7 @@ install_gh() {
 }
 
 install_ghq() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/x-motemen/ghq/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/x-motemen/ghq/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/x-motemen/ghq/releases/download/${LATEST}/"
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
@@ -555,7 +555,7 @@ install_ghq() {
 }
 
 install_lsd() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/Peltoche/lsd/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/Peltoche/lsd/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/Peltoche/lsd/releases/download/${LATEST}/"
     RELEASE="lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
@@ -570,7 +570,7 @@ install_lsd() {
 }
 
 install_dust() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/bootandy/dust/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/bootandy/dust/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/bootandy/dust/releases/download/${LATEST}/"
     RELEASE="dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
@@ -585,7 +585,7 @@ install_dust() {
 }
 
 install_bat() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/sharkdp/bat/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/sharkdp/bat/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/sharkdp/bat/releases/download/${LATEST}/"
     RELEASE="bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
@@ -600,7 +600,7 @@ install_bat() {
 }
 
 install_delta() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/dandavison/delta/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/dandavison/delta/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/dandavison/delta/releases/download/${LATEST}/"
     RELEASE="delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
@@ -615,7 +615,7 @@ install_delta() {
 }
 
 install_efm-langserver() {
-    LATEST=$(curl -sSL "https://api.github.com/repos/mattn/efm-langserver/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/mattn/efm-langserver/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/mattn/efm-langserver/releases/download/${LATEST}/"
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
@@ -863,7 +863,7 @@ if ! $FLG_R && ! $FLG_C; then
 
     # install icons
     # Fluent-icon-theme
-    LATEST=$(curl -sSL "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
     RELEASE="${LATEST}.tar.gz"
 
@@ -887,7 +887,7 @@ if ! $FLG_R && ! $FLG_C; then
     # run mv fonts.conf ~/.config/fontconfig/
 
     # set up PlemolJPConsole_NF
-    LATEST=$(curl -sSL "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
     RELEASE="PlemolJP_NF_${LATEST}"
 
