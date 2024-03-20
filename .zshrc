@@ -337,6 +337,33 @@ function github-star-import() {
   echo $urls | fzf | ghq import
 }
 
+function doh-test() {
+  if [ $# -eq 2 ];then
+    local ip_version=$1
+    local query=$2
+  elif [ $# -eq 1 ];then
+    local ip_version="ipv4"
+    local query=$1
+    if [ "$query" = "-h" ];then
+        echo "see the docs in https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/"
+        return 0
+    fi
+  else
+    echo "invalid arguments, doh-test [-h] [ipv4|ipv6] query"
+    return 1
+  fi
+
+  case "$ip_version" in
+    "ipv4")
+      local query_type="A";;
+    "ipv6")
+      local query_type="AAAA";;
+    "*")
+      local query_type="A";;
+  esac
+
+  curl -sS -H "accept: application/dns-json" "https://one.one.one.one/dns-query?name=${query}&type=${query_type}" | jq
+}
 
 #
 # Alias
