@@ -924,7 +924,7 @@ if ! $FLG_R && ! $FLG_C; then
         run wget "${REPO}${RELEASE}.zip"
         run unzip "${RELEASE}.zip"
 
-        run mv "${RELEASE}/PlemolJPConsole_NF/*.ttf" "$HOME/.local/share/fonts"
+        run mv "${RELEASE}"/PlemolJPConsole_NF/*.ttf "$HOME/.local/share/fonts"
 
         run rm "${RELEASE}.zip"
         run rm -rf "${RELEASE}"
