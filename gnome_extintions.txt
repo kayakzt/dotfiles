@@ -5,3 +5,4 @@ Frippery move clock
 No title bar
 Removavle drive menu
 Gtile
+Blur my Shell

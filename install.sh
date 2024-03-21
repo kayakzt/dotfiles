@@ -15,7 +15,7 @@
 #     * curl
 #
 
-set -Ceu
+set -Ceux
 
 echo "--- Install Script Start! ---"
 
@@ -861,26 +861,52 @@ fi
 #
 
 if ! $FLG_R && ! $FLG_C; then
-    run mkdir -p "$HOME/.themes"
+    run mkdir -p "${HOME}/.local/share/fonts"
+    run mkdir -p "${HOME}/.local/share/icons"
+    run mkdir -p "${HOME}/.local/share/themes"
+
     echo "$password" | sudo -S echo ""
+
     # Paper-Icon & Adapta-Gtk-Theme
 
     # install GUI apps
-    sudo apt install gufw
+    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+        sudo apt install -y \
+            gufw \
+            gnome-shell-extensions
+    fi
 
     # install icons
+
     # Fluent-icon-theme
-    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
-    RELEASE="${LATEST}.tar.gz"
+    {
+        LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
+        REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
+        RELEASE="${LATEST}.tar.gz"
 
-    run wget ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+        run wget "${REPO}${RELEASE}"
+        tar -zxvf "${RELEASE}"
 
-    Fluent-icon-theme-${LATEST}/install.sh --round --dark
+        "Fluent-icon-theme-${LATEST}/install.sh" --round --dark
 
-    run rm ${RELEASE}
-    run rm -rf Fluent-icon-theme-${LATEST}
+        run rm "${RELEASE}"
+        run rm -rf "Fluent-icon-theme-${LATEST}"
+    }
+
+    # install Sweet-Folders
+    {
+        git clone "https://github.com/EliverLara/Sweet-folders" "${HOME}/.local/share/icons/Sweet-Folders"
+        mv "${HOME}"/.local/share/icons/Sweet-Folders/Sweet-* "${HOME}/.local/share/icons"
+
+        sweetColors=("Blue" "Mars" "Purple-Filled" "Purple" "Rainbow" "Red-Filled" "Red" "Teal-Filled" "Teal" "Yellow-Filled" "Yellow")
+        # use with Fluent icon
+        for color in "${sweetColors[@]}"; do
+            sed -i "s/Inherits=candy-icons/Inherits=Fluent,candy-icons/" "${HOME}/.local/share/icons/Sweet-${color}/index.theme"
+        done
+    }
+
+    # run mkdir -p ~/.config/fontconfig/ && \
+    # run mv fonts.conf ~/.config/fontconfig/
 
     # install fonts
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
@@ -889,24 +915,33 @@ if ! $FLG_R && ! $FLG_C; then
             fonts-roboto
     fi
 
-    run mkdir -p ~/.local/share/fonts/
-    # run mkdir -p ~/.config/fontconfig/ && \
-    # run mv fonts.conf ~/.config/fontconfig/
-
     # set up PlemolJPConsole_NF
-    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
-    RELEASE="PlemolJP_NF_${LATEST}"
+    {
+        LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
+        REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
+        RELEASE="PlemolJP_NF_${LATEST}"
 
-    run wget "${REPO}${RELEASE}.zip"
-    run unzip "${RELEASE}.zip"
+        run wget "${REPO}${RELEASE}.zip"
+        run unzip "${RELEASE}.zip"
 
-    run mv ${RELEASE}/PlemolJPConsole_NF/*.ttf $HOME/.local/share/fonts
+        run mv "${RELEASE}/PlemolJPConsole_NF/*.ttf" "$HOME/.local/share/fonts"
 
-    run rm "${RELEASE}.zip"
-    run rm -rf ${RELEASE}
+        run rm "${RELEASE}.zip"
+        run rm -rf "${RELEASE}"
 
-    fc-cache -fv
+        fc-cache -fv
+    }
+
+    # install themes
+
+    # install Sweet
+    {
+        git clone "https://github.com/EliverLara/Sweet" "${HOME}/.local/share/themes/Sweet"
+        cd "${HOME}/.local/share/themes/Sweet"
+        git fetch
+        git checkout -b Ambar-Blue-Dark origin/Ambar-Blue-Dark  # changes to blue theme
+        cd "${WORKING_DIR}"
+    }
 
     # set gtk3.0 theme & icon
     if [ ! -e "$HOME/.config/gtk-3.0" ]; then
