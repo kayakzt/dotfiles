@@ -829,7 +829,7 @@ if ! $FLG_R && ! $FLG_M; then
     then
         echo '{"dependencies":{}}' > package.json
     fi
-    npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod \
+    npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --only=prod \
         coc-json \
         coc-diagnostic \
         coc-snippets \
