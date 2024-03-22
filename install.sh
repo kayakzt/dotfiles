@@ -118,6 +118,7 @@ USE_REPO_JAPAN=false
 INSTALL_PYTHON=false
 INSTALL_GO=false
 INSTALL_RUST=false
+INSTALL_DOCKER=false
 
 usage_exit() {
     echo "Usage: $0 [-m] [-r] [-c] [-v] [-h]" 1>&2
@@ -171,6 +172,7 @@ if $FLG_D; then
     yes_or_no "[dev] Do you want to install python language?" && INSTALL_PYTHON=true
     yes_or_no "[dev] Do you want to install go language?" && INSTALL_GO=true
     yes_or_no "[dev] Do you want to install rust language?" && INSTALL_RUST=true
+    yes_or_no "[dev] Do you want to install docker engine?" && INSTALL_DOCKER=true
 fi
 yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
@@ -817,10 +819,11 @@ if ! $FLG_R && ! $FLG_M; then
 
     # install needed npm packages
     npm install -g npm
-    npm install -g npm-check-updates
-    npm install -g yarn
-    npm install -g markdownlint-cli  textlint\
-        vue-cli
+    npm install -g \
+        npm-check-updates \
+        yarn \
+        markdownlint-cli \
+        textlint
 
     # install coc-extensions for neovim
     mkdir -p "$CONF_PATH/coc/extensions"
@@ -829,7 +832,8 @@ if ! $FLG_R && ! $FLG_M; then
     then
         echo '{"dependencies":{}}' > package.json
     fi
-    npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --only=prod \
+    npm install --install-strategy=shallow --ignore-scripts \
+        --no-bin-links --no-package-lock --only=prod \
         coc-json \
         coc-diagnostic \
         coc-snippets \
@@ -849,10 +853,21 @@ if ! $FLG_R && ! $FLG_M; then
         coc-toml \
         coc-calc
     cd "$WORKING_DIR"
+
+    # install docker
+    if $INSTALL_DOCKER; then
+        echo "$password" | sudo -S echo ""
+        curl -fsSL get.docker.com -o install-docker.sh && \
+            sh install-docker.sh --channel=stable && \
+            sudo gpasswd -a $USER docker && \
+            sudo docker run hello-world && \
+            rm install-docker.sh
+    fi
 # else
 #     echo "$password" | sudo -S echo ""
 #     sudo apt install python3-pip
 #     pip3 install pynvim
+#
 fi
 
 
