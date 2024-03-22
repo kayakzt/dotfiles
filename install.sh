@@ -557,8 +557,8 @@ install_ghq() {
 }
 
 install_lsd() {
-    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/Peltoche/lsd/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/Peltoche/lsd/releases/download/${LATEST}/"
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/lsd-rs/lsd/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/lsd-rs/lsd/releases/download/${LATEST}/"
     RELEASE="lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
