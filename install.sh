@@ -213,6 +213,9 @@ fi
 if $INSTALL_RUST; then
     echo -n $(colored $green "install_rust ")
 fi
+if $INSTALL_DOCKER; then
+    echo -n $(colored $green "install_docker ")
+fi
 if $FLG_D; then
     echo -n $(colored $green "), ")
 fi
