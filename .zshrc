@@ -523,3 +523,5 @@ autoload -Uz compinit && compinit
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(limactl completion zsh)"
 eval "$(direnv hook zsh)"
+export SSH_AUTH_SOCK=/Users/dhasumi/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+
