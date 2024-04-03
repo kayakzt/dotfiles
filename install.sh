@@ -15,7 +15,7 @@
 #     * curl
 #
 
-set -Ceu
+set -Ceux
 
 echo "--- Install Script Start! ---"
 
@@ -118,6 +118,7 @@ USE_REPO_JAPAN=false
 INSTALL_PYTHON=false
 INSTALL_GO=false
 INSTALL_RUST=false
+INSTALL_DOCKER=false
 
 usage_exit() {
     echo "Usage: $0 [-m] [-r] [-c] [-v] [-h]" 1>&2
@@ -171,6 +172,7 @@ if $FLG_D; then
     yes_or_no "[dev] Do you want to install python language?" && INSTALL_PYTHON=true
     yes_or_no "[dev] Do you want to install go language?" && INSTALL_GO=true
     yes_or_no "[dev] Do you want to install rust language?" && INSTALL_RUST=true
+    yes_or_no "[dev] Do you want to install docker engine?" && INSTALL_DOCKER=true
 fi
 yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
@@ -210,6 +212,9 @@ if $INSTALL_GO; then
 fi
 if $INSTALL_RUST; then
     echo -n $(colored $green "install_rust ")
+fi
+if $INSTALL_DOCKER; then
+    echo -n $(colored $green "install_docker ")
 fi
 if $FLG_D; then
     echo -n $(colored $green "), ")
@@ -555,8 +560,8 @@ install_ghq() {
 }
 
 install_lsd() {
-    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/Peltoche/lsd/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/Peltoche/lsd/releases/download/${LATEST}/"
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/lsd-rs/lsd/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/lsd-rs/lsd/releases/download/${LATEST}/"
     RELEASE="lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
     run wget ${REPO}${RELEASE}
@@ -817,10 +822,11 @@ if ! $FLG_R && ! $FLG_M; then
 
     # install needed npm packages
     npm install -g npm
-    npm install -g npm-check-updates
-    npm install -g yarn
-    npm install -g markdownlint-cli  textlint\
-        vue-cli
+    npm install -g \
+        npm-check-updates \
+        yarn \
+        markdownlint-cli \
+        textlint
 
     # install coc-extensions for neovim
     mkdir -p "$CONF_PATH/coc/extensions"
@@ -829,7 +835,8 @@ if ! $FLG_R && ! $FLG_M; then
     then
         echo '{"dependencies":{}}' > package.json
     fi
-    npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod \
+    npm install --install-strategy=shallow --ignore-scripts \
+        --no-bin-links --no-package-lock --only=prod \
         coc-json \
         coc-diagnostic \
         coc-snippets \
@@ -849,10 +856,21 @@ if ! $FLG_R && ! $FLG_M; then
         coc-toml \
         coc-calc
     cd "$WORKING_DIR"
+
+    # install docker
+    if $INSTALL_DOCKER; then
+        echo "$password" | sudo -S echo ""
+        curl -fsSL get.docker.com -o install-docker.sh && \
+            sh install-docker.sh --channel=stable && \
+            sudo gpasswd -a $USER docker && \
+            sudo docker run hello-world && \
+            rm install-docker.sh
+    fi
 # else
 #     echo "$password" | sudo -S echo ""
 #     sudo apt install python3-pip
 #     pip3 install pynvim
+#
 fi
 
 
@@ -861,26 +879,52 @@ fi
 #
 
 if ! $FLG_R && ! $FLG_C; then
-    run mkdir -p "$HOME/.themes"
+    run mkdir -p "${HOME}/.local/share/fonts"
+    run mkdir -p "${HOME}/.local/share/icons"
+    run mkdir -p "${HOME}/.local/share/themes"
+
     echo "$password" | sudo -S echo ""
+
     # Paper-Icon & Adapta-Gtk-Theme
 
     # install GUI apps
-    sudo apt install gufw
+    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+        sudo apt install -y \
+            gufw \
+            gnome-shell-extensions
+    fi
 
     # install icons
+
     # Fluent-icon-theme
-    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
-    RELEASE="${LATEST}.tar.gz"
+    {
+        LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
+        REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
+        RELEASE="${LATEST}.tar.gz"
 
-    run wget ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+        run wget "${REPO}${RELEASE}"
+        tar -zxvf "${RELEASE}"
 
-    Fluent-icon-theme-${LATEST}/install.sh --round --dark
+        "Fluent-icon-theme-${LATEST}/install.sh" --round --dark
 
-    run rm ${RELEASE}
-    run rm -rf Fluent-icon-theme-${LATEST}
+        run rm "${RELEASE}"
+        run rm -rf "Fluent-icon-theme-${LATEST}"
+    }
+
+    # install Sweet-Folders
+    {
+        git clone "https://github.com/EliverLara/Sweet-folders" "${HOME}/.local/share/icons/Sweet-Folders"
+        mv "${HOME}"/.local/share/icons/Sweet-Folders/Sweet-* "${HOME}/.local/share/icons"
+
+        sweetColors=("Blue" "Mars" "Purple-Filled" "Purple" "Rainbow" "Red-Filled" "Red" "Teal-Filled" "Teal" "Yellow-Filled" "Yellow")
+        # use with Fluent icon
+        for color in "${sweetColors[@]}"; do
+            sed -i "s/Inherits=candy-icons/Inherits=Fluent,candy-icons/" "${HOME}/.local/share/icons/Sweet-${color}/index.theme"
+        done
+    }
+
+    # run mkdir -p ~/.config/fontconfig/ && \
+    # run mv fonts.conf ~/.config/fontconfig/
 
     # install fonts
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
@@ -889,24 +933,33 @@ if ! $FLG_R && ! $FLG_C; then
             fonts-roboto
     fi
 
-    run mkdir -p ~/.local/share/fonts/
-    # run mkdir -p ~/.config/fontconfig/ && \
-    # run mv fonts.conf ~/.config/fontconfig/
-
     # set up PlemolJPConsole_NF
-    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
-    REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
-    RELEASE="PlemolJP_NF_${LATEST}"
+    {
+        LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
+        REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
+        RELEASE="PlemolJP_NF_${LATEST}"
 
-    run wget "${REPO}${RELEASE}.zip"
-    run unzip "${RELEASE}.zip"
+        run wget "${REPO}${RELEASE}.zip"
+        run unzip "${RELEASE}.zip"
 
-    run mv ${RELEASE}/PlemolJPConsole_NF/*.ttf $HOME/.local/share/fonts
+        run mv "${RELEASE}"/PlemolJPConsole_NF/*.ttf "$HOME/.local/share/fonts"
 
-    run rm "${RELEASE}.zip"
-    run rm -rf ${RELEASE}
+        run rm "${RELEASE}.zip"
+        run rm -rf "${RELEASE}"
 
-    fc-cache -fv
+        fc-cache -fv
+    }
+
+    # install themes
+
+    # install Sweet
+    {
+        git clone "https://github.com/EliverLara/Sweet" "${HOME}/.local/share/themes/Sweet"
+        cd "${HOME}/.local/share/themes/Sweet"
+        git fetch
+        git checkout -b Ambar-Blue-Dark origin/Ambar-Blue-Dark  # changes to blue theme
+        cd "${WORKING_DIR}"
+    }
 
     # set gtk3.0 theme & icon
     if [ ! -e "$HOME/.config/gtk-3.0" ]; then
