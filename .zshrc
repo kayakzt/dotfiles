@@ -520,8 +520,12 @@ fi
 autoload -Uz compinit && compinit
 
 # macos
-eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$(limactl completion zsh)"
-eval "$(direnv hook zsh)"
-export SSH_AUTH_SOCK=/Users/dhasumi/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+case ${OSTYPE} in
+  darwin*)
+    eval "$(/opt/homebrew/bin/brew shellenv)" # need homebrew
+    eval "$(limactl completion zsh)" # need limactl
+    eval "$(direnv hook zsh)" # need direnv
+    export SSH_AUTH_SOCK=/Users/dhasumi/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh # for secretive
+  ;;
+esac
 
