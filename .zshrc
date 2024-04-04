@@ -528,3 +528,6 @@ case ${OSTYPE} in
   ;;
 esac
 
+# load sheldon plugin scripts here
+eval "$(direnv hook zsh)" # need direnv
+

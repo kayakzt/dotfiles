@@ -93,7 +93,6 @@ export MY_NOTE_DIR="${HOME}/Notes"
 
 export path=(/usr/lib/git-core/(N-/) $path)
 fpath=( ~/.zfunc "${fpath[@]}" )
-eval "$(direnv hook zsh)" # need direnv
 
 # History Settings
 HISTSIZE=1000
