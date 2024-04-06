@@ -643,6 +643,35 @@ install_efm-langserver() {
     run rm -rf efm-langserver_${LATEST}_linux_*
 }
 
+install_treesitter() {
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/tree-sitter/tree-sitter/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/tree-sitter/tree-sitter/releases/download/${LATEST}/"
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        RELEASE="tree-sitter-linux-x64.gz"
+    else
+        RELEASE="tree-sitter-linux-arm64.gz"
+    fi
+
+    run wget ${REPO}${RELEASE}
+    tar -zxvf ${RELEASE}
+
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        run mv tree-sitter-linux-x64/tree-sitter $HOME/dev/bin/tree-sitter
+    else
+        run mv tree-sitter-linux-arm64/tree-sitter $HOME/dev/bin/tree-sitter
+    fi
+
+    chmod u+x $HOME/dev/bin/tree-sitter
+
+    run rm ${RELEASE}
+
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        run rm tree-sitter-linux-x64
+    else
+        run rm tree-sitter-linux-arm64
+    fi
+}
+
 # install tools
 install_tmux
 # install_zsh
@@ -657,6 +686,7 @@ install_lsd
 install_dust
 install_bat
 install_delta
+install_treesitter
 
 #
 # Config Setup
