@@ -44,23 +44,32 @@ if !isdirectory(s:dein_repo_dir)
 endif
 let &runtimepath = s:dein_repo_dir .','. &runtimepath
 " プラグイン読み込み＆キャッシュ作成
-let s:toml = '~/.config/nvim/dein.toml'
-let s:toml_lazy = '~/.config/nvim/dein_lazy.toml'
+let s:toml = expand('$HOME/.config/nvim/dein.toml')
+let s:toml_lazy = expand('$HOME/.config/nvim/dein_lazy.toml')
 if dein#load_state(s:dein_dir)
     call dein#begin(s:dein_dir)
-    call dein#load_toml(s:toml,{'lazy' : 0})
-    call dein#load_toml(s:toml_lazy,{'lazy' : 1})
+
+    if getftype(s:toml) !=# ''
+        call dein#load_toml(s:toml,{'lazy' : 0})
+    endif
+
+    if getftype(s:toml_lazy) !=# ''
+        call dein#load_toml(s:toml_lazy,{'lazy' : 1})
+    endif
+
     call dein#end()
     " call dein#save_state()
 endif
 
 " automatic plugin installation
-if dein#check_install()
-    call dein#install()
-endif
+" if dein#check_install()
+"     call dein#install()
+" endif
 
 " set colorscheme
-" colorscheme onedark
+if getftype(s:toml_lazy) ==# ''
+    colorscheme zephyr
+endif
 
 if has('filetype')
     filetype indent plugin on
