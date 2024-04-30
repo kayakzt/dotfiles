@@ -68,7 +68,7 @@ endif
 
 " set colorscheme
 if getftype(s:toml_lazy) ==# ''
-    colorscheme zephyr
+    colorscheme elflord
 endif
 
 if has('filetype')
