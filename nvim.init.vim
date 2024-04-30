@@ -62,9 +62,9 @@ if dein#load_state(s:dein_dir)
 endif
 
 " automatic plugin installation
-" if dein#check_install()
-"     call dein#install()
-" endif
+if dein#check_install()
+    call dein#install()
+endif
 
 " set colorscheme
 if getftype(s:toml_lazy) ==# ''
