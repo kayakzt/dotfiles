@@ -1,29 +1,399 @@
-[[plugins]] # show status line
-repo = 'vim-airline/vim-airline'
+[[plugins]] # complement LSP
+repo = 'j-hui/fidget.nvim'
+rev = 'v1.*'
 on_event = "VimEnter"
-depends = ['vim-fugitive']
-hook_source = '''
-let g:airline#extensions#coc#enabled = 1
-set laststatus=2
-let g:airline_powerline_fonts = 0
-let g:airline#extensions#tabline#enabled = 1
-let airline#extensions#coc#error_symbol = 'E:'
-let airline#extensions#coc#warning_symbol = 'W:'
+hook_post_source = '''
+lua << EOF
 
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-"
-let g:airline_symbols.crypt = 'ɦ'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.spell = 'Ꞩ'
+local fidget = require("fidget")
+
+fidget.setup()
+
+EOF
+'''
+
+# [[plugins]] # show status line
+# repo = 'vim-airline/vim-airline'
+# on_event = "VimEnter"
+# depends = ['vim-fugitive']
+# hook_source = '''
+# let g:airline#extensions#coc#enabled = 1
+# set laststatus=2
+# let g:airline_powerline_fonts = 0
+# let g:airline#extensions#tabline#enabled = 1
+# let airline#extensions#coc#error_symbol = 'E:'
+# let airline#extensions#coc#warning_symbol = 'W:'
+#
+# if !exists('g:airline_symbols')
+#   let g:airline_symbols = {}
+# endif
+# "
+# let g:airline_symbols.crypt = 'ɦ'
+# let g:airline_symbols.paste = 'ρ'
+# let g:airline_symbols.spell = 'Ꞩ'
+# '''
+
+[[plugins]] # show status line
+repo = 'nvim-lualine/lualine.nvim'
+on_event = "VimEnter"
+hook_post_source = '''
+lua << EOF
+
+local function hasKey(table, key)
+    return table[key] ~= nil
+end
+
+-- Eviline config for lualine
+-- Author: shadmansaleh
+-- Credit: glepnir
+local lualine = require('lualine')
+
+-- Color table for highlights
+local c = require('onedark.colors')
+local cfg = vim.g.onedark_config
+
+local colors = {
+    black = c.bg0,
+    white = c.fg,
+    red = c.red,
+    green = c.green,
+    yellow = c.yellow,
+    orange = c.orange,
+    blue = c.blue,
+    purple = c.purple,
+    cyan = c.cyan,
+    grey = c.grey,
+    light_grey = c.light_grey,
+    bg1 = c.bg1,
+    bg2 = c.bg2,
+    bg3 = c.bg3,
+    bg_d = c.bg_d,
+}
+
+local theme = {
+  normal = {
+    a = { fg = colors.black, bg = colors.green },
+    b = { fg = colors.light_grey, bg = colors.bg3 },
+    c = { fg = colors.white },
+  },
+
+  insert = { a = { fg = colors.black, bg = colors.blue, gui = 'bold' } },
+  visual = { a = { fg = colors.black, bg = colors.purple, gui = 'bold' } },
+  command = { a = { fg = colors.black, bg = colors.yellow, gui = 'bold' } },
+  terminal = { a = { fg = colors.bg, bg = colors.cyan, gui = 'bold' } },
+  replace = { a = { fg = colors.black, bg = colors.red, gui = 'bold' } },
+
+  inactive = {
+    a = { fg = colors.black, bg = colors.grey },
+    b = { fg = colors.white, bg = colors.black },
+    c = { fg = colors.white },
+  },
+}
+
+local conditions = {
+  buffer_not_empty = function()
+    return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
+  end,
+  hide_in_width = function()
+    return vim.fn.winwidth(0) > 80
+  end,
+  check_git_workspace = function()
+    local filepath = vim.fn.expand('%:p:h')
+    local gitdir = vim.fn.finddir('.git', filepath .. ';')
+    return gitdir and #gitdir > 0 and #gitdir < #filepath
+  end,
+}
+
+-- Config
+local config = {
+  options = {
+    globalstatus = false,
+    -- Disable sections and component separators
+    component_separators = '',
+    section_separators = '',
+    theme = theme,
+  },
+  sections = {
+    -- these are to remove the defaults
+    lualine_a = {},
+    lualine_b = {},
+    lualine_y = {},
+    lualine_z = {},
+    -- These will be filled later
+    lualine_c = {},
+    lualine_x = {},
+  },
+  inactive_sections = {
+    -- these are to remove the defaults
+    lualine_a = {},
+    lualine_b = {},
+    lualine_y = {},
+    lualine_z = {},
+    lualine_c = {},
+    lualine_x = {},
+  },
+  -- winbar = {
+  --   lualine_a = {},
+  --   lualine_b = {'filename'},
+  --   lualine_c = {'buffers'},
+  --   lualine_x = {'tabs'},
+  --   lualine_y = {},
+  --   lualine_z = {}
+  -- },
+  extensions = {
+      'quickfix',
+      'mason',
+      'nvim-tree',
+  }
+}
+
+-- Inserts a component in lualine_c at left section
+local function ins_left(loc, component)
+  table.insert(loc, component)
+end
+
+-- Inserts a component in lualine_x at right section
+local function ins_right(component)
+  table.insert(config.sections.lualine_x, component)
+end
+
+ins_left(config.sections.lualine_a, {
+  -- mode component
+  'mode',
+  padding = 1,
+})
+
+-- ins_left {
+--   -- filesize component
+--   'filesize',
+--   cond = conditions.buffer_not_empty,
+-- }
+
+ins_left(config.sections.lualine_b, {
+  'branch',
+  shorting_target = 4,
+  icon = '',
+  -- color = { fg = colors.purple},
+})
+
+ins_left(config.sections.lualine_c, {
+  'filename',
+  shorting_target = 32,
+  cond = conditions.buffer_not_empty,
+  -- color = { fg = colors.green, gui = 'bold' },
+})
+
+ins_left(config.sections.lualine_c, {
+  'diagnostics',
+  sources = { 'nvim_diagnostic' },
+  diagnostics_color = {
+    error = { fg = colors.red },
+    warn = { fg = colors.yellow },
+    info = { fg = colors.cyan },
+    hint = { fg = colors.green },
+  },
+})
+
+-- Insert mid section. You can make any number of sections in neovim :)
+-- for lualine it's any number greater then 2
+ins_left(config.sections.lualine_c, {
+  function()
+    return '%='
+  end,
+})
+
+-- ins_left {
+--   -- Lsp server name .
+--   function()
+--     local msg = 'No Active Lsp'
+--     local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+--     local clients = vim.lsp.get_active_clients()
+--     if next(clients) == nil then
+--       return msg
+--     end
+--     for _, client in ipairs(clients) do
+--       local filetypes = client.config.filetypes
+--       if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+--         return client.name
+--       end
+--     end
+--     return msg
+--   end,
+--   icon = ' LSP:',
+--   color = { fg = '#ffffff', gui = 'bold' },
+-- }
+
+-- Add components to right sections
+ins_right {
+  'o:encoding', -- option component same as &encoding in viml
+  fmt = string.upper, -- I'm not sure why it's upper case either ;)
+  cond = conditions.hide_in_width,
+  -- color = { fg = colors.green, gui = 'bold' },
+}
+
+ins_right {
+  'filetype',
+  cond = conditions.hide_in_width,
+  icons_enabled = false,
+}
+
+
+ins_right {
+  'fileformat',
+  fmt = string.upper,
+  icons_enabled = false,
+  -- color = { fg = colors.green, gui = 'bold' },
+}
+
+ins_right {
+  'diff',
+  -- Is it me or the symbol for modified us really weird
+  symbols = { added = ' ', modified = '󰝤 ', removed = ' ' },
+  diff_color = {
+    added = { fg = colors.green },
+    modified = { fg = colors.cyan },
+    removed = { fg = colors.purple },
+  },
+  cond = conditions.hide_in_width,
+}
+
+ins_right { 'progress', color = { fg = colors.white, gui = 'bold' } }
+
+ins_right { 'location' }
+
+-- Now don't forget to initialize lualine
+require("lualine").setup(config)
+
+EOF
 '''
 
 [[plugins]]
 repo = 'nvim-lua/plenary.nvim'
 
+[[plugins]] # complement LSP
+repo = 'jay-babu/mason-null-ls.nvim'
+on_event = "VimEnter"
+depends = ['mason.nvim']
+hook_post_source = '''
+lua << EOF
+
+require("mason-null-ls").setup({
+    ensure_installed = {
+        "biome",
+        "black",
+        "goimports",
+        "impl",
+        "gomodifytags",
+        "stylua",
+        "isort",
+        "markdownlint",
+        "prettier",
+        "textlint",
+    },
+})
+
+EOF
+'''
+
+[[plugins]] # complement LSP
+repo = 'nvimtools/none-ls.nvim'
+on_event = "VimEnter"
+depends = ['plenary.nvim', 'mason-null-ls.nvim']
+hook_post_source = '''
+lua << EOF
+
+local null_ls = require("null-ls")
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+local disabled_format_clients = { "lua_ls", "volar", "tsserver" }
+
+on_attach = function(client, bufnr)
+    if client.supports_method("textDocument/formatting") then
+        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            group = augroup,
+            buffer = bufnr,
+            callback = function()
+                vim.lsp.buf.format({
+                    async = false,
+                    filter = function(c)
+                        -- return not vim.tbl_contains(disabled_format_clients, c.name)
+                        return c.name == "null-ls"
+                    end,
+                    timeout_ms = 1000,
+                })
+            end,
+        })
+    end
+end
+
+
+null_ls.setup({
+    on_attach = on_attach,
+    sources = {
+        null_ls.builtins.completion.spell.with({
+            filetypes = {"text", "markdown", "tex", "latex"},
+        }),
+        null_ls.builtins.code_actions.gitsigns,
+        null_ls.builtins.code_actions.gomodifytags,
+        null_ls.builtins.code_actions.impl,
+        -- null_ls.builtins.diagnostics.editorconfig_checker,
+        null_ls.builtins.diagnostics.markdownlint,
+        null_ls.builtins.diagnostics.textlint.with({
+            condition = function(utils)
+                return utils.root_has_file({ ".textlintrc" })
+            end,
+        }),
+        null_ls.builtins.diagnostics.vint,
+        null_ls.builtins.diagnostics.zsh,
+        null_ls.builtins.formatting.biome,
+        null_ls.builtins.formatting.black,
+        null_ls.builtins.formatting.gofmt,
+        null_ls.builtins.formatting.goimports,
+        null_ls.builtins.formatting.isort,
+        null_ls.builtins.formatting.markdownlint,
+        null_ls.builtins.formatting.prettier.with({
+            filetypes = {"vue", "css", "scss", "less", "html","yaml", "graphql", "handlebars"},
+        }),
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.textlint.with({
+            condition = function(utils)
+                return utils.root_has_file({ ".textlintrc" })
+            end,
+        }),
+        null_ls.builtins.hover.dictionary,
+    }
+})
+
+EOF
+'''
+
+# [[plugins]] # formatting on save config
+# repo = 'lukas-reineke/lsp-format.nvim'
+# on_event = "BufReadPost"
+# hook_post_source = '''
+# lua << EOF
+#
+# local lsp_format = require("lsp-format")
+# local lsp_config = require("lspconfig")
+#
+# lsp_format.setup()
+#
+# local on_attach = function(client, bufnr)
+#     lsp_format.on_attach(client, bufnr)
+#
+#     -- ... custom code ...
+# end
+#
+# lsp_config.gopls.setup({ on_attach = on_attach })
+# lsp_config.pyright.setup({ on_attach = on_attach })
+#
+# EOF
+# '''
+
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter'
+rev = "v0.*"
 merged = 0
 on_event = 'BufEnter'
 hook_post_update = 'TSUpdate'
@@ -51,6 +421,8 @@ require'nvim-treesitter.configs'.setup {
     "latex",
     "lua",
     "make",
+    "markdown",
+    "markdown_inline",
     "python",
     "rust",
     "scss",
@@ -111,9 +483,6 @@ depends = ['sqlite.lua']
 repo = 'fhill2/telescope-ultisnips.nvim'
 
 [[plugins]]
-repo = 'fannheyward/telescope-coc.nvim'
-
-[[plugins]]
 repo = 'nvim-telescope/telescope-ui-select.nvim'
 
 [[plugins]]
@@ -127,7 +496,6 @@ depends = [
     'telescope-frecency.nvim',
     'telescope-ui-select.nvim',
     'telescope-symbols.nvim',
-    'telescope-coc.nvim',
     'telescope-ultisnips.nvim',
 ]
 on_event = 'VimEnter'
@@ -146,12 +514,13 @@ nnoremap <silent> [telescope]t :Telescope filetypes <CR>
 nnoremap <silent> [telescope]y :Telescope registers <CR>
 nnoremap <silent> [telescope]m :Telescope marks <CR>
 nnoremap <silent> [telescope]q :Telescope command_history <CR>
+nnoremap <silent> [telescope]H :Telescope help_tags <CR>
 nnoremap <silent> [telescope]n :Telescope find_files cwd=$MY_NOTE_DIR <CR>
 nnoremap <silent> [telescope]N :Telescope live_grep cwd=$MY_NOTE_DIR <CR>
 " nnoremap <silent> [telescope]o :Telescope treesitter <CR>
 
 nnoremap <silent> [telescope]c :Telescope git_commits <CR>
-nnoremap <silent> [telescope]e :lua require('telescope.builtin').symbols{ sources = {'emoji'} } <CR>
+nnoremap <silent> [telescope]e :lua require('telescope.builtin').symbols{ sources = {'emoji', 'gitmoji'} } <CR>
 nnoremap <silent> [telescope]o :Telescope file_browser <CR>
 
 nnoremap <silent> [telescope]s :SessionManager load_current_dir_session<CR>
@@ -408,7 +777,6 @@ require('telescope').load_extension('fzf')
 require('telescope').load_extension('frecency')
 require('telescope').load_extension('file_browser')
 require('telescope').load_extension('ui-select')
-require('telescope').load_extension('coc')
 require('telescope').load_extension('ultisnips')
 
 EOF
@@ -629,13 +997,13 @@ EOF
 repo = 'SirVer/ultisnips'
 on_event = 'VimEnter'
 hook_source = '''
-let g:UltiSnipsExpandTrigger = "<C-e>"
-let g:UltiSnipsJumpForwardTrigger = "<C-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
+" let g:UltiSnipsExpandTrigger = "<C-e>"
+" let g:UltiSnipsJumpForwardTrigger = "<C-j>"
+" let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
 let g:UltiSnipsEditSplit = "vertical"
 let g:UltiSnipsSnippetDirectories = ["~/.config/dotfiles/snippets"]
 
-let g:ultisnips_python_syle = "google"
+let g:ultisnips_python_style = "google"
 '''
 
 [[plugins]]
@@ -643,14 +1011,14 @@ repo = 'honza/vim-snippets'
 on_event = 'VimEnter'
 depends = ['ultisnips']
 
-[[plugins]] # Auto close parentheses
-repo = 'cohama/lexima.vim'
-on_event = 'VimEnter'
-hook_add = '''
-"call lexima#add_rule({'char': '$', 'input_after': '$', 'filetype': 'latex'})
-"call lexima#add_rule({'char': '$', 'at': '\%#\$', 'leave': 1, 'filetype': 'latex'})
-"call lexima#add_rule({'char': '<BS>', 'at': '\$\%#\$', 'delete': 1, 'filetype': 'latex'})
-'''
+# [[plugins]] # Auto close parentheses
+# repo = 'cohama/lexima.vim'
+# on_event = 'VimEnter'
+# hook_add = '''
+# "call lexima#add_rule({'char': '$', 'input_after': '$', 'filetype': 'latex'})
+# "call lexima#add_rule({'char': '$', 'at': '\%#\$', 'leave': 1, 'filetype': 'latex'})
+# "call lexima#add_rule({'char': '<BS>', 'at': '\$\%#\$', 'delete': 1, 'filetype': 'latex'})
+# '''
 
 [[plugins]] # enable to buffer execution on vim
 repo = 'thinca/vim-quickrun'
@@ -691,14 +1059,14 @@ autocmd FileType qf nnoremap <silent><buffer>q :quit<CR>
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "<Leader><C-c>"
 '''
 
-[[plugins]] # Neovim/Vim integration for Delve
-repo = 'sebdah/vim-delve'
-on_event = 'VimEnter'
-on_ft = 'go'
-hook_add = '''
-autocmd FileType go nnoremap <Leader>d :DlvDebug<CR>
-autocmd FileType go nnoremap <Leader>p :DlvToggleBreakpoint<CR>
-'''
+# [[plugins]] # Neovim/Vim integration for Delve
+# repo = 'sebdah/vim-delve'
+# on_event = 'VimEnter'
+# on_ft = 'go'
+# hook_add = '''
+# autocmd FileType go nnoremap <Leader>d :DlvDebug<CR>
+# autocmd FileType go nnoremap <Leader>p :DlvToggleBreakpoint<CR>
+# '''
 
 [[plugins]] # get file type for Shougo-san's plugins
 repo = 'Shougo/context_filetype.vim'
@@ -920,15 +1288,296 @@ endfunction
 set foldlevel=20
 '''
 
-[[plugins]] # accelerate up-down moving
-repo = 'rhysd/accelerated-jk'
-on_event = 'BufEnter'
-hook_add = '''
-nmap j <Plug>(accelerated_jk_gj)
-nmap k <Plug>(accelerated_jk_gk)
-'''
+# [[plugins]] # accelerate up-down moving
+# repo = 'rhysd/accelerated-jk'
+# on_event = 'BufEnter'
+# hook_add = '''
+# nmap j <Plug>(accelerated_jk_gj)
+# nmap k <Plug>(accelerated_jk_gk)
+# '''
 
 [[plugins]] # logging command output
 repo = 'tyru/capture.vim'
 on_event = 'VimEnter'
 
+[[plugins]] # file visualizer
+repo = 'nvim-tree/nvim-tree.lua'
+on_event = "VimEnter"
+hook_post_source = '''
+lua << EOF
+
+local nvim_tree = require("nvim-tree")
+
+nvim_tree.setup()
+
+EOF
+'''
+
+[[plugins]] # pretty quickfix, location view
+repo = 'yorickpeterse/nvim-pqf'
+on_event = "VimEnter"
+hook_post_source = '''
+lua << EOF
+
+local pqf = require("pqf")
+
+pqf.setup({
+})
+
+EOF
+'''
+
+[[plugins]] # autopairs
+repo = 'windwp/nvim-autopairs'
+on_event = "VimEnter"
+depends = ["nvim-cmp"]
+hook_post_source = '''
+lua << EOF
+
+local npairs = require("nvim-autopairs")
+
+local Rule = require('nvim-autopairs.rule')
+local cond = require('nvim-autopairs.conds')
+local ts_conds = require('nvim-autopairs.ts-conds')
+
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+local handlers = require("nvim-autopairs.completion.handlers")
+
+local cmp = require("cmp")
+
+npairs.setup({
+  check_ts = true,
+  ts_config = {
+    -- lua = {'string'},
+    -- python = {},
+  },
+  ignored_next_char = "[%w%.]", -- will ignore alphanumeric and `.` symbol
+})
+
+-- add custom rules
+
+npairs.add_rule(Rule("$$","$$","tex"))
+
+-- press % => %% only while inside a comment or string
+-- npairs.add_rules({
+--   Rule("%", "%", "lua")
+--     :with_pair(ts_conds.is_ts_node({'string','comment'})), -- not working in this cond?
+--   Rule("$", "$", "lua")
+--     :with_pair(ts_conds.is_not_ts_node({'function'}))
+-- })
+
+
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done({
+    filetypes = {
+      -- "*" is a alias to all filetypes
+      ["*"] = {
+        ["("] = {
+          kind = {
+            cmp.lsp.CompletionItemKind.Function,
+            cmp.lsp.CompletionItemKind.Method,
+          },
+          handler = handlers["*"]
+        }
+      },
+      -- lua = {
+      --   ["("] = {
+      --     kind = {
+      --       cmp.lsp.CompletionItemKind.Function,
+      --       cmp.lsp.CompletionItemKind.Method
+      --     },
+      --     ---@param char string
+      --     ---@param item table item completion
+      --     ---@param bufnr number buffer number
+      --     ---@param rules table
+      --     ---@param commit_character table<string>
+      --     handler = function(char, item, bufnr, rules, commit_character)
+      --       -- Your handler function. Inspect with print(vim.inspect{char, item, bufnr, rules, commit_character})
+      --     end
+      --   }
+      -- },
+      -- Disable for tex
+      tex = false,
+      text = false,
+    }
+  })
+)
+
+EOF
+'''
+
+[[plugins]] # git conflict support plugin
+repo = 'akinsho/git-conflict.nvim'
+rev = "v*"
+on_event = "BufReadPost"
+hook_post_source = '''
+lua << EOF
+
+require("git-conflict").setup()
+
+EOF
+'''
+
+[[plugins]] # jump outlines
+repo = 'hedyhli/outline.nvim'
+on_event = "VimEnter"
+hook_post_source = '''
+lua << EOF
+
+require("outline").setup({
+  symbol_folding = {
+    auto_unfold = {
+      only = 2,
+    },
+  },
+  preview_window = {
+    auto_preview = true,
+  },
+})
+
+EOF
+
+" set outline.nvim keymap as a part of Telescope commands
+nmap <C-p> [telescope]
+nnoremap <silent> [telescope]h :Outline<CR>
+
+'''
+
+[[plugins]] # jump outlines
+repo = 'nvimdev/lspsaga.nvim'
+on_event = "VimEnter"
+depends = ['nvim-treesitter', 'nvim-web-devicons']
+hook_post_source = '''
+lua << EOF
+
+require("lspsaga").setup({
+  symbol_in_winbar = {
+    enable = false,
+    show_server_name = false,
+    show_file = false,
+  },
+  finder = {
+    enable = false,
+  },
+  code_action = {
+    extend_gitsigns = true,
+  },
+  lightbulb = {
+    enable = false,
+  },
+})
+
+-- add lspsaga keymaps instead of native lsp functions
+vim.keymap.set('n', '[lsp]n', "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+vim.keymap.set('n', '[lsp]p', "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+vim.keymap.set('n', '[lsp]d', "<cmd>Lspsaga show_buf_diagnostics<CR>", opts)
+vim.keymap.set('n', '[lsp]D', "<cmd>Lspsaga show_workspace_diagnostics<CR>", opts)
+vim.keymap.set('n', '[lsp]h', "<cmd>Lspsaga hover_doc<CR>", opts)
+vim.keymap.set('n', '[lsp]a', "<cmd>Lspsaga code_action<CR>", opts)
+
+EOF
+
+'''
+
+[[plugins]] # make a bookmarks
+repo = 'tomasky/bookmarks.nvim'
+on_event = "VimEnter"
+depends = ['telescope.nvim']
+hook_post_source = '''
+
+nnoremap [bookmark]  <Nop>
+nmap <Leader>b [bookmark]
+
+lua << EOF
+
+require("bookmarks").setup({
+  sign_priority = 8,  --set bookmark sign priority to cover other sign
+  save_file = vim.fn.expand "$HOME/.config/nvim/bookmarks", -- bookmarks save file path
+  keywords =  {
+    ["@t"] = "✅", -- mark annotation startswith @t,signs this icon as `Todo`
+    ["@w"] = "⚠️" , -- mark annotation startswith @w arn,signs this icon as `Warn`
+    ["@f"] = "⛏️", -- mark annotation startswith @f ix,signs this icon as `Fix`
+    ["@n"] = "🗒️" , -- mark annotation startswith @n ote,signs this icon as `Note`
+  },
+  on_attach = function(bufnr)
+    local bm = require "bookmarks"
+    local map = vim.keymap.set
+    map("n","[bookmark]t",bm.bookmark_toggle) -- add or remove bookmark at current line
+    map("n","[bookmark]a",bm.bookmark_ann) -- add or edit mark annotation at current line
+    map("n","[bookmark]e",bm.bookmark_ann) -- add or edit mark annotation at current line
+    map("n","[bookmark]cl",bm.bookmark_clean) -- clean all marks in local buffer
+    map("n","[bookmark]n",bm.bookmark_next) -- jump to next mark in local buffer
+    map("n","[bookmark]p",bm.bookmark_prev) -- jump to previous mark in local buffer
+    -- map("n","ml",bm.bookmark_list) -- show marked file list in quickfix window
+  end
+})
+
+require('telescope').load_extension('bookmarks')
+
+EOF
+
+" set keymaps
+nnoremap <silent> [bookmark]t :Git status<CR><C-w>T
+nnoremap <silent> [bookmark]e :Git write<CR>
+
+nnoremap <silent> [telescope]B :Telescope bookmarks list <CR>
+'''
+
+[[plugins]] # showin top bar
+repo = 'akinsho/bufferline.nvim'
+rev = "v4.*"
+on_event = "VimEnter"
+depends = ['nvim-web-devicons']
+hook_post_source = '''
+lua << EOF
+
+local bufferline = require("bufferline")
+
+bufferline.setup({
+  options = {
+    style_preet = bufferline.style_preset.minimal,
+    diagnostics = "nvim_lsp",
+    diagnostics_indicator = function(count, level, diagnostics_dict, context)
+      local icon = level:match("error") and " " or " "
+      return " " .. icon .. count
+    end,
+  },
+})
+
+EOF
+'''
+
+[[plugins]] # highlight any words
+repo = 't9md/vim-quickhl'
+on_event = "BufReadPre"
+hook_add = '''
+nmap <Leader>hl <Plug>(quickhl-manual-this)
+xmap <Leader>hl <Plug>(quickhl-manual-this)
+nmap <Leader>hc <Plug>(quickhl-manual-reset)
+xmap <Leader>hc <Plug>(quickhl-manual-reset)
+
+'''
+
+[[plugins]] # highlight todo comments
+repo = 'folke/todo-comments.nvim'
+rev = "v1.*"
+on_event = "VimEnter"
+hook_post_source = '''
+lua << EOF
+
+local c = require('onedark.colors')
+
+require("todo-comments").setup({
+  colors = {
+    error = { c.red },
+    warning = { c.yellow },
+    info = { c.blue },
+    hint = { c.green },
+    default = {  c.green },
+    test = {  c.purple }
+  },
+})
+
+EOF
+'''

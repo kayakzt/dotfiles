@@ -1,6 +1,6 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
-rev = 'release'
+rev = '3.1'
 hook_add = '''
 command! DeinUpdate  call s:dein_update()
 
@@ -15,12 +15,22 @@ rev = 'ver10.*'
 build = 'make'
 
 [[plugins]]
-repo = 'joshdick/onedark.vim'
+repo = 'navarasu/onedark.nvim'
 hook_add = '''
-let g:onedark_color_overrides = {
-\ "comment_grey": {"gui": "#67727D", "cterm": "59", "cterm16" : "15"}
-\}
-let g:airline_theme='onedark'
+lua << EOF
+
+local onedark = require('onedark')
+
+onedark.setup({
+    style = 'dark',
+    code_style = {
+        functions = 'italic',
+        strings = 'bold',
+    },
+})
+onedark.load()
+
+EOF
 '''
 
 # configuration wrapper for builtin LSP
@@ -32,12 +42,14 @@ map <C-k> [lsp]
 
 lua << EOF
 
+vim.diagnostic.config({severity_sort = true})
+
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set('n', '[lsp]D', vim.diagnostic.open_float)
-vim.keymap.set('n', '[lsp]n', vim.diagnostic.goto_prev)
-vim.keymap.set('n', '[lsp]p', vim.diagnostic.goto_next)
-vim.keymap.set('n', '[lsp]d', vim.diagnostic.setloclist)
+-- vim.keymap.set('n', '[lsp]D', vim.diagnostic.open_float)
+-- vim.keymap.set('n', '[lsp]n', vim.diagnostic.goto_next)
+-- vim.keymap.set('n', '[lsp]p', vim.diagnostic.goto_prev)
+-- vim.keymap.set('n', '[lsp]d', vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -51,7 +63,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '[lsp]s', vim.lsp.buf.signature_help, opts)
@@ -62,7 +74,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- end, opts)
     vim.keymap.set('n', '[lsp]t', vim.lsp.buf.type_definition, opts)
     vim.keymap.set('n', '[lsp]r', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'v' }, '[lsp]a', vim.lsp.buf.code_action, opts)
+    -- vim.keymap.set({ 'n', 'v' }, '[lsp]a', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '[lsp]R', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '[lsp]f', function()
       vim.lsp.buf.format { async = true }
@@ -73,23 +85,69 @@ vim.api.nvim_create_autocmd('LspAttach', {
 EOF
 '''
 
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/nvim-cmp'
+depends = ['nvim-lspconfig']
+
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp'
+depends = ['nvim-cmp']
+
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp-signature-help'
+depends = ['nvim-cmp']
+
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/cmp-cmdline'
+depends = ['nvim-cmp']
+
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/cmp-calc'
+depends = ['nvim-cmp']
+
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/cmp-path'
+depends = ['nvim-cmp']
+
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/cmp-buffer'
+depends = ['nvim-cmp']
+
+# completion plugin
+[[plugins]]
+repo = 'hrsh7th/cmp-git'
+depends = ['nvim-cmp']
+
+# completion plugin
+[[plugins]]
+repo = 'quangnguyen30192/cmp-nvim-ultisnips'
+depends = ['nvim-cmp']
+
 # plaguin manager for neovim
 [[plugins]]
 repo = 'williamboman/mason.nvim'
 depends = ['nvim-lspconfig']
-hook_add = '''
-'''
 
 # integrationg nvim-lspconfig and mason
 [[plugins]]
 repo = 'williamboman/mason-lspconfig.nvim'
-depends = ['mason.nvim']
-hook_add = '''
+depends = ['mason.nvim', 'cmp-nvim-lsp']
+hook_source = '''
 lua << EOF
 
 local mason = require "mason"
 local mason_lspconfig = require "mason-lspconfig"
 local lspconfig = require "lspconfig"
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local cmp = require("cmp")
+local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
 local servers = {
     "bashls",
@@ -97,11 +155,11 @@ local servers = {
     "dockerls",
     "gopls",
     "jsonls",
-    "lua_ls",
     "tsserver",
     "pyright",
     "rust_analyzer",
     "taplo",
+    "typos_lsp",
 }
 
 mason.setup({
@@ -120,26 +178,98 @@ mason_lspconfig.setup {
 
 require("mason-lspconfig").setup_handlers {
     function (server_name) -- default handler (optional)
-        require("lspconfig")[server_name].setup {}
+        lspconfig[server_name].setup {
+            capabilities = capabilities,
+        }
+        lspconfig.pyright.setup {
+            settings = {
+                python = {
+                    venvPath = ".",
+                    pythonPath = "./.venv/bin/python",
+                    analysis = {
+                        extraPaths = {"."},
+                    },
+                },
+            },
+        }
+        lspconfig.typos_lsp.setup({
+            init_options = {
+                diagnosticSeverity = "Hint",  -- change warning level
+            },
+        })
     end,
     -- ["rust_analyzer"] = function ()
     --     require("rust-tools").setup {}
     -- end
-    -- if use clippy diag, see https://www.reddit.com/r/neovim/comments/nu2w2g/using_clippy_as_linter_for_rust_in/
+    -- if you want to use clippy diagnostic, see https://www.reddit.com/r/neovim/comments/nu2w2g/using_clippy_as_linter_for_rust_in/
 }
 
-lspconfig.efm.setup {
-    init_options = {documentFormatting = true},
-    settings = {
-        rootMarkers = {".git/"},
-        languages = {
-            vim = {
-                {lintCommand = "vint --enable-neovim --style-problem ${INPUT}", lintFormats = "%f:%l:%c: %m"}
+-- lspconfig.efm.setup {
+--     init_options = {documentFormatting = true},
+--     settings = {
+--         rootMarkers = {".git/"},
+--         languages = {
+--             vim = {
+--                 {lintCommand = "vint --enable-neovim --style-problem ${INPUT}", lintFormats = "%f:%l:%c: %m"}
+--             }
+--         }
+--     }
+-- }
+
+cmp.setup({
+    snippet = {
+        expand = function(args)
+            vim.fn["UltiSnips#Anon"](args.body) -- for ultisnip users.
+        end,
+    },
+    mapping = cmp.mapping.preset.insert({
+        ['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-e>'] = cmp.mapping(
+            function(fallback)
+                cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+            end,
+            { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
+        ),
+    }),
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' },
+        { name = 'buffer' },
+        { name = 'git' },
+        { name = 'path' },
+        { name = 'calc' },
+        { name = 'ultisnips' },
+    })
+})
+
+cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+        { name = 'buffer' },
+        { name = 'path' },
+    }, {
+        {
+            name = 'cmdline',
+            option = {
+                ignore_cmds = { 'Man', '!' }
             }
-        }
+        },
     }
-}
+})
+
+cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+        { name = 'path' }
+    }, {
+        { name = 'cmdline' }
+    }),
+    matching = { disallow_symbol_nonprefix_matching = false }
+})
 
 EOF
 '''
-

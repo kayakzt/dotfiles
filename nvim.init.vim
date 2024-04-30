@@ -16,7 +16,7 @@ let g:cache_home = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_
 let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CONFIG_HOME
 
 " Initialization
-set nocompatible
+" set nocompatible
 
 " if !&compatible
 "     map ^[OA ^[ka
@@ -60,7 +60,7 @@ if dein#check_install()
 endif
 
 " set colorscheme
-colorscheme onedark
+" colorscheme onedark
 
 if has('filetype')
     filetype indent plugin on
@@ -221,6 +221,11 @@ augroup MyAutoCmd
     " show preview window during the completion mode
     " autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
     autocmd FileType vue syntax sync fromstart
+
+    " auto close quickfix window after press CR
+    autocmd FileType qf nnoremap <buffer> <CR> <CR><Cmd>cclose<CR>
+    " don't close quickfix window with ctrl-j
+    autocmd FileType qf nnoremap <buffer> <C-j> <CR>
 
     " completion settings
     " autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview

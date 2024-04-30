@@ -147,7 +147,7 @@ function yes_or_no(){
     done
 }
 
-# argments processing
+# augments processing
 while getopts mrc OPT
 do
     case $OPT in
@@ -1002,9 +1002,9 @@ There are some steps to finish setup.
 
 * for System
 1. import mozc.keymap.txt for using mozc tool.
-2. change terminal color refered to terminal.color.txt (if u don't use a terminator).
+2. change terminal color referred to terminal.color.txt (if u don't use a terminator).
 3. launch Tweak-Tool, change Theme & Font (Noto Sans CJK JP Regular 10pt).
-4. launch Tweak-Tool, set Gnome Extentions (see gnome_extentions.txt).
+4. launch Tweak-Tool, set Gnome Extensions (see gnome_extensions.txt).
 5. setup IME through ibus-daemon for Japanese-input method on X-Forwarding
 
 * for zsh
@@ -1020,7 +1020,7 @@ EOF
 if $FLG_H; then
     cat <<-EOF
 
-reboot, then if you want to connect this VM with EnhancedSession on Hyper-V, don't remenber config below.
+reboot, then if you want to connect this VM with EnhancedSession on Hyper-V, don't remember config below.
 PS C:\> Set-VM -VMName <VMname> -EnhancedSessionTransportType HvSocket
 PS C:\> (Get-VM -VMName <VMname>).EnhancedSessionTransportType
 
