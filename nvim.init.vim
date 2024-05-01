@@ -2,7 +2,7 @@ set encoding=utf8
 scriptencoding utf-8
 
 " Set Color Mode
-if (has('termguicolors'))
+if (!has('gui_running') && has('termguicolors') && &term =~# '^\%(screen|tmux\)')
     set termguicolors
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -192,17 +192,7 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
-" 日本語入力がオンのままでも使えるコマンド(Enterキーは必要)
-nnoremap あ a
-nnoremap い i
-nnoremap う u
-nnoremap お o
-nnoremap っｄ dd
-nnoremap っｙ yy
-" 中身を変更する
-nnoremap し” ci"
-nnoremap し’ ci'
-nnoremap し（ ci(
+
 " jjでエスケープ
 inoremap <silent> jj <ESC>
 " 日本語入力で”っj”と入力してもEnterキーで確定させればインサートモードを抜ける
@@ -240,6 +230,48 @@ augroup MyAutoCmd
     " autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
     " autocmd BufRead,BufNewFile *.go set completeopt=menuone,preview
 augroup END
+
+" Custom Digraphs
+digraphs j( 65288  " （
+digraphs j) 65289  " ）
+digraphs j[ 12300  " 「
+digraphs j] 12301  " 」
+digraphs j{ 12302  " 『
+digraphs j} 12303  " 』
+digraphs j< 12304  " 【
+digraphs j> 12305  " 】
+
+digraphs j, 12289  " 、
+digraphs j. 12290  " 。
+digraphs j< 65292  " ，
+digraphs j> 65294  " ．
+digraphs j! 65281  " ！
+digraphs j? 65311  " ？
+digraphs j: 65306  " ：
+
+digraphs j0 65296  " ０
+digraphs j1 65297  " １
+digraphs j2 65298  " ２
+digraphs j3 65299  " ３
+digraphs j4 65300  " ４
+digraphs j5 65301  " ５
+digraphs j6 65302  " ６
+digraphs j7 65303  " ７
+digraphs j8 65304  " ８
+digraphs j9 65305  " ９
+
+digraphs j- 12540  " ー〜
+digraphs j~ 12316  " 〜
+digraphs j/ 12539  " ・
+digraphs js 12288  " 　
+digraphs j@ 65312  " ＠
+
+" Customise f-motion for japanese-input
+noremap fj f<C-k>j
+noremap Fj F<C-k>j
+noremap tj t<C-k>j
+noremap Tj T<C-k>j
+digraphs jj 106  " j follow fj command
 
 " Terminal Function
 let g:term_buf = 0

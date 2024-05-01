@@ -74,11 +74,11 @@ local theme = {
     c = { fg = colors.white },
   },
 
-  insert = { a = { fg = colors.black, bg = colors.blue, gui = 'bold' } },
-  visual = { a = { fg = colors.black, bg = colors.purple, gui = 'bold' } },
-  command = { a = { fg = colors.black, bg = colors.yellow, gui = 'bold' } },
-  terminal = { a = { fg = colors.bg, bg = colors.cyan, gui = 'bold' } },
-  replace = { a = { fg = colors.black, bg = colors.red, gui = 'bold' } },
+  insert = { a = { fg = colors.black, bg = colors.blue } },
+  visual = { a = { fg = colors.black, bg = colors.purple } },
+  command = { a = { fg = colors.black, bg = colors.yellow } },
+  terminal = { a = { fg = colors.bg, bg = colors.cyan } },
+  replace = { a = { fg = colors.black, bg = colors.red } },
 
   inactive = {
     a = { fg = colors.black, bg = colors.grey },
@@ -182,7 +182,7 @@ ins_left(config.sections.lualine_c, {
     error = { fg = colors.red },
     warn = { fg = colors.yellow },
     info = { fg = colors.cyan },
-    hint = { fg = colors.green },
+    hint = { fg = colors.purple },
   },
 })
 
@@ -232,7 +232,7 @@ ins_right {
 
 ins_right {
   'progress',
-  color = { fg = colors.white, gui = 'bold' },
+  color = { fg = colors.white },
   cond = conditions.hide_in_width,
 }
 
@@ -269,6 +269,7 @@ require("mason-null-ls").setup({
         "markdownlint",
         "prettier",
         "textlint",
+        "shellcheck",
     },
 })
 
@@ -1519,6 +1520,19 @@ bufferline.setup({
     style_preet = bufferline.style_preset.minimal,
     diagnostics = "nvim_lsp",
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
+      local icon = " "
+      if level:match("error") then
+        return " " .. icon .. count
+      elseif level:match("warn") then
+        icon = " "
+        return " " .. icon .. count
+      elseif level:match("info") then
+        icon = " "
+        return " " .. icon .. count
+      elseif level:match("hint") then
+        icon = " "
+        return " " .. icon .. count
+      end
       local icon = level:match("error") and " " or " "
       return " " .. icon .. count
     end,
