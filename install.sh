@@ -320,7 +320,7 @@ fi
 # Basic Apps install
 #
 
-# preapre bin, src directories
+# prepare bin, src directories
 run mkdir -p "$HOME"/dev
 run mkdir -p "$HOME"/dev/bin
 run mkdir -p "$HOME"/dev/src
@@ -694,6 +694,10 @@ if [ ! -e "$HOME/.zfunc" ]; then
         run mkdir "$HOME/.zfunc"
 fi
 
+if [ ! -e "$CONF_PATH/alacritty" ]; then
+        run mkdir "$CONF_PATH/alacritty"
+fi
+
 # set symbolic link
 run ln -snf "$DOT_PATH/.zshenv" "$HOME/.zshenv"
 run ln -snf "$DOT_PATH/.zshrc" "$HOME/.zshrc"
@@ -711,10 +715,11 @@ run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
 run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.yaml"
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
+run ln -snf "$DOT_PATH/alacritty.toml" "$CONF_PATH/alacritty/alacritty.toml"
 
 
 #
-# Developper Apps install
+# Developer Apps install
 #
 
 if ! $FLG_R && ! $FLG_M; then
@@ -795,7 +800,7 @@ if ! $FLG_R && ! $FLG_M; then
         export PATH=$PATH:$HOME/.cargo/bin
         # cargo +nightly install racer # racer must be installed under the nightly channel from 2.1
 
-        # install rust stable channnel & default use
+        # install rust stable channel & default use
         rustup toolchain install stable
         rustup default stable
         rustup component add rustfmt
