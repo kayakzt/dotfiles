@@ -182,7 +182,7 @@ ins_left(config.sections.lualine_c, {
     error = { fg = colors.red },
     warn = { fg = colors.yellow },
     info = { fg = colors.cyan },
-    hint = { fg = colors.green },
+    hint = { fg = colors.purple },
   },
 })
 
@@ -1520,6 +1520,19 @@ bufferline.setup({
     style_preet = bufferline.style_preset.minimal,
     diagnostics = "nvim_lsp",
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
+      local icon = " "
+      if level:match("error") then
+        return " " .. icon .. count
+      elseif level:match("warn") then
+        icon = " "
+        return " " .. icon .. count
+      elseif level:match("info") then
+        icon = " "
+        return " " .. icon .. count
+      elseif level:match("hint") then
+        icon = " "
+        return " " .. icon .. count
+      end
       local icon = level:match("error") and " " or " "
       return " " .. icon .. count
     end,

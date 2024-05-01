@@ -204,7 +204,7 @@ require("mason-lspconfig").setup_handlers {
         }
         lspconfig.typos_lsp.setup({
             init_options = {
-                diagnosticSeverity = "Hint",  -- change warning level
+                diagnosticSeverity = "Information",  -- change warning level
             },
         })
     end,
