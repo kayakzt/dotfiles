@@ -696,6 +696,9 @@ fi
 
 if [ ! -e "$CONF_PATH/alacritty" ]; then
         run mkdir "$CONF_PATH/alacritty"
+        run mkdir "$CONF_PATH/alacritty/themes"
+        # set alacritty themes
+        git clone https://github.com/alacritty/alacritty-theme $CONF_PATH/alacritty/themes
 fi
 
 # set symbolic link
