@@ -1,6 +1,6 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
-rev = 'release'
+rev = '3.1'
 hook_add = '''
 command! DeinUpdate  call s:dein_update()
 
@@ -15,11 +15,30 @@ rev = 'ver10.*'
 build = 'make'
 
 [[plugins]]
-repo = 'joshdick/onedark.vim'
+repo = 'navarasu/onedark.nvim'
 hook_add = '''
-let g:onedark_color_overrides = {
-\ "comment_grey": {"gui": "#67727D", "cterm": "59", "cterm16" : "15"}
-\}
-let g:airline_theme='onedark'
-'''
+lua << EOF
 
+local onedark = require('onedark')
+
+onedark.setup({
+    style = 'dark',
+    toggle_style_key = nil, -- keybind to toggle theme style. Leave it nil to disable it, or set it to a string, for example "<leader>ts"
+    toggle_style_list = {'dark', 'darker', 'warm', 'warmer'}, -- List of styles to toggle between
+    code_style = { -- italic, bold, underline, none
+        comments = 'italic,bold',
+        keywords = 'none',
+        functions = 'italic',
+        strings = 'none',
+        variables = 'none'
+    },
+    highlights = {
+    },
+})
+onedark.load()
+
+EOF
+
+" Reduce the vividness of eol
+hi NonText ctermfg=238 ctermbg=None guifg=#444444 guibg=None
+'''

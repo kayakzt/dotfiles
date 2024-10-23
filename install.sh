@@ -147,7 +147,7 @@ function yes_or_no(){
     done
 }
 
-# argments processing
+# augments processing
 while getopts mrc OPT
 do
     case $OPT in
@@ -320,7 +320,7 @@ fi
 # Basic Apps install
 #
 
-# preapre bin, src directories
+# prepare bin, src directories
 run mkdir -p "$HOME"/dev
 run mkdir -p "$HOME"/dev/bin
 run mkdir -p "$HOME"/dev/src
@@ -724,6 +724,13 @@ if [ ! -e "$HOME/.zfunc" ]; then
         run mkdir "$HOME/.zfunc"
 fi
 
+if [ ! -e "$CONF_PATH/alacritty" ]; then
+        run mkdir "$CONF_PATH/alacritty"
+        run mkdir "$CONF_PATH/alacritty/themes"
+        # set alacritty themes
+        git clone https://github.com/alacritty/alacritty-theme $CONF_PATH/alacritty/themes
+fi
+
 # set symbolic link
 run ln -snf "$DOT_PATH/.zshenv" "$HOME/.zshenv"
 run ln -snf "$DOT_PATH/.zshrc" "$HOME/.zshrc"
@@ -737,14 +744,16 @@ run ln -snf "$DOT_PATH/fonts.conf" "$CONF_PATH/fontconfig/fonts.conf"
 run ln -snf "$DOT_PATH/nvim.init.vim" "$CONF_PATH/nvim/init.vim"
 run ln -snf "$DOT_PATH/nvim.dein.toml" "$CONF_PATH/nvim/dein.toml"
 run ln -snf "$DOT_PATH/nvim.dein_lazy.toml" "$CONF_PATH/nvim/dein_lazy.toml"
-run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
+run ln -snf "$DOT_PATH/UltiSnips" "$CONF_PATH/nvim/UltiSnips"
+# run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
 run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.yaml"
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
+run ln -snf "$DOT_PATH/alacritty.toml" "$CONF_PATH/alacritty/alacritty.toml"
 
 
 #
-# Developper Apps install
+# Developer Apps install
 #
 
 if ! $FLG_R && ! $FLG_M; then
@@ -825,7 +834,7 @@ if ! $FLG_R && ! $FLG_M; then
         export PATH=$PATH:$HOME/.cargo/bin
         # cargo +nightly install racer # racer must be installed under the nightly channel from 2.1
 
-        # install rust stable channnel & default use
+        # install rust stable channel & default use
         rustup toolchain install stable
         rustup default stable
         rustup component add rustfmt
@@ -842,7 +851,7 @@ if ! $FLG_R && ! $FLG_M; then
     export NVM_DIR="$HOME/.nvm"
     git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
     cd "$NVM_DIR"
-    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+    git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
     \. "$NVM_DIR/nvm.sh"
     cd $WORKING_DIR
 
@@ -1032,9 +1041,9 @@ There are some steps to finish setup.
 
 * for System
 1. import mozc.keymap.txt for using mozc tool.
-2. change terminal color refered to terminal.color.txt (if u don't use a terminator).
+2. change terminal color referred to terminal.color.txt (if u don't use a terminator).
 3. launch Tweak-Tool, change Theme & Font (Noto Sans CJK JP Regular 10pt).
-4. launch Tweak-Tool, set Gnome Extentions (see gnome_extentions.txt).
+4. launch Tweak-Tool, set Gnome Extensions (see gnome_extensions.txt).
 5. setup IME through ibus-daemon for Japanese-input method on X-Forwarding
 
 * for zsh
@@ -1050,7 +1059,7 @@ EOF
 if $FLG_H; then
     cat <<-EOF
 
-reboot, then if you want to connect this VM with EnhancedSession on Hyper-V, don't remenber config below.
+reboot, then if you want to connect this VM with EnhancedSession on Hyper-V, don't remember config below.
 PS C:\> Set-VM -VMName <VMname> -EnhancedSessionTransportType HvSocket
 PS C:\> (Get-VM -VMName <VMname>).EnhancedSessionTransportType
 

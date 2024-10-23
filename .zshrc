@@ -107,7 +107,14 @@ zstyle ':completion:*' format '%B%F{blue}%d%f%b'
 zstyle ':completion:*' group-name ''
 # zstyle ':completion:*' menu select=2
 zstyle ':completion:*:default' menu select=2
-# eval "$(dircolors -b)"
+case ${OSTYPE} in
+    linux*)
+        eval "$(dircolors -b)"
+        ;;
+    darwin*)
+        ;;
+esac
+
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
 zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
@@ -492,7 +499,13 @@ setopt no_beep
 setopt transient_rprompt
 setopt auto_cd
 
+<<<<<<< HEAD
 
+||||||| 87d1a59
+eval "$(direnv hook zsh)"
+
+=======
+>>>>>>> nvim-native-lsp
 # X forwarding Settings
 if [ -n "$SSH_CONNECTION" ] ; then
   export DefaultIMModule=ibus
@@ -518,6 +531,7 @@ if [ -n "$SSH_CONNECTION" ] ; then
 fi
 
 autoload -Uz compinit && compinit
+<<<<<<< HEAD
 
 # macos
 case ${OSTYPE} in
@@ -531,3 +545,18 @@ esac
 # load sheldon plugin scripts here
 eval "$(direnv hook zsh)" # need direnv
 
+||||||| 87d1a59
+=======
+
+# macos
+case ${OSTYPE} in
+  darwin*)
+    eval "$(/opt/homebrew/bin/brew shellenv)" # need homebrew
+    eval "$(limactl completion zsh)" # need limactl
+    export SSH_AUTH_SOCK=$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh # for secretive
+  ;;
+esac
+
+# load sheldon plugin scripts here
+eval "$(direnv hook zsh)" # need direnv
+>>>>>>> nvim-native-lsp

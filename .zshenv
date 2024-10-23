@@ -14,12 +14,18 @@ export path=(${my_dev_dir}/bin(N-/) $path)
 export path=(/opt/local/bin(N-/) $path)
 export path=(~/.local/bin(N-/) $path)
 export path=(/snap/bin(N-/) $path)
+export path=(/opt/homebrew/bin(N-/) $path)
 
 # fzf
 export FZF_ROOT="$HOME/.fzf"
 export path=($FZF_ROOT/bin(N-/) $path)
 # [[ $- == *i* ]] && source "${FZF_ROOT}/shell/completion.zsh" 2> /dev/null
 # source "${FZF_ROOT}/shell/key-bindings.zsh"
+
+# read local config
+if [[ -f "$HOME/.local.config.zsh" ]] then
+    source "$HOME/.local.config.zsh"
+fi
 
 
 # pyenv

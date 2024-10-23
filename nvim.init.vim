@@ -2,7 +2,7 @@ set encoding=utf8
 scriptencoding utf-8
 
 " Set Color Mode
-if (has('termguicolors'))
+if (!has('gui_running') && has('termguicolors') && &term =~# '^\%(screen|tmux\)')
     set termguicolors
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -16,7 +16,7 @@ let g:cache_home = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_
 let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CONFIG_HOME
 
 " Initialization
-set nocompatible
+" set nocompatible
 
 " if !&compatible
 "     map ^[OA ^[ka
@@ -44,12 +44,19 @@ if !isdirectory(s:dein_repo_dir)
 endif
 let &runtimepath = s:dein_repo_dir .','. &runtimepath
 " プラグイン読み込み＆キャッシュ作成
-let s:toml = '~/.config/nvim/dein.toml'
-let s:toml_lazy = '~/.config/nvim/dein_lazy.toml'
+let s:toml = expand('$HOME/.config/nvim/dein.toml')
+let s:toml_lazy = expand('$HOME/.config/nvim/dein_lazy.toml')
 if dein#load_state(s:dein_dir)
     call dein#begin(s:dein_dir)
-    call dein#load_toml(s:toml,{'lazy' : 0})
-    call dein#load_toml(s:toml_lazy,{'lazy' : 1})
+
+    if getftype(s:toml) !=# ''
+        call dein#load_toml(s:toml,{'lazy' : 0})
+    endif
+
+    if getftype(s:toml_lazy) !=# ''
+        call dein#load_toml(s:toml_lazy,{'lazy' : 1})
+    endif
+
     call dein#end()
     " call dein#save_state()
 endif
@@ -60,7 +67,9 @@ if dein#check_install()
 endif
 
 " set colorscheme
-colorscheme onedark
+if getftype(s:toml_lazy) ==# ''
+    colorscheme elflord
+endif
 
 if has('filetype')
     filetype indent plugin on
@@ -183,17 +192,7 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
-" 日本語入力がオンのままでも使えるコマンド(Enterキーは必要)
-nnoremap あ a
-nnoremap い i
-nnoremap う u
-nnoremap お o
-nnoremap っｄ dd
-nnoremap っｙ yy
-" 中身を変更する
-nnoremap し” ci"
-nnoremap し’ ci'
-nnoremap し（ ci(
+
 " jjでエスケープ
 inoremap <silent> jj <ESC>
 " 日本語入力で”っj”と入力してもEnterキーで確定させればインサートモードを抜ける
@@ -222,10 +221,57 @@ augroup MyAutoCmd
     " autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
     autocmd FileType vue syntax sync fromstart
 
+    " auto close quickfix window after press CR
+    autocmd FileType qf nnoremap <buffer> <CR> <CR><Cmd>cclose<CR>
+    " don't close quickfix window with ctrl-j
+    autocmd FileType qf nnoremap <buffer> <C-j> <CR>
+
     " completion settings
     " autocmd BufRead,BufNewFile *.py set completeopt=menuone,preview
     " autocmd BufRead,BufNewFile *.go set completeopt=menuone,preview
 augroup END
+
+" Custom Digraphs
+digraphs j( 65288  " （
+digraphs j) 65289  " ）
+digraphs j[ 12300  " 「
+digraphs j] 12301  " 」
+digraphs j{ 12302  " 『
+digraphs j} 12303  " 』
+digraphs j< 12304  " 【
+digraphs j> 12305  " 】
+
+digraphs j, 12289  " 、
+digraphs j. 12290  " 。
+digraphs j< 65292  " ，
+digraphs j> 65294  " ．
+digraphs j! 65281  " ！
+digraphs j? 65311  " ？
+digraphs j: 65306  " ：
+
+digraphs j0 65296  " ０
+digraphs j1 65297  " １
+digraphs j2 65298  " ２
+digraphs j3 65299  " ３
+digraphs j4 65300  " ４
+digraphs j5 65301  " ５
+digraphs j6 65302  " ６
+digraphs j7 65303  " ７
+digraphs j8 65304  " ８
+digraphs j9 65305  " ９
+
+digraphs j- 12540  " ー〜
+digraphs j~ 12316  " 〜
+digraphs j/ 12539  " ・
+digraphs js 12288  " 　
+digraphs j@ 65312  " ＠
+
+" Customise f-motion for japanese-input
+noremap fj f<C-k>j
+noremap Fj F<C-k>j
+noremap tj t<C-k>j
+noremap Tj T<C-k>j
+digraphs jj 106  " j follow fj command
 
 " Terminal Function
 let g:term_buf = 0
