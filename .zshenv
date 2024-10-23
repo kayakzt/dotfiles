@@ -22,6 +22,11 @@ export path=($FZF_ROOT/bin(N-/) $path)
 # [[ $- == *i* ]] && source "${FZF_ROOT}/shell/completion.zsh" 2> /dev/null
 # source "${FZF_ROOT}/shell/key-bindings.zsh"
 
+# read local config
+if [[ -f "$HOME/.local.config.zsh" ]] then
+    source "$HOME/.local.config.zsh"
+fi
+
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"

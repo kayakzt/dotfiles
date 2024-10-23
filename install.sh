@@ -714,7 +714,8 @@ run ln -snf "$DOT_PATH/fonts.conf" "$CONF_PATH/fontconfig/fonts.conf"
 run ln -snf "$DOT_PATH/nvim.init.vim" "$CONF_PATH/nvim/init.vim"
 run ln -snf "$DOT_PATH/nvim.dein.toml" "$CONF_PATH/nvim/dein.toml"
 run ln -snf "$DOT_PATH/nvim.dein_lazy.toml" "$CONF_PATH/nvim/dein_lazy.toml"
-run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
+run ln -snf "$DOT_PATH/UltiSnips" "$CONF_PATH/nvim/UltiSnips"
+# run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
 run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.yaml"
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
@@ -820,7 +821,7 @@ if ! $FLG_R && ! $FLG_M; then
     export NVM_DIR="$HOME/.nvm"
     git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
     cd "$NVM_DIR"
-    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+    git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
     \. "$NVM_DIR/nvm.sh"
     cd $WORKING_DIR
 
