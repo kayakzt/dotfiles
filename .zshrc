@@ -499,13 +499,6 @@ setopt no_beep
 setopt transient_rprompt
 setopt auto_cd
 
-<<<<<<< HEAD
-
-||||||| 87d1a59
-eval "$(direnv hook zsh)"
-
-=======
->>>>>>> nvim-native-lsp
 # X forwarding Settings
 if [ -n "$SSH_CONNECTION" ] ; then
   export DefaultIMModule=ibus
@@ -531,7 +524,6 @@ if [ -n "$SSH_CONNECTION" ] ; then
 fi
 
 autoload -Uz compinit && compinit
-<<<<<<< HEAD
 
 # macos
 case ${OSTYPE} in
@@ -544,19 +536,3 @@ esac
 
 # load sheldon plugin scripts here
 eval "$(direnv hook zsh)" # need direnv
-
-||||||| 87d1a59
-=======
-
-# macos
-case ${OSTYPE} in
-  darwin*)
-    eval "$(/opt/homebrew/bin/brew shellenv)" # need homebrew
-    eval "$(limactl completion zsh)" # need limactl
-    export SSH_AUTH_SOCK=$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh # for secretive
-  ;;
-esac
-
-# load sheldon plugin scripts here
-eval "$(direnv hook zsh)" # need direnv
->>>>>>> nvim-native-lsp
