@@ -794,7 +794,8 @@ if ! $FLG_R && ! $FLG_M; then
             gunzip rye-aarch64-linux.gz
             mv rye-aarch64-linux "${HOME}/dev/rye"
         fi
-        chmod u+x "${HOME}/dev/rye"
+        chmod u+x "${HOME}/dev/bin/rye"
+        ${HOME}/dev/bin/rye self completion -s zsh > ~/.zfunc/_rye
 
         # install python modules
         pip install --use-deprecated=legacy-resolver \

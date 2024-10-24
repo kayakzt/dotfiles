@@ -39,6 +39,13 @@ fi
 #     source "${VIRTUAL_ENV}/bin/activate"
 # fi
 
+# rye
+if command -v rye 1>/dev/null 2>&1; then
+    if [[ -f "$HOME/.rye/env" ]] then
+        source "$HOME/.rye/env"
+    fi
+fi
+
 # goenv & go
 export GOENV_ROOT=$HOME/.goenv
 export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
