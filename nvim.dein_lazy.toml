@@ -1466,7 +1466,7 @@ EOF
 [[plugins]] # git conflict support plugin
 repo = 'akinsho/git-conflict.nvim'
 rev = "v*"
-on_event = "BufReadPost"
+on_event = "VimEnter"
 hook_post_source = '''
 lua << EOF
 
