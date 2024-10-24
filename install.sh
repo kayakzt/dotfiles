@@ -389,7 +389,7 @@ install_nvim() {
     REPO="https://github.com/neovim/neovim/releases/download/${LATEST}/"
     RELEASE="nvim.appimage"
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
 
     if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         sudo mv ${RELEASE} /usr/local/bin/nvim
@@ -411,7 +411,7 @@ install_sheldon() {
     FILENAME="sheldon-${LATEST}-${ARCH_TYPE}-unknown-linux-musl"
     RELEASE="${FILENAME}.tar.gz"
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
 
     tar -zxvf ${RELEASE}
 
@@ -465,7 +465,7 @@ install_zsh() {
         mkdir $HOME/.local
     fi
 
-    wget "https://sourceforge.net/projects/zsh/files/zsh/5.9/zsh-5.9.tar.xz/download"
+    curl -OL "https://sourceforge.net/projects/zsh/files/zsh/5.9/zsh-5.9.tar.xz/download"
     tar Jxvf download
 
     cd zsh-5.9
@@ -521,7 +521,7 @@ install_gh() {
         RELEASE="gh_${LATEST:1}_linux_arm64.tar.gz"
     fi
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
@@ -545,7 +545,7 @@ install_ghq() {
         RELEASE="ghq_linux_arm64.zip"
     fi
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     unzip ${RELEASE}
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
@@ -564,7 +564,7 @@ install_lsd() {
     REPO="https://github.com/lsd-rs/lsd/releases/download/${LATEST}/"
     RELEASE="lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
     mv lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/lsd $HOME/dev/bin/lsd
@@ -579,7 +579,7 @@ install_dust() {
     REPO="https://github.com/bootandy/dust/releases/download/${LATEST}/"
     RELEASE="dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
     mv dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/dust $HOME/dev/bin/dust
@@ -594,7 +594,7 @@ install_bat() {
     REPO="https://github.com/sharkdp/bat/releases/download/${LATEST}/"
     RELEASE="bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
     mv bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/bat $HOME/dev/bin/bat
@@ -609,7 +609,7 @@ install_delta() {
     REPO="https://github.com/dandavison/delta/releases/download/${LATEST}/"
     RELEASE="delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
     mv delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/delta $HOME/dev/bin/delta
@@ -629,7 +629,7 @@ install_efm-langserver() {
         RELEASE="efm-langserver_${LATEST}_linux_arm64.tar.gz"
     fi
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     tar -zxvf ${RELEASE}
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
@@ -652,7 +652,7 @@ install_treesitter() {
         RELEASE="tree-sitter-linux-arm64.gz"
     fi
 
-    run wget ${REPO}${RELEASE}
+    run curl -OL ${REPO}${RELEASE}
     gunzip -d ${RELEASE}
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
@@ -783,6 +783,18 @@ if ! $FLG_R && ! $FLG_M; then
         curl -sSL https://install.python-poetry.org | python -
         export PATH="$HOME/.local/bin:$PATH"
         poetry completions zsh > ~/.zfunc/_poetry
+
+        # install rye
+        if [ "$ARCH_TYPE" = "x86_64" ]; then
+            run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-x86_64-linux.gz
+            gunzip rye-x86_64-linux.gz
+            mv rye-x86_64-linux "${HOME}/dev/rye"
+        else
+            run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-aarch64-linux.gz
+            gunzip rye-aarch64-linux.gz
+            mv rye-aarch64-linux "${HOME}/dev/rye"
+        fi
+        chmod u+x "${HOME}/dev/rye"
 
         # install python modules
         pip install --use-deprecated=legacy-resolver \
@@ -933,7 +945,7 @@ if ! $FLG_R && ! $FLG_C; then
         REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
         RELEASE="${LATEST}.tar.gz"
 
-        run wget "${REPO}${RELEASE}"
+        run curl -OL "${REPO}${RELEASE}"
         tar -zxvf "${RELEASE}"
 
         "Fluent-icon-theme-${LATEST}/install.sh" --round --dark
@@ -970,7 +982,7 @@ if ! $FLG_R && ! $FLG_C; then
         REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
         RELEASE="PlemolJP_NF_${LATEST}"
 
-        run wget "${REPO}${RELEASE}.zip"
+        run curl -OL "${REPO}${RELEASE}.zip"
         run unzip "${RELEASE}.zip"
 
         run mv "${RELEASE}"/PlemolJPConsole_NF/*.ttf "$HOME/.local/share/fonts"
