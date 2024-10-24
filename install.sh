@@ -653,23 +653,15 @@ install_treesitter() {
     fi
 
     run wget ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+    gunzip -d ${RELEASE}
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
-        run mv tree-sitter-linux-x64/tree-sitter $HOME/dev/bin/tree-sitter
+        run mv tree-sitter-linux-x64 $HOME/dev/bin/tree-sitter
     else
-        run mv tree-sitter-linux-arm64/tree-sitter $HOME/dev/bin/tree-sitter
+        run mv tree-sitter-linux-arm64 $HOME/dev/bin/tree-sitter
     fi
 
     chmod u+x $HOME/dev/bin/tree-sitter
-
-    run rm ${RELEASE}
-
-    if [ "$ARCH_TYPE" = "x86_64" ]; then
-        run rm tree-sitter-linux-x64
-    else
-        run rm tree-sitter-linux-arm64
-    fi
 }
 
 # install tools
