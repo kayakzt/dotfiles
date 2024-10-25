@@ -788,11 +788,11 @@ if ! $FLG_R && ! $FLG_M; then
         if [ "$ARCH_TYPE" = "x86_64" ]; then
             run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-x86_64-linux.gz
             gunzip rye-x86_64-linux.gz
-            mv rye-x86_64-linux "${HOME}/dev/rye"
+            mv rye-x86_64-linux "${HOME}/dev/bin/rye"
         else
             run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-aarch64-linux.gz
             gunzip rye-aarch64-linux.gz
-            mv rye-aarch64-linux "${HOME}/dev/rye"
+            mv rye-aarch64-linux "${HOME}/dev/bin/rye"
         fi
         chmod u+x "${HOME}/dev/bin/rye"
         ${HOME}/dev/bin/rye self completion -s zsh > ~/.zfunc/_rye
