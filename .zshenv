@@ -29,11 +29,11 @@ fi
 
 
 # pyenv
-# export PYENV_ROOT="$HOME/.pyenv"
-# export path=($PYENV_ROOT/bin(N-/) $path)
-# if command -v pyenv 1>/dev/null 2>&1; then
-#     eval "$(pyenv init --path)"
-# fi
+export PYENV_ROOT="$HOME/.pyenv"
+export path=($PYENV_ROOT/bin(N-/) $path)
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init --path)"
+fi
 # export path=($HOME/.poetry/bin(N-/) $path)
 # if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
 #     source "${VIRTUAL_ENV}/bin/activate"
