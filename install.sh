@@ -771,18 +771,18 @@ if ! $FLG_R && ! $FLG_M; then
         fi
 
         # install pyenv
-        git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-        export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init --path)"
-        export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '*3\.11\.[0-9]$' | tail -n -2 | head -n 1 | tr -d ' ')"
-        pyenv install ${python_version}
-        pyenv global ${python_version}
+        # git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+        # export PYENV_ROOT="$HOME/.pyenv"
+        # export PATH="$PYENV_ROOT/bin:$PATH"
+        # eval "$(pyenv init --path)"
+        # export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '*3\.11\.[0-9]$' | tail -n -2 | head -n 1 | tr -d ' ')"
+        # pyenv install ${python_version}
+        # pyenv global ${python_version}
 
         # install poetry
-        curl -sSL https://install.python-poetry.org | python -
-        export PATH="$HOME/.local/bin:$PATH"
-        poetry completions zsh > ~/.zfunc/_poetry
+        # curl -sSL https://install.python-poetry.org | python -
+        # export PATH="$HOME/.local/bin:$PATH"
+        # poetry completions zsh > ~/.zfunc/_poetry
 
         # install rye
         if [ "$ARCH_TYPE" = "x86_64" ]; then
