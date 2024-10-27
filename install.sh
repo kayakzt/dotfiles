@@ -873,33 +873,33 @@ if ! $FLG_R && ! $FLG_M; then
         textlint
 
     # install coc-extensions for neovim
-    mkdir -p "$CONF_PATH/coc/extensions"
-    cd "$CONF_PATH/coc/extensions"
-    if [ ! -f package.json ]
-    then
-        echo '{"dependencies":{}}' > package.json
-    fi
-    npm install --install-strategy=shallow --ignore-scripts \
-        --no-bin-links --no-package-lock --only=prod \
-        coc-json \
-        coc-diagnostic \
-        coc-snippets \
-        coc-neosnippet \
-        coc-sh \
-        coc-pyright \
-        coc-go \
-        coc-rls \
-        coc-tsserver \
-        coc-eslint \
-        coc-prettier \
-        coc-vetur \
-        coc-html \
-        coc-css \
-        coc-markdownlint \
-        coc-yaml \
-        coc-toml \
-        coc-calc
-    cd "$WORKING_DIR"
+    # mkdir -p "$CONF_PATH/coc/extensions"
+    # cd "$CONF_PATH/coc/extensions"
+    # if [ ! -f package.json ]
+    # then
+    #     echo '{"dependencies":{}}' > package.json
+    # fi
+    # npm install --install-strategy=shallow --ignore-scripts \
+    #     --no-bin-links --no-package-lock --only=prod \
+    #     coc-json \
+    #     coc-diagnostic \
+    #     coc-snippets \
+    #     coc-neosnippet \
+    #     coc-sh \
+    #     coc-pyright \
+    #     coc-go \
+    #     coc-rls \
+    #     coc-tsserver \
+    #     coc-eslint \
+    #     coc-prettier \
+    #     coc-vetur \
+    #     coc-html \
+    #     coc-css \
+    #     coc-markdownlint \
+    #     coc-yaml \
+    #     coc-toml \
+    #     coc-calc
+    # cd "$WORKING_DIR"
 
     # install docker
     if $INSTALL_DOCKER; then
