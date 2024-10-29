@@ -258,7 +258,7 @@ EOF
 repo = 'j-hui/fidget.nvim'
 rev = 'v1.*'
 on_event = "BufEnter"
-hook_post_source = '''
+hook_source = '''
 lua << EOF
 
 local fidget = require("fidget")
@@ -492,7 +492,7 @@ repo = 'MunifTanjim/nui.nvim'
 repo = 'jay-babu/mason-null-ls.nvim'
 on_event = "BufEnter"
 depends = ['mason.nvim']
-hook_post_source = '''
+hook_source = '''
 lua << EOF
 
 require("mason-null-ls").setup({
@@ -518,7 +518,7 @@ EOF
 repo = 'nvimtools/none-ls.nvim'
 on_event = "BufEnter"
 depends = ['plenary.nvim', 'mason-null-ls.nvim']
-hook_post_source = '''
+hook_source = '''
 lua << EOF
 
 local null_ls = require("null-ls")
