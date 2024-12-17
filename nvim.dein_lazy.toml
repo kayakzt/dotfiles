@@ -1263,7 +1263,7 @@ vmap gs <Plug>(openbrowser-smart-search)
 [[plugins]] # for the real-time preview for markdown files
 repo = 'iamcco/markdown-preview.nvim'
 on_ft = ['markdown','pandoc.markdown','rmd']
-build = 'sh -c "cd app && yarn install"'
+build = 'sh -c "cd app && npx --yes yarn install"'
 
 [[plugins]] # assist table edit on markdown files
 repo = 'dhruvasagar/vim-table-mode'
