@@ -28,10 +28,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gD', vim.lsp.buf.definition, opts)
+    -- vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '[lsp]D', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', '[lsp]s', vim.lsp.buf.signature_help, opts)
     -- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     -- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     -- end, opts)
     vim.keymap.set('n', '[lsp]t', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '[lsp]r', vim.lsp.buf.rename, opts)
+    -- vim.keymap.set('n', '[lsp]r', vim.lsp.buf.rename, opts)
     -- vim.keymap.set({ 'n', 'v' }, '[lsp]a', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '[lsp]R', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '[lsp]f', function()
@@ -707,7 +707,7 @@ nnoremap [telescope]G :execute 'Telescope live_grep default_text=' . expand('<cw
 nnoremap <silent> [telescope]v :Telescope git_files <CR>
 nnoremap <silent> [telescope]b :Telescope buffers <CR>
 nnoremap <silent> [telescope]j :Telescope jumplist <CR>
-nnoremap <silent> [telescope]t :Telescope filetypes <CR>
+nnoremap <silent> [telescope]T :Telescope filetypes <CR>
 nnoremap <silent> [telescope]y :Telescope registers <CR>
 nnoremap <silent> [telescope]m :Telescope marks <CR>
 nnoremap <silent> [telescope]q :Telescope command_history <CR>
@@ -722,6 +722,8 @@ nnoremap <silent> [telescope]o :Telescope file_browser <CR>
 
 nnoremap <silent> [telescope]s :SessionManager load_current_dir_session<CR>
 nnoremap <silent> [telescope]S :SessionManager load_session<CR>
+
+nnoremap <silent> [telescope]t :TodoTelescope<CR>
 '''
 
 hook_post_source = '''
@@ -1525,12 +1527,15 @@ require("lspsaga").setup({
 })
 
 -- add lspsaga keymaps instead of native lsp functions
+vim.keymap.set('n', 'gd', "<cmd>Lspsaga peek_definition<CR>", opts)
 vim.keymap.set('n', '[lsp]n', "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
 vim.keymap.set('n', '[lsp]p', "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
 vim.keymap.set('n', '[lsp]d', "<cmd>Lspsaga show_buf_diagnostics<CR>", opts)
-vim.keymap.set('n', '[lsp]D', "<cmd>Lspsaga show_workspace_diagnostics<CR>", opts)
+vim.keymap.set('n', '[lsp]wd', "<cmd>Lspsaga show_workspace_diagnostics<CR>", opts)
 vim.keymap.set('n', '[lsp]h', "<cmd>Lspsaga hover_doc<CR>", opts)
 vim.keymap.set('n', '[lsp]a', "<cmd>Lspsaga code_action<CR>", opts)
+vim.keymap.set('n', '[lsp]r', "<cmd>Lspsaga rename<CR>", opts)
+vim.keymap.set('n', '[lsp]F', "<cmd>Lspsaga finder<CR>", opts)
 
 EOF
 
@@ -1538,12 +1543,12 @@ EOF
 
 [[plugins]] # make a bookmarks
 repo = 'tomasky/bookmarks.nvim'
-on_event = "VimEnter"
+on_event = "BufReadPre"
 depends = ['telescope.nvim']
-hook_post_source = '''
+hook_source = '''
 
 nnoremap [bookmark]  <Nop>
-nmap <Leader>b [bookmark]
+nmap <S-b> [bookmark]
 
 lua << EOF
 
@@ -1551,10 +1556,10 @@ require("bookmarks").setup({
   sign_priority = 8,  --set bookmark sign priority to cover other sign
   save_file = vim.fn.expand "$HOME/.config/nvim/bookmarks", -- bookmarks save file path
   keywords =  {
-    ["@t"] = "✅", -- mark annotation startswith @t,signs this icon as `Todo`
-    ["@w"] = "⚠️" , -- mark annotation startswith @w arn,signs this icon as `Warn`
-    ["@f"] = "⛏️", -- mark annotation startswith @f ix,signs this icon as `Fix`
-    ["@n"] = "🗒️" , -- mark annotation startswith @n ote,signs this icon as `Note`
+    ["@t"] = "🔖", -- mark annotation startswith @t,signs this icon as `Todo`
+    ["@w"] = "🚧" , -- mark annotation startswith @w arn,signs this icon as `Warn`
+    ["@f"] = "🧰", -- mark annotation startswith @f ix,signs this icon as `Fix`
+    ["@n"] = "📖" , -- mark annotation startswith @n ote,signs this icon as `Note`
   },
   on_attach = function(bufnr)
     local bm = require "bookmarks"
@@ -1562,10 +1567,10 @@ require("bookmarks").setup({
     map("n","[bookmark]t",bm.bookmark_toggle) -- add or remove bookmark at current line
     map("n","[bookmark]a",bm.bookmark_ann) -- add or edit mark annotation at current line
     map("n","[bookmark]e",bm.bookmark_ann) -- add or edit mark annotation at current line
-    map("n","[bookmark]cl",bm.bookmark_clean) -- clean all marks in local buffer
+    map("n","[bookmark]c",bm.bookmark_clean) -- clean all marks in local buffer
     map("n","[bookmark]n",bm.bookmark_next) -- jump to next mark in local buffer
     map("n","[bookmark]p",bm.bookmark_prev) -- jump to previous mark in local buffer
-    -- map("n","ml",bm.bookmark_list) -- show marked file list in quickfix window
+    map("n","[bookmark]l",bm.bookmark_list) -- show marked file list in quickfix window
   end
 })
 
@@ -1631,6 +1636,7 @@ xmap <Leader>hc <Plug>(quickhl-manual-reset)
 [[plugins]] # highlight todo comments
 repo = 'folke/todo-comments.nvim'
 rev = "v1.*"
+depends = ['plenary.nvim']
 on_event = "VimEnter"
 hook_post_source = '''
 lua << EOF
@@ -1647,6 +1653,14 @@ require("todo-comments").setup({
     test = {  c.purple }
   },
 })
+
+vim.keymap.set("n", "]t", function()
+  require("todo-comments").jump_next()
+end, { desc = "Next todo comment" })
+
+vim.keymap.set("n", "[t", function()
+  require("todo-comments").jump_prev()
+end, { desc = "Previous todo comment" })
 
 EOF
 '''
