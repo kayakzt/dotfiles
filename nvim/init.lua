@@ -1,3 +1,20 @@
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
+
 -- 文字コード設定
 vim.opt.encoding = "utf-8"
 
@@ -21,39 +38,39 @@ vim.g.python_host_skip_check = 1
 vim.api.nvim_create_augroup("MyAutoCmd", { clear = true })
 
 -- dein.vimの設定
-local dein_dir = vim.g.cache_home .. "/dein"
-local dein_repo_dir = dein_dir .. "/repos/github.com/Shougo/dein.vim"
-
-if not vim.loop.fs_stat(dein_repo_dir) then
-  vim.fn.system({ "git", "clone", "https://github.com/Shougo/dein.vim", dein_repo_dir })
-end
-
-vim.opt.runtimepath:prepend(dein_repo_dir)
-
-if vim.fn["dein#load_state"](dein_dir) == 1 then
-  vim.fn["dein#begin"](dein_dir)
-
-  local toml = vim.fn.expand("$HOME/.config/nvim/dein.toml")
-  local toml_lazy = vim.fn.expand("$HOME/.config/nvim/dein_lazy.toml")
-
-  if vim.fn.getftype(toml) ~= "" then
-    vim.fn["dein#load_toml"](toml, { lazy = 0 })
-  end
-
-  if vim.fn.getftype(toml_lazy) ~= "" then
-    vim.fn["dein#load_toml"](toml_lazy, { lazy = 1 })
-  end
-
-  vim.fn["dein#end"]()
-end
-
-if vim.fn["dein#check_install"]() == 1 then
-  vim.fn["dein#install"]()
-end
-
-if vim.fn.getftype(vim.fn.expand("$HOME/.config/nvim/dein_lazy.toml")) == "" then
-  vim.cmd("colorscheme elflord")
-end
+-- local dein_dir = vim.g.cache_home .. "/dein"
+-- local dein_repo_dir = dein_dir .. "/repos/github.com/Shougo/dein.vim"
+--
+-- if not vim.loop.fs_stat(dein_repo_dir) then
+--   vim.fn.system({ "git", "clone", "https://github.com/Shougo/dein.vim", dein_repo_dir })
+-- end
+--
+-- vim.opt.runtimepath:prepend(dein_repo_dir)
+--
+-- if vim.fn["dein#load_state"](dein_dir) == 1 then
+--   vim.fn["dein#begin"](dein_dir)
+--
+--   local toml = vim.fn.expand("$HOME/.config/nvim/dein.toml")
+--   local toml_lazy = vim.fn.expand("$HOME/.config/nvim/dein_lazy.toml")
+--
+--   if vim.fn.getftype(toml) ~= "" then
+--     vim.fn["dein#load_toml"](toml, { lazy = 0 })
+--   end
+--
+--   if vim.fn.getftype(toml_lazy) ~= "" then
+--     vim.fn["dein#load_toml"](toml_lazy, { lazy = 1 })
+--   end
+--
+--   vim.fn["dein#end"]()
+-- end
+--
+-- if vim.fn["dein#check_install"]() == 1 then
+--   vim.fn["dein#install"]()
+-- end
+--
+-- if vim.fn.getftype(vim.fn.expand("$HOME/.config/nvim/dein_lazy.toml")) == "" then
+--   vim.cmd("colorscheme elflord")
+-- end
 
 if vim.fn.has("filetype") == 1 then
   vim.cmd("filetype indent plugin on")
@@ -255,3 +272,16 @@ for _, digraph in ipairs(digraphs) do
   local char, code = digraph[1], digraph[2]
   vim.cmd(string.format("digraphs %s %d", char, code))
 end
+
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    -- import your plugins
+    { import = "plugins" },
+  },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "onedark" } },
+  -- automatically check for plugin updates
+  checker = { enabled = true },
+})

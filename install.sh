@@ -696,6 +696,8 @@ fi
 # neovim setup
 if [ ! -e "$HOME/.config/nvim" ]; then
         run mkdir -p "$HOME/.config/nvim"
+        run mkdir -p "$HOME/.config/nvim/lua"
+        run mkdir -p "$HOME/.config/nvim/lua/plugins"
 fi
 
 if [ ! -e "$HOME/.config/efm-langserver" ]; then
@@ -733,17 +735,18 @@ run ln -snf "$DOT_PATH/tmux.memory" "$HOME/dev/bin/tmux.memory"
 run ln -snf "$DOT_PATH/tmux.loadaverage" "$HOME/dev/bin/tmux.loadaverage"
 run ln -snf "$DOT_PATH/.gitconfig" "$HOME/.gitconfig"
 run ln -snf "$DOT_PATH/fonts.conf" "$CONF_PATH/fontconfig/fonts.conf"
-# run ln -snf "$DOT_PATH/nvim.init.vim" "$CONF_PATH/nvim/init.vim"
-run ln -snf "$DOT_PATH/nvim.init.lua" "$CONF_PATH/nvim/init.lua"
-run ln -snf "$DOT_PATH/nvim.dein.toml" "$CONF_PATH/nvim/dein.toml"
-run ln -snf "$DOT_PATH/nvim.dein_lazy.toml" "$CONF_PATH/nvim/dein_lazy.toml"
-run ln -snf "$DOT_PATH/UltiSnips" "$CONF_PATH/nvim/UltiSnips"
-# run ln -snf "$DOT_PATH/coc-settings.json" "$CONF_PATH/nvim/coc-settings.json"
 run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.yaml"
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
 run ln -snf "$DOT_PATH/alacritty.toml" "$CONF_PATH/alacritty/alacritty.toml"
 run ln -snf "$DOT_PATH/ghostty_config.txt" "$CONF_PATH/ghostty/config"
+
+run ln -snf "$DOT_PATH/nvim/init.lua" "$CONF_PATH/nvim/init.lua"
+run ln -snf "$DOT_PATH/nvim/plugins.lsp.lua" "$CONF_PATH/nvim/lua/plugins/lsp.lua"
+run ln -snf "$DOT_PATH/nvim/plugins.manager.lua" "$CONF_PATH/nvim/lua/plugins/manager.lua"
+run ln -snf "$DOT_PATH/nvim/plugins.ui.lua" "$CONF_PATH/nvim/lua/plugins/ui.lua"
+run ln -snf "$DOT_PATH/nvim/plugins.util.lua" "$CONF_PATH/nvim/lua/plugins/util.lua"
+run ln -snf "$DOT_PATH/UltiSnips" "$CONF_PATH/nvim/UltiSnips"
 
 
 #
