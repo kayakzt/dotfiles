@@ -742,6 +742,7 @@ run ln -snf "$DOT_PATH/efm-langserver.yaml" "$CONF_PATH/efm-langserver/config.ya
 run ln -snf "$DOT_PATH/.editorconfig" "$HOME/.editorconfig"
 run ln -snf "$DOT_PATH/terminator_config" "$CONF_PATH/terminator/config"
 run ln -snf "$DOT_PATH/alacritty.toml" "$CONF_PATH/alacritty/alacritty.toml"
+run ln -snf "$DOT_PATH/ghostty_config.txt" "$CONF_PATH/ghostty/config"
 
 
 #
