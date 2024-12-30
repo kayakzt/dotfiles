@@ -15,62 +15,27 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- 文字コード設定
+-- Setting Character Code
 vim.opt.encoding = "utf-8"
 
--- カラーモード設定
+-- Color mode configuration
 if not vim.fn.has("gui_running") and vim.fn.has("termguicolors") and vim.opt.term:match("screen|tmux") then
   vim.opt.termguicolors = true
   vim.opt.t_8f = "\x1b[38;2;%lu;%lu;%lum"
   vim.opt.t_8b = "\x1b[48;2;%lu;%lu;%lum"
 end
 
--- leaderキーの設定
+-- Leader key setting
 vim.g.mapleader = " "
 
--- XDGディレクトリ設定
+-- XDG Directory setting
 vim.g.cache_home = vim.env.XDG_CACHE_HOME or vim.fn.expand("~/.cache")
 vim.g.config_home = vim.env.XDG_CONFIG_HOME or vim.fn.expand("~/.config")
 
 vim.g.python_host_skip_check = 1
 
--- augroup設定をリセット
+-- reset MyAutoCmd augroup
 vim.api.nvim_create_augroup("MyAutoCmd", { clear = true })
-
--- dein.vimの設定
--- local dein_dir = vim.g.cache_home .. "/dein"
--- local dein_repo_dir = dein_dir .. "/repos/github.com/Shougo/dein.vim"
---
--- if not vim.loop.fs_stat(dein_repo_dir) then
---   vim.fn.system({ "git", "clone", "https://github.com/Shougo/dein.vim", dein_repo_dir })
--- end
---
--- vim.opt.runtimepath:prepend(dein_repo_dir)
---
--- if vim.fn["dein#load_state"](dein_dir) == 1 then
---   vim.fn["dein#begin"](dein_dir)
---
---   local toml = vim.fn.expand("$HOME/.config/nvim/dein.toml")
---   local toml_lazy = vim.fn.expand("$HOME/.config/nvim/dein_lazy.toml")
---
---   if vim.fn.getftype(toml) ~= "" then
---     vim.fn["dein#load_toml"](toml, { lazy = 0 })
---   end
---
---   if vim.fn.getftype(toml_lazy) ~= "" then
---     vim.fn["dein#load_toml"](toml_lazy, { lazy = 1 })
---   end
---
---   vim.fn["dein#end"]()
--- end
---
--- if vim.fn["dein#check_install"]() == 1 then
---   vim.fn["dein#install"]()
--- end
---
--- if vim.fn.getftype(vim.fn.expand("$HOME/.config/nvim/dein_lazy.toml")) == "" then
---   vim.cmd("colorscheme elflord")
--- end
 
 if vim.fn.has("filetype") == 1 then
   vim.cmd("filetype indent plugin on")
@@ -124,7 +89,7 @@ vim.api.nvim_create_user_command("NoteCreate", function()
   end
 end, { nargs = 0 })
 
--- Neovim 表示設定
+-- Neovim Display Setting
 local ui_options = {
   number = true,
   cursorline = true,
@@ -139,7 +104,7 @@ local ui_options = {
   },
 }
 
--- カーソル、バッファ、検索、タブ/インデント設定
+-- Config for Cursor, Buffer, Search, Tab/Indent
 local editing_options = {
   whichwrap = "b,s,h,l,<,>,[,]",
   scrolloff = 8,
@@ -158,12 +123,12 @@ local editing_options = {
   smartindent = true,
 }
 
--- クリップボードとOS連携
+-- System integrations
 local system_integration = {
   mouse = "a",
 }
 
--- 設定の適用
+-- Applying configurations
 for k, v in pairs(ui_options) do
   vim.opt[k] = v
 end
@@ -175,9 +140,8 @@ end
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.mouse = system_integration.mouse
 
--- カスタムキー設定
+-- Custom keymap configs
 local keymaps = {
-  -- ノーマルモード
   n = {
     { "Q", "gq" },
     { "ZZ", "<Nop>" },
@@ -187,7 +151,6 @@ local keymaps = {
     { "gp", ":bp<CR>" },
     { "gs", ":vertical wincmd f<CR>" },
   },
-  -- 挿入モード
   i = {
     { "<C-j>", "<Down>" },
     { "<C-k>", "<Up>" },
@@ -196,20 +159,20 @@ local keymaps = {
   },
 }
 
--- キーマップの適用
+-- Applying key configs
 for mode, mappings in pairs(keymaps) do
   for _, map in ipairs(mappings) do
     vim.keymap.set(mode, map[1], map[2])
   end
 end
 
--- 検索とgrep設定
+-- Search and grep configurations
 if vim.fn.executable("rg") == 1 then
   vim.opt.grepprg = "rg --vimgrep --no-heading"
   vim.opt.grepformat = "%f:%l:%c:%m,%f:%l:%m"
 end
 
--- MyAutoCmd (自動コマンド)
+-- MyAutoCmd configs
 local my_auto_cmd = vim.api.nvim_create_augroup("MyAutoCmd", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -275,6 +238,11 @@ end
 
 -- Setup lazy.nvim
 require("lazy").setup({
+  defaults = {
+    -- Set this to `true` to have all your plugins lazy-loaded by default.
+    -- Only do this if you know what you are doing, as it can lead to unexpected behavior.
+    lazy = true, -- should plugins be lazy-loaded?
+  },
   spec = {
     -- import your plugins
     { import = "plugins" },

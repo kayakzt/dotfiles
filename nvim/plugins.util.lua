@@ -118,7 +118,6 @@ return {
   },
   {
     "Shougo/context_filetype.vim",
-    event = "BufEnter",
   },
   {
     "osyo-manga/vim-precious",
@@ -156,6 +155,7 @@ return {
 
   {
     "mattn/gist-vim",
+    event = "BufEnter",
     cmd = "Gist",
     dependencies = { "mattn/webapi-vim" },
   },
@@ -201,6 +201,7 @@ return {
   -- Binary file support
   {
     "Shougo/vinarise.vim",
+    event = "VimEnter",
     cmd = "Vinarise",
     config = function()
       vim.g.vinarise_enable_auto_detect = 1
@@ -221,6 +222,7 @@ return {
   -- Markdown preview
   {
     "iamcco/markdown-preview.nvim",
+    event = "BufReadPost",
     ft = { "markdown", "pandoc.markdown", "rmd" },
     build = "cd app && npx --yes yarn install",
   },
@@ -228,8 +230,8 @@ return {
   -- Table mode for Markdown
   {
     "dhruvasagar/vim-table-mode",
-    ft = { "markdown", "pandoc.markdown", "rmd" },
     event = "BufReadPost",
+    ft = { "markdown", "pandoc.markdown", "rmd" },
   },
 
   -- Session manager
@@ -408,24 +410,6 @@ return {
         },
       })
       vim.api.nvim_set_keymap("n", "[telescope]h", ":Outline<CR>", { noremap = true, silent = true })
-    end,
-  },
-  {
-    "akinsho/bufferline.nvim",
-    version = "v4.*",
-    event = "VimEnter",
-    dependencies = { "nvim-web-devicons" },
-    config = function()
-      require("bufferline").setup({
-        options = {
-          style_preset = require("bufferline").style_preset.minimal,
-          diagnostics = "nvim_lsp",
-          diagnostics_indicator = function(count, level)
-            local icons = { error = " ", warn = " ", info = " ", hint = " " }
-            return " " .. (icons[level] or " ") .. count
-          end,
-        },
-      })
     end,
   },
   {

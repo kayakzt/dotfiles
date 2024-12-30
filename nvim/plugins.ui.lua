@@ -2,6 +2,7 @@ return {
   -- Onedark.nvim
   {
     "navarasu/onedark.nvim",
+    lazy = false,
     config = function()
       local onedark = require("onedark")
 
@@ -21,6 +22,14 @@ return {
       onedark.load()
       -- vim.api.nvim_set_hl(0, "NonText", { ctermfg = 238, ctermbg = nil, guifg = "#444444", guibg = nil })
     end,
+  },
+
+  {
+    "nvim-lua/plenary.nvim",
+  },
+
+  {
+    "MunifTanjim/nui.nvim",
   },
 
   -- Fidget.nvim
@@ -255,23 +264,8 @@ return {
     build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
   },
   {
-    "nvim-telescope/telescope-file-browser.nvim",
-  },
-  {
-    "nvim-telescope/telescope-symbols.nvim",
-  },
-  {
-    "tami5/sqlite.lua",
-  },
-  {
     "nvim-telescope/telescope-frecency.nvim",
     dependencies = { "tami5/sqlite.lua" },
-  },
-  {
-    "fhill2/telescope-ultisnips.nvim",
-  },
-  {
-    "nvim-telescope/telescope-ui-select.nvim",
   },
 
   -- Telescope.nvim
@@ -592,6 +586,51 @@ return {
       vim.keymap.set("n", "[telescope]S", ":SessionManager load_session<CR>", { noremap = true, silent = true })
 
       vim.keymap.set("n", "[telescope]t", ":TodoTelescope<CR>", { noremap = true, silent = true })
+    end,
+  },
+  {
+    "akinsho/bufferline.nvim",
+    version = "v4.*",
+    event = "VimEnter",
+    dependencies = { "nvim-web-devicons" },
+    config = function()
+      require("bufferline").setup({
+        options = {
+          style_preset = require("bufferline").style_preset.minimal,
+          diagnostics = "nvim_lsp",
+          diagnostics_indicator = function(count, level)
+            local icons = { error = " ", warn = " ", info = " ", hint = " " }
+            return " " .. (icons[level] or " ") .. count
+          end,
+        },
+      })
+    end,
+  },
+  {
+    "nvimdev/lspsaga.nvim",
+    event = "BufReadPost",
+    dependencies = { "nvim-treesitter", "nvim-web-devicons" },
+    config = function()
+      require("lspsaga").setup({
+        symbol_in_winbar = {
+          enable = false,
+          show_server_name = false,
+          show_file = false,
+        },
+        finder = { enable = false },
+        code_action = { extend_gitsigns = true },
+        lightbulb = { enable = false },
+      })
+      local opts = { noremap = true, silent = true }
+      vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts)
+      vim.keymap.set("n", "[lsp]n", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+      vim.keymap.set("n", "[lsp]p", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+      vim.keymap.set("n", "[lsp]d", "<cmd>Lspsaga show_buf_diagnostics<CR>", opts)
+      vim.keymap.set("n", "[lsp]wd", "<cmd>Lspsaga show_workspace_diagnostics<CR>", opts)
+      vim.keymap.set("n", "gh", "<cmd>Lspsaga hover_doc<CR>", opts)
+      vim.keymap.set("n", "[lsp]a", "<cmd>Lspsaga code_action<CR>", opts)
+      vim.keymap.set("n", "[lsp]r", "<cmd>Lspsaga rename<CR>", opts)
+      vim.keymap.set("n", "[lsp]F", "<cmd>Lspsaga finder<CR>", opts)
     end,
   },
 }
