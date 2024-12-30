@@ -116,14 +116,14 @@ return {
       vim.api.nvim_set_keymap("x", "<Leader>r", ":<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>", { noremap = true })
     end,
   },
-  {
-    "Shougo/context_filetype.vim",
-  },
-  {
-    "osyo-manga/vim-precious",
-    event = "BufEnter",
-    dependencies = { "Shougo/context_filetype.vim" },
-  },
+  -- {
+  --   "Shougo/context_filetype.vim",
+  -- },
+  -- {
+  --   "osyo-manga/vim-precious",
+  --   event = "BufEnter",
+  --   dependencies = { "Shougo/context_filetype.vim" },
+  -- },
   {
     "tpope/vim-surround",
     event = "BufReadPost",

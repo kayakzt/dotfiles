@@ -145,14 +145,15 @@ return {
   },
 
   -- Mason & LSP Integration
+  -- {
+  --   "williamboman/mason-lspconfig.nvim",
+  --   event = "VimEnter",
+  --   dependencies = {"hrsh7th/cmp-nvim-lsp" },
+  -- },
   {
     "williamboman/mason.nvim",
-    dependencies = { "neovim/nvim-lspconfig" },
-  },
-  {
-    "williamboman/mason-lspconfig.nvim",
     event = "BufReadPre",
-    dependencies = { "williamboman/mason.nvim", "hrsh7th/cmp-nvim-lsp" },
+    dependencies = { "williamboman/mason-lspconfig.nvim", "neovim/nvim-lspconfig", "hrsh7th/cmp-nvim-lsp" },
     config = function()
       local mason = require("mason")
       local mason_lspconfig = require("mason-lspconfig")
@@ -170,6 +171,7 @@ return {
         "rust_analyzer",
         "taplo",
         "typos_lsp",
+        "lua_ls",
       }
 
       mason.setup({
@@ -207,6 +209,39 @@ return {
               diagnosticSeverity = "Information", -- change warning level
             },
           })
+          lspconfig.lua_ls.setup({
+            on_init = function(client)
+              if client.workspace_folders then
+                local path = client.workspace_folders[1].name
+                if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+                  return
+                end
+              end
+
+              client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+                runtime = {
+                  -- Tell the language server which version of Lua you're using
+                  -- (most likely LuaJIT in the case of Neovim)
+                  version = "LuaJIT",
+                },
+                -- Make the server aware of Neovim runtime files
+                workspace = {
+                  checkThirdParty = false,
+                  library = {
+                    vim.env.VIMRUNTIME,
+                    -- Depending on the usage, you might want to add additional paths here.
+                    -- "${3rd}/luv/library"
+                    -- "${3rd}/busted/library",
+                  },
+                  -- or pull in all of 'runtimepath'. NOTE: this is a lot slower and will cause issues when working on your own configuration (see https://github.com/neovim/nvim-lspconfig/issues/3189)
+                  -- library = vim.api.nvim_get_runtime_file("", true)
+                },
+              })
+            end,
+            settings = {
+              Lua = {},
+            },
+          })
         end,
       })
     end,
@@ -214,7 +249,7 @@ return {
 
   {
     "jay-babu/mason-null-ls.nvim",
-    event = "BufReadPre",
+    event = "VimEnter",
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-null-ls").setup({
@@ -237,13 +272,13 @@ return {
 
   {
     "nvimtools/none-ls.nvim",
-    event = "BufReadPre",
+    event = "BufWritePre",
     dependencies = { "nvim-lua/plenary.nvim", "jay-babu/mason-null-ls.nvim" },
     config = function()
       local null_ls = require("null-ls")
       local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
-      local disabled_format_clients = { "lua_ls", "volar", "tsserver" }
+      -- local disabled_format_clients = { "lua_ls", "volar", "tsserver" }
 
       local on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
@@ -298,7 +333,9 @@ return {
           null_ls.builtins.formatting.prettier.with({
             filetypes = { "vue", "css", "scss", "less", "html", "yaml", "graphql", "handlebars" },
           }),
-          null_ls.builtins.formatting.stylua,
+          null_ls.builtins.formatting.stylua.with({
+            filetypes = { "lua" },
+          }),
           null_ls.builtins.formatting.textlint.with({
             condition = function(utils)
               return utils.root_has_file({ ".textlintrc" })
