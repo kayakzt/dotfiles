@@ -49,6 +49,7 @@ export ENHANCD_ARG_SINGLE_DOT="ls"
 export EMOJI_CLI_KEYBIND="^oe"
 export EMOJI_CLI_FILTER="fzf:peco"
 export EMOJI_CLI_USE_EMOJI=0
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
 
 # load sheldon source
 cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}
