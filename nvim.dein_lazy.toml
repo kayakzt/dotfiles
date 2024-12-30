@@ -553,7 +553,13 @@ null_ls.setup({
         null_ls.builtins.completion.spell.with({
             filetypes = {"text", "markdown", "tex", "latex"},
         }),
-        null_ls.builtins.code_actions.gitsigns,
+        null_ls.builtins.code_actions.gitsigns.with({
+            config = {
+                filter_actions = function(title)
+                    return title:lower():match("blame") == nil -- filter out blame actions
+                end,
+            },
+        }),
         null_ls.builtins.code_actions.gomodifytags,
         null_ls.builtins.code_actions.impl,
         -- null_ls.builtins.diagnostics.editorconfig_checker,
