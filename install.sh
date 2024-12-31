@@ -725,6 +725,10 @@ if [ ! -e "$CONF_PATH/alacritty" ]; then
         git clone https://github.com/alacritty/alacritty-theme $CONF_PATH/alacritty/themes
 fi
 
+if [ ! -e "$CONF_PATH/ghostty" ]; then
+        run mkdir "$CONF_PATH/ghostty"
+fi
+
 # set symbolic link
 run ln -snf "$DOT_PATH/.zshenv" "$HOME/.zshenv"
 run ln -snf "$DOT_PATH/.zshrc" "$HOME/.zshrc"
