@@ -746,7 +746,6 @@ run ln -snf "$DOT_PATH/alacritty.toml" "$CONF_PATH/alacritty/alacritty.toml"
 run ln -snf "$DOT_PATH/ghostty_config.txt" "$CONF_PATH/ghostty/config"
 
 run ln -snf "$DOT_PATH/nvim/init.lua" "$CONF_PATH/nvim/init.lua"
-run ln -snf "$DOT_PATH/nvim/plugins.lsp.lua" "$CONF_PATH/nvim/lua/plugins/lsp.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.manager.lua" "$CONF_PATH/nvim/lua/plugins/manager.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.ui.lua" "$CONF_PATH/nvim/lua/plugins/ui.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.util.lua" "$CONF_PATH/nvim/lua/plugins/util.lua"
