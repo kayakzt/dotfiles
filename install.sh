@@ -500,7 +500,12 @@ install_rg() {
     # from https://gist.github.com/niftylettuce/a9f0a293289eb7274516bf2cb0455796
     REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
     RG_LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
-    RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-${ARCH_TYPE}-unknown-linux-musl.tar.gz"
+    if [ "$ARCH_TYPE" = "x86_64" ]; then
+        RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-${ARCH_TYPE}-unknown-linux-musl.tar.gz"
+    else
+        RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
+    fi
+
 
     TMPDIR=$(mktemp -d)
     cd $TMPDIR
