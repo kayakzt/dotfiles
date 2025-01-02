@@ -69,7 +69,7 @@ detect_os() {
     if [ -e /etc/debian_version ] || [ -e /etc/debian_release ]; then
         if [ -e /etc/lsb-release ]; then
             OSNAME="ubuntu"
-            UBUNTU_VERSION=$(cat /etc/lsb-release | grep DISTRIB_CODENAME | cut -d "=" -f 2)
+            UBUNTU_VERSION=$(cat /etc/lsb-release | grep DISTRIB_RELEASE | cut -d "=" -f 2)
         else
             OSNAME="debian"
         fi
@@ -334,11 +334,9 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         flex \
         libssl-dev \
         libreadline-dev \
-        libappindicator1 \
         libffi-dev \
         libbz2-dev \
         libsqlite3-dev \
-        libfuse2 \
         zlib1g-dev \
         unzip \
         wget \
@@ -352,6 +350,15 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         exuberant-ctags \
         direnv \
         zsh \
+
+        # detect major version of ubuntu
+        UBUNTU_VERSION_MAJOR=$(echo "$UBUNTU_VERSION" | cut -d "." -f 1)
+
+        # if UBUNTU_VERSION_MAJOR is after 24.04
+        if [ "$UBUNTU_VERSION_MAJOR" -ge 24 ]; then
+        echo "$password" | sudo -S echo ""
+        sudo apt install libfuse2t64
+        fi
 
 elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
     sudo yum install -y wget \
