@@ -48,11 +48,12 @@ return {
 
   {
     "SirVer/ultisnips",
+    event = "InsertEnter",
     config = function()
       -- Set UltiSnips triggers
-      -- vim.g.UltiSnipsExpandTrigger = "<C-e>"
-      -- vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
-      -- vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
+      vim.g.UltiSnipsExpandTrigger = "<C-e>"
+      vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
+      vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
 
       vim.g.UltiSnipsEditSplit = "vertical"
       vim.g.UltiSnipsSnippetDirectories = { os.getenv("HOME") .. "/.config/nvim/UltiSnips" }
