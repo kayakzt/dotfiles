@@ -1,1 +1,5 @@
+export ANTHROPIC_API_KEY=
+export GEMINI_API_KEY=
+export PERPLEXITY_API_KEY=
 export OPENAI_API_KEY=
+export GITHUB_TOKEN=

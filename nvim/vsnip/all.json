@@ -1,0 +1,14 @@
+{
+  "business_mail": {
+    "prefix": "business_mail",
+    "description": "mail template for business",
+    "body": [
+      "To: $1",
+      "",
+      "Hello, I'm $2",
+      "$3",
+      "",
+      "Best regards,"
+    ]
+  }
+}

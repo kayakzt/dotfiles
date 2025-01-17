@@ -240,7 +240,7 @@ return {
     event = "VimEnter",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      local Path = require("plenary.path")
+      -- local Path = require("plenary.path")
       require("session_manager").setup({
         autoload_mode = require("session_manager.config").AutoloadMode.Disabled,
         autosave_last_session = true,
@@ -443,15 +443,56 @@ return {
       vim.keymap.set("n", "[t", require("todo-comments").jump_prev, { desc = "Previous todo comment" })
     end,
   },
+  -- {
+  --   "jackMort/ChatGPT.nvim",
+  --   dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim", "MunifTanjim/nui.nvim" },
+  --   event = "VimEnter",
+  --   config = function()
+  --     require("chatgpt").setup({
+  --       openai_params = {
+  --         model = "gpt-3.5-turbo",
+  --         max_tokens = 350,
+  --       },
+  --     })
+  --   end,
+  -- },
   {
-    "jackMort/ChatGPT.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim", "MunifTanjim/nui.nvim" },
+    "frankroeder/parrot.nvim",
+    dependencies = { "ibhagwan/fzf-lua", "nvim-lua/plenary.nvim" },
     event = "VimEnter",
     config = function()
-      require("chatgpt").setup({
-        openai_params = {
-          model = "gpt-3.5-turbo",
-          max_tokens = 350,
+      require("parrot").setup({
+        -- Providers must be explicitly added to make them available.
+        providers = {
+          anthropic = {
+            api_key = os.getenv("ANTHROPIC_API_KEY"),
+          },
+          gemini = {
+            api_key = os.getenv("GEMINI_API_KEY"),
+          },
+          -- groq = {
+          --   api_key = os.getenv("GROQ_API_KEY"),
+          -- },
+          -- mistral = {
+          --   api_key = os.getenv("MISTRAL_API_KEY"),
+          -- },
+          pplx = {
+            api_key = os.getenv("PERPLEXITY_API_KEY"),
+          },
+          -- provide an empty list to make provider available (no API key required)
+          -- ollama = {},
+          openai = {
+            api_key = os.getenv("OPENAI_API_KEY"),
+          },
+          github = {
+            api_key = os.getenv("GITHUB_TOKEN"),
+          },
+          -- nvidia = {
+          --   api_key = os.getenv("NVIDIA_API_KEY"),
+          -- },
+          -- xai = {
+          --   api_key = os.getenv("XAI_API_KEY"),
+          -- },
         },
       })
     end,

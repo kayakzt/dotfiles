@@ -1,0 +1,120 @@
+{
+  "func": {
+    "prefix": "func",
+    "description": "func () (){...}",
+    "body": [
+      "func $1($2) ${3:error}{",
+      "    $4",
+      "\\}"
+    ]
+  },
+  "struct": {
+    "prefix": "struct",
+    "description": "type struct...",
+    "body": [
+      "type $1 struct {",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "iferr": {
+    "prefix": "iferr",
+    "description": "if err != nil {...}",
+    "body": [
+      "if err != nil {",
+      "    $1",
+      "\\}"
+    ]
+  },
+  "ifok": {
+    "prefix": "ifok",
+    "description": "if !ok {...}",
+    "body": [
+      "if !ok {",
+      "    $1",
+      "\\}"
+    ]
+  },
+  "forcstyle": {
+    "prefix": "forcstyle",
+    "description": "C style for loop",
+    "body": [
+      "for i := 0; i < $1; i++ {",
+      "    $2",
+      "\\}"
+    ]
+  },
+  "switch": {
+    "prefix": "switch",
+    "description": "switch {case:... default:...}",
+    "body": [
+      "switch ${1:condition} {",
+      "case $2:$3",
+      "default:$0",
+      "\\}"
+    ]
+  },
+  "testFunc": {
+    "prefix": "testFunc",
+    "description": "function template for testing",
+    "body": [
+      "func Test$1(t *testing.T) {",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "tableTest": {
+    "prefix": "tableTest",
+    "description": "templage block for table testing",
+    "body": [
+      "cases := []struct {",
+      "    in   $1",
+      "    want $2",
+      "\\}{",
+      "    $3",
+      "\\}",
+      "for _, c := range cases {",
+      "    got := $4",
+      "    if got != c.want {",
+      "        t.Errorf(\"func(%q) = %q, want %q\", c.in, got, c.want)",
+      "    \\}",
+      "\\}"
+    ]
+  },
+  "testSub": {
+    "prefix": "testSub",
+    "description": "function template for sub testing",
+    "body": [
+      "func Test$1(t *testing.T) {",
+      "    t.Run(\"$2\", func(t *testing.T) {",
+      "\t\t$0",
+      "    \\})",
+      "\\}"
+    ]
+  },
+  "benchFunc": {
+    "prefix": "benchFunc",
+    "description": "function template for benchmarking",
+    "body": [
+      "func Benchmark$1(b *testing.B) {",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "benchSub": {
+    "prefix": "benchSub",
+    "description": "function template for sub benchmarking",
+    "body": [
+      "func Benchmark$1(b *testing.B) {",
+      "    b.Run(\"$2\", func(b *testing.B) {",
+      "        b.ReportAllocs()",
+      "        b.ResetTimer()",
+      "        for i := 0; i < b.N; i++ {",
+      "            ${3:#:// do something...}",
+      "        \\}",
+      "        b.StopTimer()",
+      "    \\})",
+      "\\}"
+    ]
+  }
+}

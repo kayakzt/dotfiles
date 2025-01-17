@@ -46,23 +46,37 @@ return {
     end,
   },
 
+  -- {
+  --   "SirVer/ultisnips",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     -- Set UltiSnips triggers
+  --     vim.g.UltiSnipsExpandTrigger = "<C-e>"
+  --     vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
+  --     vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
+  --
+  --     vim.g.UltiSnipsEditSplit = "vertical"
+  --     vim.g.UltiSnipsSnippetDirectories = { os.getenv("HOME") .. "/.config/nvim/UltiSnips" }
+  --     vim.g.ultisnips_python_style = "google"
+  --   end,
+  -- },
+  -- {
+  --   "honza/vim-snippets",
+  --   dependencies = { "SirVer/ultisnips" },
+  -- },
   {
-    "SirVer/ultisnips",
-    event = "InsertEnter",
+    "hrsh7th/vim-vsnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
     config = function()
-      -- Set UltiSnips triggers
-      vim.g.UltiSnipsExpandTrigger = "<C-e>"
-      vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
-      vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
+      vim.g.vsnip_snippet_dir = vim.fn.expand(os.getenv("HOME") .. "/.config/nvim/vsnip")
+      vim.keymap.set("i", "<C-e>", function()
+        return vim.fn["vsnip#available"](1) == 1 and "<Plug>(vsnip-expand-or-jump)" or "<C-e>"
+      end, { expr = true })
 
-      vim.g.UltiSnipsEditSplit = "vertical"
-      vim.g.UltiSnipsSnippetDirectories = { os.getenv("HOME") .. "/.config/nvim/UltiSnips" }
-      vim.g.ultisnips_python_style = "google"
+      vim.keymap.set("s", "<C-e>", function()
+        return vim.fn["vsnip#available"](1) == 1 and "<Plug>(vsnip-expand-or-jump)" or "<C-e>"
+      end, { expr = true })
     end,
-  },
-  {
-    "honza/vim-snippets",
-    dependencies = { "SirVer/ultisnips" },
   },
 
   -- Completion Plugins
@@ -70,36 +84,42 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-cmdline",
       "hrsh7th/cmp-calc",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-git",
-      "quangnguyen30192/cmp-nvim-ultisnips",
+      -- "quangnguyen30192/cmp-nvim-ultisnips",
+      "hrsh7th/vim-vsnip",
+      "hrsh7th/cmp-vsnip",
     },
     config = function()
       local cmp = require("cmp")
-      local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+      -- local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
       cmp.setup({
         snippet = {
           expand = function(args)
-            vim.fn["UltiSnips#Anon"](args.body) -- for ultisnips users.
+            vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+            -- vim.fn["UltiSnips#Anon"](args.body) -- for ultisnips users.
+            -- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
           end,
         },
         mapping = cmp.mapping.preset.insert({
           ["<Tab>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
           ["<S-Tab>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-e>"] = cmp.mapping(function(fallback)
-            cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-          end, {
-            "i",
-            "s", --[[ "c" (to enable the mapping in command mode) ]]
-          }),
+          -- ["<C-e>"] = cmp.mapping(function(fallback)
+          --   cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+          -- end, {
+          --   "i",
+          --   "s", --[[ "c" (to enable the mapping in command mode) ]]
+          -- }),
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
@@ -108,7 +128,8 @@ return {
           { name = "git" },
           { name = "path" },
           { name = "calc" },
-          { name = "ultisnips" },
+          -- { name = "ultisnips" },
+          { name = "vsnip" },
         }),
       })
 
@@ -141,11 +162,11 @@ return {
       require("cmp_git").setup()
     end,
   },
+
+  -- Mason & LSP Integration
   {
     "hrsh7th/cmp-nvim-lsp",
   },
-
-  -- Mason & LSP Integration
   -- {
   --   "williamboman/mason-lspconfig.nvim",
   --   event = "VimEnter",
@@ -153,7 +174,7 @@ return {
   -- },
   {
     "williamboman/mason.nvim",
-    event = "BufReadPre",
+    -- event = "VimEnter",
     dependencies = { "williamboman/mason-lspconfig.nvim", "neovim/nvim-lspconfig", "hrsh7th/cmp-nvim-lsp" },
     config = function()
       local mason = require("mason")
@@ -250,7 +271,7 @@ return {
 
   {
     "jay-babu/mason-null-ls.nvim",
-    event = "VimEnter",
+    event = "BufReadPre",
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-null-ls").setup({
@@ -273,7 +294,7 @@ return {
 
   {
     "nvimtools/none-ls.nvim",
-    event = "BufWritePre",
+    event = "BufReadPost",
     dependencies = { "nvim-lua/plenary.nvim", "jay-babu/mason-null-ls.nvim" },
     config = function()
       local null_ls = require("null-ls")

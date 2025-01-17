@@ -761,7 +761,7 @@ run ln -snf "$DOT_PATH/nvim/init.lua" "$CONF_PATH/nvim/init.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.manager.lua" "$CONF_PATH/nvim/lua/plugins/manager.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.ui.lua" "$CONF_PATH/nvim/lua/plugins/ui.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.util.lua" "$CONF_PATH/nvim/lua/plugins/util.lua"
-run ln -snf "$DOT_PATH/UltiSnips" "$CONF_PATH/nvim/UltiSnips"
+run ln -snf "$DOT_PATH/nvim/vsnip" "$CONF_PATH/nvim/vsnip"
 
 
 #

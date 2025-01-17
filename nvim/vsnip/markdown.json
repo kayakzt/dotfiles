@@ -1,0 +1,36 @@
+{
+  "link": {
+    "prefix": "link",
+    "description": "Snippet for Hyperlink",
+    "body": "[${1:text}](${2:url})$0"
+  },
+  "image": {
+    "prefix": "image",
+    "description": "Image block",
+    "body": "![${1:text}](${2:url} ${3:\"title\"})$0"
+  },
+  "code": {
+    "prefix": "code",
+    "description": "Code block",
+    "body": [
+      "''' ${1:bash}",
+      "$0",
+      "'''"
+    ]
+  },
+  "business_daily": {
+    "prefix": "business_daily",
+    "description": "daily memo template for business",
+    "body": [
+      "# Working Time",
+      "$1",
+      "",
+      "# Reminder",
+      "- $2",
+      "",
+      "# Today's Task",
+      "- $3",
+      ""
+    ]
+  }
+}
