@@ -47,7 +47,7 @@ export ENHANCD_COMMAND="cd"
 export ENHANCD_ARG_DOUBLE_DOT="up"
 export ENHANCD_ARG_SINGLE_DOT="ls"
 export EMOJI_CLI_KEYBIND="^oe"
-export EMOJI_CLI_FILTER="fzf:peco"
+export EMOJI_CLI_FILTER="fzf"
 export EMOJI_CLI_USE_EMOJI=0
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
 
