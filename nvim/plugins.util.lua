@@ -501,4 +501,15 @@ return {
     "dstein64/vim-startuptime",
     event = "VimEnter",
   },
+  {
+    "mfussenegger/nvim-dap",
+    config = function()
+      local dap = require("dap")
+    end,
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    event = "BufReadPost",
+  },
 }
