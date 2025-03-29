@@ -1,7 +1,7 @@
 theme = OneHalfDark
 font-family="PlemolJP Console NF"
 font-size=16
-window-padding-x = 16
+window-padding-x = 8
 window-padding-y = 8
 window-padding-balance = true
 window-theme = dark
