@@ -491,7 +491,7 @@ install_zsh() {
     fi
 
     cd $WORKING_DIR
-    run rm -rf zsh-5.8.1
+    run rm -rf zsh-5.9
     run rm download
 }
 
