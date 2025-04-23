@@ -332,6 +332,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     sudo apt install -y build-essential \
         bison \
         flex \
+        linux-libc-dev \
         libssl-dev \
         libreadline-dev \
         libffi-dev \
@@ -867,7 +868,6 @@ if ! $FLG_R && ! $FLG_M; then
         rustup component add rls rust-analysis rust-src # install RLS
         # rustup component add rls-preview rust-analysis rust-src
         cargo install cargo-update
-        cargo install cargo-script
         # cargo install --locked cargo-outdated
         cargo install cargo-audit
     fi
@@ -960,32 +960,18 @@ if ! $FLG_R && ! $FLG_C; then
 
     # install icons
 
-    # Fluent-icon-theme
-    {
-        LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/vinceliuice/Fluent-icon-theme/releases/latest" | jq --raw-output .tag_name)
-        REPO="https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/"
-        RELEASE="${LATEST}.tar.gz"
-
-        run curl -OL "${REPO}${RELEASE}"
-        tar -zxvf "${RELEASE}"
-
-        "Fluent-icon-theme-${LATEST}/install.sh" --round --dark
-
-        run rm "${RELEASE}"
-        run rm -rf "Fluent-icon-theme-${LATEST}"
-    }
 
     # install Sweet-Folders
-    {
-        git clone "https://github.com/EliverLara/Sweet-folders" "${HOME}/.local/share/icons/Sweet-Folders"
-        mv "${HOME}"/.local/share/icons/Sweet-Folders/Sweet-* "${HOME}/.local/share/icons"
-
-        sweetColors=("Blue" "Mars" "Purple-Filled" "Purple" "Rainbow" "Red-Filled" "Red" "Teal-Filled" "Teal" "Yellow-Filled" "Yellow")
-        # use with Fluent icon
-        for color in "${sweetColors[@]}"; do
-            sed -i "s/Inherits=candy-icons/Inherits=Fluent,candy-icons/" "${HOME}/.local/share/icons/Sweet-${color}/index.theme"
-        done
-    }
+    # {
+    #     git clone "https://github.com/EliverLara/Sweet-folders" "${HOME}/.local/share/icons/Sweet-Folders"
+    #     mv "${HOME}"/.local/share/icons/Sweet-Folders/Sweet-* "${HOME}/.local/share/icons"
+    #
+    #     sweetColors=("Blue" "Mars" "Purple-Filled" "Purple" "Rainbow" "Red-Filled" "Red" "Teal-Filled" "Teal" "Yellow-Filled" "Yellow")
+    #     # use with Fluent icon
+    #     for color in "${sweetColors[@]}"; do
+    #         sed -i "s/Inherits=candy-icons/Inherits=Fluent,candy-icons/" "${HOME}/.local/share/icons/Sweet-${color}/index.theme"
+    #     done
+    # }
 
     # run mkdir -p ~/.config/fontconfig/ && \
     # run mv fonts.conf ~/.config/fontconfig/
@@ -1017,20 +1003,20 @@ if ! $FLG_R && ! $FLG_C; then
     # install themes
 
     # install Sweet
-    {
-        git clone "https://github.com/EliverLara/Sweet" "${HOME}/.local/share/themes/Sweet"
-        cd "${HOME}/.local/share/themes/Sweet"
-        git fetch
-        git checkout -b Ambar-Blue-Dark origin/Ambar-Blue-Dark  # changes to blue theme
-        cd "${WORKING_DIR}"
-    }
+    # {
+    #     git clone "https://github.com/EliverLara/Sweet" "${HOME}/.local/share/themes/Sweet"
+    #     cd "${HOME}/.local/share/themes/Sweet"
+    #     git fetch
+    #     git checkout -b Ambar-Blue-Dark origin/Ambar-Blue-Dark  # changes to blue theme
+    #     cd "${WORKING_DIR}"
+    # }
 
     # set gtk3.0 theme & icon
-    if [ ! -e "$HOME/.config/gtk-3.0" ]; then
-        run mkdir "$HOME/.config/gtk-3.0"
-    fi
-    printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Fluent\n" \
-    > "$HOME/.config/gtk-3.0/settings.ini"
+    # if [ ! -e "$HOME/.config/gtk-3.0" ]; then
+    #     run mkdir "$HOME/.config/gtk-3.0"
+    # fi
+    # printf "[Settings]\ngtk-theme-name = Ant\ngtk-icon-theme-name = Fluent\n" \
+    # > "$HOME/.config/gtk-3.0/settings.ini"
 fi
 
 #
@@ -1075,8 +1061,8 @@ There are some steps to finish setup.
 1. change default shell to zsh(chsh with no sudo).
 
 * for Neovim
-1. try :UpdateRemotePlugins & :CheckHealth to check plugin status
-2. launch DeinUpdate command
+1. Plugins will be automatically installed
+2. launch :Mason command, to install LPSs
 
 * End. Please reboot
 EOF
