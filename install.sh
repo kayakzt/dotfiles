@@ -710,6 +710,7 @@ fi
 if [ ! -e "$HOME/.config/nvim" ]; then
         run mkdir -p "$HOME/.config/nvim"
         run mkdir -p "$HOME/.config/nvim/lua"
+        run mkdir -p "$HOME/.config/nvim/after/lsp"
         run mkdir -p "$HOME/.config/nvim/lua/plugins"
 fi
 
@@ -763,6 +764,10 @@ run ln -snf "$DOT_PATH/nvim/plugins.manager.lua" "$CONF_PATH/nvim/lua/plugins/ma
 run ln -snf "$DOT_PATH/nvim/plugins.ui.lua" "$CONF_PATH/nvim/lua/plugins/ui.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.util.lua" "$CONF_PATH/nvim/lua/plugins/util.lua"
 run ln -snf "$DOT_PATH/nvim/vsnip" "$CONF_PATH/nvim/vsnip"
+
+run ln -snf "$DOT_PATH/nvim/lsp/typos_lsp.lua" "$CONF_PATH/nvim/after/lsp/typos_lsp.lua"
+run ln -snf "$DOT_PATH/nvim/lsp/lua_ls.lua" "$CONF_PATH/nvim/after/lsp/lua_ls.lua"
+run ln -snf "$DOT_PATH/nvim/lsp/pyright.lua" "$CONF_PATH/nvim/after/lsp/pyright.lua"
 
 
 #
@@ -983,6 +988,22 @@ if ! $FLG_R && ! $FLG_C; then
             fonts-roboto
     fi
 
+    # set up UDEV Gothic 35NF
+    {
+        LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/udev-gothic/releases/latest" | jq --raw-output .tag_name)
+        REPO="https://github.com/yuru7/udev-gothic/releases/download/${LATEST}/"
+        RELEASE="UDEVGothic_NF_${LATEST}"
+
+        run curl -OL "${REPO}${RELEASE}.zip"
+        run unzip "${RELEASE}.zip"
+
+        run mv "${RELEASE}"/*.ttf "$HOME/.local/share/fonts"
+
+        run rm "${RELEASE}.zip"
+        run rm -rf "${RELEASE}"
+
+        fc-cache -fv
+    }
     # set up PlemolJPConsole_NF
     {
         LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
