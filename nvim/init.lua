@@ -123,6 +123,18 @@ local editing_options = {
   smartindent = true,
 }
 
+local diagnosticSigns = { Err = "", Warn = "", Hint = "", Info = "" }
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = diagnosticSigns.Err,
+      [vim.diagnostic.severity.WARN] = diagnosticSigns.Warn,
+      [vim.diagnostic.severity.INFO] = diagnosticSigns.Info,
+      [vim.diagnostic.severity.HINT] = diagnosticSigns.Hint,
+    },
+  },
+})
+
 -- System integrations
 local system_integration = {
   mouse = "a",
@@ -174,6 +186,15 @@ end
 
 -- MyAutoCmd configs
 local my_auto_cmd = vim.api.nvim_create_augroup("MyAutoCmd", { clear = true })
+
+-- highlighting yank word during 300ms
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = "MyAutoCmd",
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank({ timeout = 300 })
+  end,
+})
 
 vim.api.nvim_create_autocmd("FileType", {
   group = my_auto_cmd,
