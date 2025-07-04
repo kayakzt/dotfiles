@@ -26,7 +26,6 @@ brew "tmux"
 brew "zfdang/free-for-macos/free-for-macos"
 
 cask "dropbox"
-cask "alacritty"
 cask "rectangle"
 cask "secretive"
 cask "logi-options+"
@@ -36,7 +35,6 @@ cask "notion"
 cask "notion-calendar"
 cask "arc"
 cask "visual-studio-code"
-cask "linear-linear"
 cask "figma"
 
 mas "LINE", id: 539883307
