@@ -29,7 +29,7 @@ fi
 
 # mise
 if command -v mise 1>/dev/null 2>&1; then
-    mise activate zsh
+    eval "$(mise activate zsh)"
 fi
 
 # pyenv

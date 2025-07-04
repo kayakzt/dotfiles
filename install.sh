@@ -687,7 +687,7 @@ install_mise() {
         ARCH_TYPE_LOCAL="arm64"
     fi
 
-    RELEASE="mise-${LATEST}-linux-${ARCH_TYPE_LOCAL}"
+    RELEASE="mise-${LATEST}-linux-${ARCH_TYPE_LOCAL}-musl"
 
     run curl -OL "${REPO}${RELEASE}"
 
