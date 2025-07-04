@@ -27,6 +27,10 @@ if [[ -f "$HOME/.local.config.zsh" ]] then
     source "$HOME/.local.config.zsh"
 fi
 
+# mise
+if command -v mise 1>/dev/null 2>&1; then
+    mise activate zsh
+fi
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"

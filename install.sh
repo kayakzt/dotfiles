@@ -677,6 +677,24 @@ install_treesitter() {
     chmod u+x $HOME/dev/bin/tree-sitter
 }
 
+install_mise() {
+    LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/jdx/mise/releases/latest" | jq --raw-output .tag_name)
+    REPO="https://github.com/jdx/mise/releases/download/${LATEST}/"
+
+    if [ "${ARCH_TYPE}" = "x86_64" ]; then
+        ARCH_TYPE_LOCAL="x64"
+    else
+        ARCH_TYPE_LOCAL="arm64"
+    fi
+
+    RELEASE="mise-${LATEST}-linux-${ARCH_TYPE_LOCAL}"
+
+    run curl -OL "${REPO}${RELEASE}"
+
+    mv "${RELEASE}" "${HOME}/dev/bin/mise"
+    chmod u+x "${HOME}/dev/bin/mise"
+}
+
 # install tools
 install_tmux
 # install_zsh
@@ -684,6 +702,7 @@ install_sheldon
 install_fzf
 install_nvim
 install_rg
+install_mise
 install_gh
 install_ghq
 install_efm-langserver
