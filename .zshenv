@@ -1,6 +1,6 @@
 # Environment Variables
 
-# # proxy settings
+# proxy settings
 # export http_proxy=
 # export https_proxy=$http_proxy
 # export HTTP_PROXY=$http_proxy
@@ -37,17 +37,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 export path=($PYENV_ROOT/bin(N-/) $path)
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init --path)"
-fi
-# export path=($HOME/.poetry/bin(N-/) $path)
-# if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
-#     source "${VIRTUAL_ENV}/bin/activate"
-# fi
-
-# rye
-if command -v rye 1>/dev/null 2>&1; then
-    if [[ -f "$HOME/.rye/env" ]] then
-        source "$HOME/.rye/env"
-    fi
 fi
 
 # goenv & go

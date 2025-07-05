@@ -195,6 +195,7 @@ return {
         "jsonls",
         "ts_ls",
         "pyright",
+        "ruff",
         "rust_analyzer",
         "taplo",
         "typos_lsp",
@@ -230,12 +231,10 @@ return {
       require("mason-null-ls").setup({
         ensure_installed = {
           "biome",
-          "black",
           "goimports",
           "impl",
           "gomodifytags",
           "stylua",
-          "isort",
           "markdownlint",
           "prettier",
           "textlint",
@@ -300,10 +299,8 @@ return {
           null_ls.builtins.diagnostics.vint,
           null_ls.builtins.diagnostics.zsh,
           null_ls.builtins.formatting.biome,
-          null_ls.builtins.formatting.black,
           null_ls.builtins.formatting.gofmt,
           null_ls.builtins.formatting.goimports,
-          null_ls.builtins.formatting.isort,
           null_ls.builtins.formatting.markdownlint,
           null_ls.builtins.formatting.prettier.with({
             filetypes = { "vue", "css", "scss", "less", "html", "yaml", "graphql", "handlebars" },

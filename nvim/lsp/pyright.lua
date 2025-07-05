@@ -5,7 +5,9 @@ return {
       pythonPath = "./.venv/bin/python",
       analysis = {
         extraPaths = { "." },
+        typeCheckingMode = "off",
+        diagnosticMode = "off",
       },
-    }
-  }
+    },
+  },
 }

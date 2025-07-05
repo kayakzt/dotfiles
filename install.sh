@@ -783,10 +783,7 @@ run ln -snf "$DOT_PATH/nvim/plugins.manager.lua" "$CONF_PATH/nvim/lua/plugins/ma
 run ln -snf "$DOT_PATH/nvim/plugins.ui.lua" "$CONF_PATH/nvim/lua/plugins/ui.lua"
 run ln -snf "$DOT_PATH/nvim/plugins.util.lua" "$CONF_PATH/nvim/lua/plugins/util.lua"
 run ln -snf "$DOT_PATH/nvim/vsnip" "$CONF_PATH/nvim/vsnip"
-
-run ln -snf "$DOT_PATH/nvim/lsp/typos_lsp.lua" "$CONF_PATH/nvim/after/lsp/typos_lsp.lua"
-run ln -snf "$DOT_PATH/nvim/lsp/lua_ls.lua" "$CONF_PATH/nvim/after/lsp/lua_ls.lua"
-run ln -snf "$DOT_PATH/nvim/lsp/pyright.lua" "$CONF_PATH/nvim/after/lsp/pyright.lua"
+run ln -snf "$DOT_PATH/nvim/lsp" "$CONF_PATH/nvim/after/lsp"
 
 
 #
@@ -820,40 +817,43 @@ if ! $FLG_R && ! $FLG_M; then
         export PYENV_ROOT="$HOME/.pyenv"
         export PATH="$PYENV_ROOT/bin:$PATH"
         eval "$(pyenv init --path)"
-        export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '*3\.13\.[0-9]$' | tail -n -2 | head -n 1 | tr -d ' ')"
+        export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '^*3\.[0-9]+\.[0-9]+$' | tail -n -1 | tr -d ' ')"
         pyenv install ${python_version}
         pyenv global ${python_version}
 
-        # install poetry
-        curl -sSL https://install.python-poetry.org | python -
-        export PATH="$HOME/.local/bin:$PATH"
-        poetry completions zsh > ~/.zfunc/_poetry
+        # install uv
+        curl -LsSf https://astral.sh/uv/install.sh | sh
 
-        # install rye
-        if [ "$ARCH_TYPE" = "x86_64" ]; then
-            run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-x86_64-linux.gz
-            gunzip rye-x86_64-linux.gz
-            mv rye-x86_64-linux "${HOME}/dev/bin/rye"
-        else
-            run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-aarch64-linux.gz
-            gunzip rye-aarch64-linux.gz
-            mv rye-aarch64-linux "${HOME}/dev/bin/rye"
-        fi
-        chmod u+x "${HOME}/dev/bin/rye"
-        ${HOME}/dev/bin/rye self completion -s zsh > ~/.zfunc/_rye
+        # # install poetry
+        # curl -sSL https://install.python-poetry.org | python -
+        # export PATH="$HOME/.local/bin:$PATH"
+        # poetry completions zsh > ~/.zfunc/_poetry
+
+        # # install rye
+        # if [ "$ARCH_TYPE" = "x86_64" ]; then
+        #     run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-x86_64-linux.gz
+        #     gunzip rye-x86_64-linux.gz
+        #     mv rye-x86_64-linux "${HOME}/dev/bin/rye"
+        # else
+        #     run curl -OL https://github.com/astral-sh/rye/releases/latest/download/rye-aarch64-linux.gz
+        #     gunzip rye-aarch64-linux.gz
+        #     mv rye-aarch64-linux "${HOME}/dev/bin/rye"
+        # fi
+        # chmod u+x "${HOME}/dev/bin/rye"
+        # ${HOME}/dev/bin/rye self completion -s zsh > ~/.zfunc/_rye
 
         # install python modules
-        pip install --use-deprecated=legacy-resolver \
-            wheel \
-            flake8 \
-            pep8 \
-            pylint \
-            'python-language-server[all]' \
-            pyls-isort \
-            pyls-black \
-            pynvim \
-            yamllint \
-            vim-vint
+        # pip install --use-deprecated=legacy-resolver \
+        #     wheel \
+        #     flake8 \
+        #     pep8 \
+        #     pylint \
+        #     'python-language-server[all]' \
+        #     pyls-isort \
+        #     pyls-black \
+        #     pynvim \
+        #     yamllint \
+        #     vim-vint
         pip install  --upgrade pip
     fi
 
