@@ -1,4 +1,4 @@
-theme = OneHalfDark
+theme = "One Half Dark"
 font-family="UDEV Gothic 35NF"
 font-size=15
 window-padding-x = 8
