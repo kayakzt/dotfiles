@@ -67,7 +67,7 @@ unset cache_dir sheldon_cache sheldon_toml
 
 # override fzf-git.sh
 _fzf_git_fzf() {
-fzf-tmux -p80%,60% -- \
+fzf --tmux 80%,60% -- \
   --layout=reverse --multi --height=50% --min-height=20 --border \
   --color='header:italic:underline' \
   --preview-window='right,50%,border-left' \
@@ -201,7 +201,7 @@ fzf-file-search() {
 
 __fzf_file_search() {
   local selected=$(eval "$FZF_DEFAULT_COMMAND" | \
-    fzf-tmux -p80%,90% --height="90%" \
+    fzf --tmux 80%,90% --height="90%" \
       --multi \
       --prompt="[file search] " \
       --preview="bat --color=always --style=header,grid {1}" \
@@ -236,7 +236,7 @@ fzf-directory-search() {
 __fzf_directory_search() {
   local cmd="find . -type d -name '.git' -prune -o -type d -print"
   local selected=$(eval "$cmd" | \
-      fzf-tmux -p80%,90% --height="90%" \
+      fzf --tmux 80%,90% --height="90%" \
         --prompt="[directory search] " \
         --preview="tree -C {} | head -200" \
   )
@@ -266,7 +266,7 @@ __fzf_text_search() {
   local rg_cmd="rg --smart-case --crlf --hidden --line-number --color=always --trim --glob '!**/.git/*' --glob '!**/.venv/*' --glob '!.gitignore' --glob '!**/*.lock' -uu"
   local initial_query="${*:-}"
   local selected=$(FZF_DEFAULT_COMMAND="$rg_cmd $(printf %q "$initial_query")" \
-      fzf-tmux -p80%,90% --bind "ctrl-r:reload($rg_cmd {q})" --header "Press CTRL-R to reload" \
+      fzf --tmux 80%,90% --bind "ctrl-r:reload($rg_cmd {q})" --header "Press CTRL-R to reload" \
         --bind="ctrl-o:execute(tmux splitw -h -- nvim +/{q} {1} +{2})" \
         --height="90%" \
         --ansi --phony --multi \
