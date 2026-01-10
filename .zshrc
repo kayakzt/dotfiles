@@ -530,7 +530,7 @@ autoload -Uz compinit && compinit
 case ${OSTYPE} in
   darwin*)
     eval "$(/opt/homebrew/bin/brew shellenv)" # need homebrew
-    export HOMEBREW_FORBIDDEN_FORMULAE="node python python3 pip pip3 npm pnpm yarn claude"
+    export HOMEBREW_FORBIDDEN_FORMULAE="node python python3 pip pip3 npm pnpm yarn go claude"
     export SSH_AUTH_SOCK=$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh # for secretive
   ;;
 esac
