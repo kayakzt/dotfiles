@@ -41,6 +41,12 @@
     switch = switch
 [blame]
     date = relative
+[branch]
+    sort = -committerdate
+[commit]
+    verbose = true
+[column]
+    ui = auto
 [push]
     default = current
     followTags = true
@@ -51,12 +57,21 @@
 [interactive]
     diffFilter = delta --color-only
 [merge]
-    conflictstyle = diff3
+    conflictstyle = zdiff3
     tool = vimdiff
 [diff]
+    algorithm = histogram
     compactionHeuristic = true
 	wordRegex = .
-    colorMoved = default
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
+[fetch]
+    prune = true
+    pruneTags = true
+    all = true
+[help]
+    autocorrect = prompt
 [pull]
 	rebase = false
 [init]
@@ -72,3 +87,12 @@
     keep-plus-minus-markers = true
     hunk-header-style = "omit"
     diff-so-fancy=true
+[rerere]
+    enabled = true
+    autoupdate = true
+[tag]
+    sort = version:refname
+[push]
+    default = simple
+    autoSetupRemote = true
+    followingTags = true

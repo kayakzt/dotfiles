@@ -530,10 +530,10 @@ autoload -Uz compinit && compinit
 case ${OSTYPE} in
   darwin*)
     eval "$(/opt/homebrew/bin/brew shellenv)" # need homebrew
-    eval "$(limactl completion zsh)" # need limactl
+    export HOMEBREW_FORBIDDEN_FORMULAE="node python python3 pip pip3 npm pnpm yarn claude"
     export SSH_AUTH_SOCK=$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh # for secretive
   ;;
 esac
 
 # load sheldon plugin scripts here
-eval "$(direnv hook zsh)" # need direnv
+# eval "$(direnv hook zsh)" # need direnv

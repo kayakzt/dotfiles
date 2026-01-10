@@ -33,22 +33,22 @@ if command -v mise 1>/dev/null 2>&1; then
 fi
 
 # pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export path=($PYENV_ROOT/bin(N-/) $path)
-if command -v pyenv 1>/dev/null 2>&1; then
-    eval "$(pyenv init --path)"
-fi
+# export PYENV_ROOT="$HOME/.pyenv"
+# export path=($PYENV_ROOT/bin(N-/) $path)
+# if command -v pyenv 1>/dev/null 2>&1; then
+#     eval "$(pyenv init --path)"
+# fi
 
 # goenv & go
-export GOENV_ROOT=$HOME/.goenv
-export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
-# export GOENV_DISABLE_GOPATH=1 # disable GOPATH management by goenv
-export path=($GOENV_ROOT/bin(N-/) $path)
-if command -v goenv > /dev/null; then
-    eval "$(goenv init -)"
-fi
-# export GOPATH=${my_dev_dir}
-export path=($GOPATH/bin(N-/) $path)
+# export GOENV_ROOT=$HOME/.goenv
+# export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
+# # export GOENV_DISABLE_GOPATH=1 # disable GOPATH management by goenv
+# export path=($GOENV_ROOT/bin(N-/) $path)
+# if command -v goenv > /dev/null; then
+#     eval "$(goenv init -)"
+# fi
+# # export GOPATH=${my_dev_dir}
+# export path=($GOPATH/bin(N-/) $path)
 
 # rustup & rust
 export path=($HOME/.cargo/bin(N-/) $path)
@@ -58,25 +58,25 @@ if command -v rustc > /dev/null; then
 fi
 
 # nvm & node path
-export NVM_DIR=$HOME/.nvm
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-nvm() { # pesuedo nvm function
-    unset -f nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
-    # source "${NVM_DIR}/nvm.sh"
-    nvm "$@"
-}
+# export NVM_DIR=$HOME/.nvm
+# # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#
+# nvm() { # pesuedo nvm function
+#     unset -f nvm
+#     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+#     # source "${NVM_DIR}/nvm.sh"
+#     nvm "$@"
+# }
 
 # This resolves the default node version
-DEFAULT_NODE_VER="$( (< "$NVM_DIR/alias/default" || < ~/.nvmrc) 2> /dev/null)"
-while [ -s "$NVM_DIR/alias/$DEFAULT_NODE_VER" ] && [ ! -z "$DEFAULT_NODE_VER" ]; do
-    DEFAULT_NODE_VER="$(<"$NVM_DIR/alias/$DEFAULT_NODE_VER")"
-done
-
-if [ ! -z "$DEFAULT_NODE_VER" ]; then
-    export PATH="$NVM_DIR/versions/node/v${DEFAULT_NODE_VER#v}/bin:$PATH"
-fi
+# DEFAULT_NODE_VER="$( (< "$NVM_DIR/alias/default" || < ~/.nvmrc) 2> /dev/null)"
+# while [ -s "$NVM_DIR/alias/$DEFAULT_NODE_VER" ] && [ ! -z "$DEFAULT_NODE_VER" ]; do
+#     DEFAULT_NODE_VER="$(<"$NVM_DIR/alias/$DEFAULT_NODE_VER")"
+# done
+#
+# if [ ! -z "$DEFAULT_NODE_VER" ]; then
+#     export PATH="$NVM_DIR/versions/node/v${DEFAULT_NODE_VER#v}/bin:$PATH"
+# fi
 
 # NODE_VERSION=v$(cat ${NVM_DIR}/alias/default) # set 'nvm alias default vX.Y.Z'
 # NODE_PATH=${NVM_DIR}/versions/node/$NODE_VERSION/bin
