@@ -21,11 +21,21 @@ run() {
 prepare_path() {
     CONF_PATH="${HOME}/.config"
     DOT_PATH="${CONF_PATH}/dotfiles"
-    WORKING_DIR=$(cd $(dirname $0); pwd)
+    WORKING_DIR=$(pwd)
     DOT_REPO="https://github.com/kayakzt/dotfiles"
 }
 
 prepare_path
+
+#
+# Download dotfiles from github.com
+#
+
+if [ ! -e "$DOT_PATH" ]; then
+        run mkdir -p "$DOT_PATH"
+fi
+
+git clone ${DOT_REPO} ${DOT_PATH}
 
 #
 # prepare bin, src directories
