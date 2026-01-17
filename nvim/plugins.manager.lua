@@ -321,12 +321,11 @@ return {
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    version = "v0.*",
+    branch = "main",
     event = "BufEnter",
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
+      local langs = {
           "bash",
           "c",
           "cmake",
@@ -338,38 +337,49 @@ return {
           "dockerfile",
           "git_rebase",
           "go",
+          "gomod",
+          "gosum",
+          "graphql",
           "html",
           "javascript",
           "jq",
+          "jsdoc",
           "json",
-          "jsonc",
+          "json5",
           "latex",
           "lua",
+          "luadoc",
           "make",
           "markdown",
           "markdown_inline",
           "python",
+          "regex",
+          "ruby",
           "rust",
           "scss",
-          "typescript",
           "toml",
+          "tsx",
+          "typescript",
           "vim",
+          "vimdoc",
           "vue",
           "yaml",
-        },
-        sync_install = false,
-        auto_install = false,
-        highlight = {
-          enable = true,
-          disable = function(lang, buf)
-            local max_filesize = 100 * 1024 -- 100 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-              return true
-            end
-          end,
-          additional_vim_regex_highlighting = false,
-        },
+        }
+
+      require("nvim-treesitter").install(langs)
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("vim-treesitter-start", {}),
+        pattern = langs,
+        callback = function(ctx)
+          -- 必要に応じて`ctx.match`に入っているファイルタイプの値に応じて挙動を制御
+          -- `pcall`でエラーを無視することでパーサーやクエリがあるか気にしなくてすむ
+          pcal(require, "nvim-treesitter")
+          pcall(vim.treesitter.start)
+
+          -- Enable Indent
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
       })
     end,
   },
