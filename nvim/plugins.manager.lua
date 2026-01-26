@@ -326,59 +326,58 @@ return {
     build = ":TSUpdate",
     config = function()
       local langs = {
-          "bash",
-          "c",
-          "cmake",
-          "comment",
-          "cpp",
-          "css",
-          "dart",
-          "diff",
-          "dockerfile",
-          "git_rebase",
-          "go",
-          "gomod",
-          "gosum",
-          "graphql",
-          "html",
-          "javascript",
-          "jq",
-          "jsdoc",
-          "json",
-          "json5",
-          "latex",
-          "lua",
-          "luadoc",
-          "make",
-          "markdown",
-          "markdown_inline",
-          "python",
-          "regex",
-          "ruby",
-          "rust",
-          "scss",
-          "toml",
-          "tsx",
-          "typescript",
-          "vim",
-          "vimdoc",
-          "vue",
-          "yaml",
-        }
+        "bash",
+        "c",
+        "cmake",
+        "comment",
+        "cpp",
+        "css",
+        "dart",
+        "diff",
+        "dockerfile",
+        "git_rebase",
+        "go",
+        "gomod",
+        "gosum",
+        "graphql",
+        "html",
+        "javascript",
+        "jq",
+        "jsdoc",
+        "json",
+        "json5",
+        "latex",
+        "lua",
+        "luadoc",
+        "make",
+        "markdown",
+        "markdown_inline",
+        "python",
+        "regex",
+        "ruby",
+        "rust",
+        "scss",
+        "toml",
+        "tsx",
+        "typescript",
+        "vim",
+        "vimdoc",
+        "vue",
+        "yaml",
+      }
 
       require("nvim-treesitter").install(langs)
 
+      local group = vim.api.nvim_create_augroup("vim-treesitter-start", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
-        group = vim.api.nvim_create_augroup("vim-treesitter-start", {}),
+        group = group,
         pattern = langs,
         callback = function(ctx)
           -- 必要に応じて`ctx.match`に入っているファイルタイプの値に応じて挙動を制御
-          -- `pcall`でエラーを無視することでパーサーやクエリがあるか気にしなくてすむ
-          pcal(require, "nvim-treesitter")
-          pcall(vim.treesitter.start)
+          vim.treesitter.start(ctx.buf)
 
           -- Enable Indent
-          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          vim.bo[ctx.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
     end,
