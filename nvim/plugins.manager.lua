@@ -238,6 +238,7 @@ return {
           "markdownlint",
           "prettier",
           "textlint",
+          "shfmt",
           "shellcheck",
         },
       })
@@ -299,6 +300,7 @@ return {
           null_ls.builtins.diagnostics.vint,
           null_ls.builtins.diagnostics.zsh,
           null_ls.builtins.formatting.biome,
+          null_ls.builtins.formatting.shfmt,
           null_ls.builtins.formatting.gofmt,
           null_ls.builtins.formatting.goimports,
           null_ls.builtins.formatting.markdownlint,
