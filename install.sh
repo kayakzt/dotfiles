@@ -805,17 +805,21 @@ if ! $FLG_R && ! $FLG_M; then
             sudo apt install -y python3-tk tk-dev
         fi
 
-        # install pyenv
-        git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-        export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init --path)"
-        export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '^*3\.[0-9]+\.[0-9]+$' | tail -n -1 | tr -d ' ')"
-        pyenv install ${python_version}
-        pyenv global ${python_version}
+        # install latest python via mise
+        eval "$("$HOME"/dev/mise activate)"
+        eval "$("$HOME"/dev/mise use --global python)"
 
-        # install uv
-        curl -LsSf https://astral.sh/uv/install.sh | sh
+        # # install pyenv
+        # git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+        # export PYENV_ROOT="$HOME/.pyenv"
+        # export PATH="$PYENV_ROOT/bin:$PATH"
+        # eval "$(pyenv init --path)"
+        # export python_version="$(pyenv install --list | grep -v - | grep -v b | grep -E '^*3\.[0-9]+\.[0-9]+$' | tail -n -1 | tr -d ' ')"
+        # pyenv install ${python_version}
+        # pyenv global ${python_version}
+        #
+        # # install uv
+        # curl -LsSf https://astral.sh/uv/install.sh | sh
 
         # # install poetry
         # curl -sSL https://install.python-poetry.org | python -
@@ -847,25 +851,29 @@ if ! $FLG_R && ! $FLG_M; then
         #     pynvim \
         #     yamllint \
         #     vim-vint
-        pip install --upgrade pip
+        # pip install --upgrade pip
     fi
 
     # go
     if $INSTALL_GO; then
-        # goenv & setup
-        echo "$password" | sudo -S echo ""
-        export GOENV_ROOT=$HOME/.goenv
-        export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
-        git clone https://github.com/syndbg/goenv.git ~/.goenv
-        # export GOPATH=$HOME/dev
-        export PATH=$PATH:$GOENV_ROOT/bin
-        eval "$(goenv init -)"
-        GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
-        goenv install "$GO_VERSION"
-        goenv global "$GO_VERSION"
+        # install latest go via mise
+        eval "$("$HOME"/dev/mise activate)"
+        eval "$("$HOME"/dev/mise use --global go)"
 
-        # go install golang.org/x/tools/gopls@latest
-        go install github.com/go-delve/delve/cmd/dlv@latest
+        # # goenv & setup
+        # echo "$password" | sudo -S echo ""
+        # export GOENV_ROOT=$HOME/.goenv
+        # export GOENV_GOPATH_PREFIX=${my_dev_dir}/go # set GOPATH as GOENV_GOPATH_PREFIX/{go_version}
+        # git clone https://github.com/syndbg/goenv.git ~/.goenv
+        # # export GOPATH=$HOME/dev
+        # export PATH=$PATH:$GOENV_ROOT/bin
+        # eval "$(goenv init -)"
+        # GO_VERSION=$(goenv install -l | grep -v beta | grep -v rc | tail -1 | tr -d ' ')
+        # goenv install "$GO_VERSION"
+        # goenv global "$GO_VERSION"
+        #
+        # # go install golang.org/x/tools/gopls@latest
+        # go install github.com/go-delve/delve/cmd/dlv@latest
     fi
 
     if $INSTALL_RUST; then
@@ -882,32 +890,36 @@ if ! $FLG_R && ! $FLG_M; then
         rustup default stable
         rustup component add rustfmt
         rustup component add clippy
-        rustup component add rls rust-analysis rust-src # install RLS
+        rustup component add rust-analysis
+        rustup component add rust-src
+        rustup component add rust-docs
         # rustup component add rls-preview rust-analysis rust-src
         cargo install cargo-update
         # cargo install --locked cargo-outdated
         cargo install cargo-audit
     fi
 
-    # nvm setup
-    export NVM_DIR="$HOME/.nvm"
-    git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
-    cd "$NVM_DIR"
-    git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
-    \. "$NVM_DIR/nvm.sh"
-    cd $WORKING_DIR
+    # install latest LTS nodejs via mise
+    eval "$("$HOME"/dev/mise activate)"
+    eval "$("$HOME"/dev/mise use --global node@lts)"
 
-    nvm install --lts --latest-npm
-    nvm alias default lts/*
-    # nvm use --lts
+    # # nvm setup
+    # export NVM_DIR="$HOME/.nvm"
+    # git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+    # cd "$NVM_DIR"
+    # git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
+    # \. "$NVM_DIR/nvm.sh"
+    # cd $WORKING_DIR
+    #
+    # nvm install --lts --latest-npm
+    # nvm alias default lts/*
+    # # nvm use --lts
 
     # install needed npm packages
     npm install -g npm
     npm install -g \
         npm-check-updates \
-        yarn \
-        markdownlint-cli \
-        textlint
+        yarn
 
     # install coc-extensions for neovim
     # mkdir -p "$CONF_PATH/coc/extensions"
@@ -1014,22 +1026,22 @@ if ! $FLG_R && ! $FLG_C; then
 
         fc-cache -fv
     }
-    # set up PlemolJPConsole_NF
-    {
-        LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
-        REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
-        RELEASE="PlemolJP_NF_${LATEST}"
-
-        run curl -OL "${REPO}${RELEASE}.zip"
-        run unzip "${RELEASE}.zip"
-
-        run mv "${RELEASE}"/PlemolJPConsole_NF/*.ttf "$HOME/.local/share/fonts"
-
-        run rm "${RELEASE}.zip"
-        run rm -rf "${RELEASE}"
-
-        fc-cache -fv
-    }
+    # # set up PlemolJPConsole_NF
+    # {
+    #     LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/yuru7/PlemolJP/releases/latest" | jq --raw-output .tag_name)
+    #     REPO="https://github.com/yuru7/PlemolJP/releases/download/${LATEST}/"
+    #     RELEASE="PlemolJP_NF_${LATEST}"
+    #
+    #     run curl -OL "${REPO}${RELEASE}.zip"
+    #     run unzip "${RELEASE}.zip"
+    #
+    #     run mv "${RELEASE}"/PlemolJPConsole_NF/*.ttf "$HOME/.local/share/fonts"
+    #
+    #     run rm "${RELEASE}.zip"
+    #     run rm -rf "${RELEASE}"
+    #
+    #     fc-cache -fv
+    # }
 
     # install themes
 
