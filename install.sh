@@ -19,7 +19,6 @@ set -Ceux
 
 echo "--- Install Script Start! ---"
 
-
 #
 # Initialize
 #
@@ -41,8 +40,7 @@ run() {
     "$@"
     result=$?
 
-    if [ $result -ne 0 ]
-    then
+    if [ $result -ne 0 ]; then
         echo -n $(colored $red "Failed: ")
         echo -n $(colored $cyan "$@")
         echo $(colored $yellow " [$PWD]")
@@ -52,9 +50,8 @@ run() {
     return 0
 }
 
-get_password(){
-    if ! ${password+:} false
-    then
+get_password() {
+    if ! ${password+:} false; then
         printf "plz input password: "
         read -s password
         echo ""
@@ -79,7 +76,7 @@ detect_os() {
         else
             OSNAME="redhat"
         fi
-    elif [ "$(uname)"    =    "Darwin" ]; then
+    elif [ "$(uname)" = "Darwin" ]; then
         OSNAME="macos"
     else
         OSNAME="other"
@@ -90,12 +87,15 @@ detect_os
 
 prepare_path() {
     if [ -z "${XDG_CONFIG_HOME+UNDEF}" ]; then
-            CONF_PATH="${HOME}/.config"
+        CONF_PATH="${HOME}/.config"
     else
-            CONF_PATH=$XDG_CONFIG_HOME
+        CONF_PATH=$XDG_CONFIG_HOME
     fi
     DOT_PATH="${CONF_PATH}/dotfiles"
-    WORKING_DIR=$(cd $(dirname $0); pwd)
+    WORKING_DIR=$(
+        cd $(dirname $0)
+        pwd
+    )
     DOT_REPO="https://github.com/kayakzt/dotfiles"
 }
 
@@ -125,40 +125,39 @@ usage_exit() {
     exit 1
 }
 
-function yes_or_no(){
+function yes_or_no() {
     PS3="Answer? "
-    while true;do
+    while true; do
         echo $(colored $cyan "$1")
-        select answer in yes no;do
+        select answer in yes no; do
             case $answer in
-                yes)
-                    echo -e "tyeped yes.\n"
-                    return 0
-                    ;;
-                no)
-                    echo -e "tyeped no.\n"
-                    return 1
-                    ;;
-                *)
-                    echo -e "cannot understand your answer. plz input '1' or '2'.\n"
-                    ;;
+            yes)
+                echo -e "tyeped yes.\n"
+                return 0
+                ;;
+            no)
+                echo -e "tyeped no.\n"
+                return 1
+                ;;
+            *)
+                echo -e "cannot understand your answer. plz input '1' or '2'.\n"
+                ;;
             esac
         done
     done
 }
 
 # augments processing
-while getopts mrc OPT
-do
+while getopts mrc OPT; do
     case $OPT in
-        m) FLG_M=true ;;
-        r) FLG_R=true ;;
-        c) FLG_C=true ;;
-        d) FLG_D=true ;;
-        v) FLG_V=true ;;
-        h) FLG_H=true ;;
+    m) FLG_M=true ;;
+    r) FLG_R=true ;;
+    c) FLG_C=true ;;
+    d) FLG_D=true ;;
+    v) FLG_V=true ;;
+    h) FLG_H=true ;;
 
-        :|\?) usage_exit;;
+    : | \?) usage_exit ;;
     esac
 done
 
@@ -230,7 +229,7 @@ fi
 #
 
 if [ ! -e "$DOT_PATH" ]; then
-        run mkdir -p "$DOT_PATH"
+    run mkdir -p "$DOT_PATH"
 fi
 
 git clone ${DOT_REPO} ${DOT_PATH}
@@ -239,7 +238,7 @@ git clone ${DOT_REPO} ${DOT_PATH}
 # Add Repositories
 #
 
-if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
 
     if $USE_REPO_JAPAN; then
@@ -256,7 +255,7 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     # sudo -E add-apt-repository -y ppa:neovim-ppa/stable
 fi
 
-if ( [ $OSNAME = "centos" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
+if ([ $OSNAME = "centos" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
     yum localinstall http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
     yum localinstall http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-11.ius.centos6.noarch.rpm
 fi
@@ -265,7 +264,7 @@ fi
 # Repository Updates + Upgrade
 #
 
-if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
     sudo apt-get update
     sudo apt-get upgrade -y
@@ -274,13 +273,12 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
     sudo apt-get -y autoclean
 fi
 
-if ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
+if ([ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
     yum check-update
     yum updade -y
     yum upgrade -y
     yum clean
 fi
-
 
 #
 # Ubuntu setting changes
@@ -289,8 +287,7 @@ fi
 if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
     echo "$password" | sudo -S echo ""
     # env LANGUAGE=C LC_MESSAGES=C xdg-user-dirs-gtk-update
-    if type "gsettings" > /dev/null 2>&1
-    then
+    if type "gsettings" >/dev/null 2>&1; then
         gsettings set org.gnome.nautilus.preferences always-use-location-entry true
     fi
     sudo sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/g' /etc/systemd/system.conf
@@ -301,8 +298,7 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
 
     sudo apt-get install -y gnome-tweaks chrome-gnome-shell
 
-    if type "gsettings" > /dev/null 2>&1
-    then
+    if type "gsettings" >/dev/null 2>&1; then
         gsettings set org.gnome.mutter auto-maximize false
         gsettings set org.gnome.shell.app-switcher current-workspace-only true
     fi
@@ -315,7 +311,6 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
     sudo ufw reload
 fi
 
-
 #
 # Basic Apps install
 #
@@ -327,7 +322,7 @@ run mkdir -p "$HOME"/dev/src
 run mkdir -p "$HOME"/.local
 run mkdir -p "$HOME"/.local/share
 
-if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
     sudo apt install -y build-essential \
         bison \
@@ -350,18 +345,18 @@ if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
         jq \
         exuberant-ctags \
         direnv \
-        zsh \
+        zsh
 
-        # detect major version of ubuntu
-        UBUNTU_VERSION_MAJOR=$(echo "$UBUNTU_VERSION" | cut -d "." -f 1)
+    # detect major version of ubuntu
+    UBUNTU_VERSION_MAJOR=$(echo "$UBUNTU_VERSION" | cut -d "." -f 1)
 
-        # if UBUNTU_VERSION_MAJOR is after 24.04
-        if [ "$UBUNTU_VERSION_MAJOR" -ge 24 ]; then
+    # if UBUNTU_VERSION_MAJOR is after 24.04
+    if [ "$UBUNTU_VERSION_MAJOR" -ge 24 ]; then
         echo "$password" | sudo -S echo ""
         sudo apt install libfuse2t64
-        fi
+    fi
 
-elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
+elif ([ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
     sudo yum install -y wget \
         git \
         zsh \
@@ -372,7 +367,7 @@ elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
         openssh-server \
         silversearcher-ag \
         jq
-        # python3-dev \
+    # python3-dev \
 
     sudo yum install -y bzip2 \
         donebzip2-devel \
@@ -390,7 +385,7 @@ install_fzf() {
 }
 
 install_nvim() {
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     fi
     LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/neovim/neovim/releases/latest" | jq --raw-output .tag_name)
@@ -399,7 +394,7 @@ install_nvim() {
 
     run curl -OL ${REPO}${RELEASE}
 
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
         sudo mv ${RELEASE} /usr/local/bin/nvim
         sudo chmod ugo+x /usr/local/bin/nvim
         sudo chmod g-w /usr/local/bin/nvim
@@ -410,7 +405,7 @@ install_nvim() {
 }
 
 install_sheldon() {
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     fi
     run mkdir sheldon && cd sheldon
@@ -433,10 +428,10 @@ install_sheldon() {
 
 # tmux install
 install_tmux() {
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
         sudo apt-get install -y automake build-essential libevent-dev libncurses5-dev pkg-config
-    elif ( [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ] ) && ! $FLG_R; then
+    elif ([ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
         yum install -y automake libevent-devel ncurses-devel
     fi
 
@@ -467,7 +462,7 @@ install_tmux() {
 
 # zsh install
 install_zsh() {
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ) && ! $FLG_R; then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     else
         mkdir $HOME/.local
@@ -506,7 +501,6 @@ install_rg() {
     else
         RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
     fi
-
 
     TMPDIR=$(mktemp -d)
     cd $TMPDIR
@@ -718,48 +712,48 @@ install_treesitter
 
 # zsh setup
 if [ ! -e "$HOME/.cache/shell/enhancd" ]; then
-        run mkdir -p "$HOME/.config/shell/enhancd"
+    run mkdir -p "$HOME/.config/shell/enhancd"
 fi
 
 if [ ! -e "$HOME/.config/sheldon" ]; then
-        run mkdir -p "$HOME/.config/sheldon"
+    run mkdir -p "$HOME/.config/sheldon"
 fi
 
 # neovim setup
 if [ ! -e "$HOME/.config/nvim" ]; then
-        run mkdir -p "$HOME/.config/nvim"
-        run mkdir -p "$HOME/.config/nvim/lua"
-        run mkdir -p "$HOME/.config/nvim/after/lsp"
-        run mkdir -p "$HOME/.config/nvim/lua/plugins"
+    run mkdir -p "$HOME/.config/nvim"
+    run mkdir -p "$HOME/.config/nvim/lua"
+    run mkdir -p "$HOME/.config/nvim/after/lsp"
+    run mkdir -p "$HOME/.config/nvim/lua/plugins"
 fi
 
 if [ ! -e "$HOME/.config/efm-langserver" ]; then
-        run mkdir -p "$HOME/.config/efm-langserver"
+    run mkdir -p "$HOME/.config/efm-langserver"
 fi
 
 # setup other files
 if [ ! -e "$CONF_PATH/fontconfig" ]; then
-        run mkdir "$CONF_PATH/fontconfig"
+    run mkdir "$CONF_PATH/fontconfig"
 fi
 # if [ ! -e "$CONF_PATH/peco" ]; then
 #         run mkdir "$CONF_PATH/peco"
 # fi
 if [ ! -e "$CONF_PATH/terminator" ]; then
-        run mkdir "$CONF_PATH/terminator"
+    run mkdir "$CONF_PATH/terminator"
 fi
 if [ ! -e "$HOME/.zfunc" ]; then
-        run mkdir "$HOME/.zfunc"
+    run mkdir "$HOME/.zfunc"
 fi
 
 if [ ! -e "$CONF_PATH/alacritty" ]; then
-        run mkdir "$CONF_PATH/alacritty"
-        run mkdir "$CONF_PATH/alacritty/themes"
-        # set alacritty themes
-        git clone https://github.com/alacritty/alacritty-theme $CONF_PATH/alacritty/themes
+    run mkdir "$CONF_PATH/alacritty"
+    run mkdir "$CONF_PATH/alacritty/themes"
+    # set alacritty themes
+    git clone https://github.com/alacritty/alacritty-theme $CONF_PATH/alacritty/themes
 fi
 
 if [ ! -e "$CONF_PATH/ghostty" ]; then
-        run mkdir "$CONF_PATH/ghostty"
+    run mkdir "$CONF_PATH/ghostty"
 fi
 
 # set symbolic link
@@ -785,7 +779,6 @@ run ln -snf "$DOT_PATH/nvim/plugins.util.lua" "$CONF_PATH/nvim/lua/plugins/util.
 run ln -snf "$DOT_PATH/nvim/vsnip" "$CONF_PATH/nvim/vsnip"
 run ln -snf "$DOT_PATH/nvim/lsp" "$CONF_PATH/nvim/after/lsp"
 
-
 #
 # Developer Apps install
 #
@@ -793,9 +786,9 @@ run ln -snf "$DOT_PATH/nvim/lsp" "$CONF_PATH/nvim/after/lsp"
 if ! $FLG_R && ! $FLG_M; then
     echo "$password" | sudo -S echo ""
     # install apps for building c++ code + shellcheck
-    if $FLG_D && { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ;}; then
+    if $FLG_D && { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; }; then
         sudo apt install -y gdb valgrind strace ltrace \
-        make cmake scons libhdf5-dev shellcheck clangd
+            make cmake scons libhdf5-dev shellcheck clangd
         # for matplotlib build
         sudo apt install -y libfreetype6-dev pkg-config libpng-dev
     fi
@@ -854,7 +847,7 @@ if ! $FLG_R && ! $FLG_M; then
         #     pynvim \
         #     yamllint \
         #     vim-vint
-        pip install  --upgrade pip
+        pip install --upgrade pip
     fi
 
     # go
@@ -948,10 +941,10 @@ if ! $FLG_R && ! $FLG_M; then
     # install docker
     if $INSTALL_DOCKER; then
         echo "$password" | sudo -S echo ""
-        curl -fsSL get.docker.com -o install-docker.sh && \
-            sh install-docker.sh --channel=stable && \
-            sudo gpasswd -a $USER docker && \
-            sudo docker run hello-world && \
+        curl -fsSL get.docker.com -o install-docker.sh &&
+            sh install-docker.sh --channel=stable &&
+            sudo gpasswd -a $USER docker &&
+            sudo docker run hello-world &&
             rm install-docker.sh
     fi
 # else
@@ -960,7 +953,6 @@ if ! $FLG_R && ! $FLG_M; then
 #     pip3 install pynvim
 #
 fi
-
 
 #
 # Themes & Icons & Fonts install
@@ -976,14 +968,13 @@ if ! $FLG_R && ! $FLG_C; then
     # Paper-Icon & Adapta-Gtk-Theme
 
     # install GUI apps
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]); then
         sudo apt install -y \
             gufw \
             gnome-shell-extensions
     fi
 
     # install icons
-
 
     # install Sweet-Folders
     # {
@@ -1001,7 +992,7 @@ if ! $FLG_R && ! $FLG_C; then
     # run mv fonts.conf ~/.config/fontconfig/
 
     # install fonts
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]); then
         sudo apt-get install -y fonts-noto-cjk \
             fonts-noto-color-emoji \
             fonts-roboto
@@ -1064,20 +1055,20 @@ fi
 #
 
 if $FLG_V; then
-    if ( [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ] ); then
+    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]); then
         sudo apt install -y linux-cloud-tools-common \
             linux-cloud-tools-generic \
             linux-cloud-tools-virtual \
             linux-cloud-tools-lowlatency
     fi
     # if $FLG_H; then
-            # sudo apt install -y xrdp
-            # git clone https://github.com/Microsoft/linux-vm-tools.git ~/linux-vm-tools
-            # cd ~/linux-vm-tools/ubuntu/18.04/
-            # sudo chmod +x install.sh
-            # sudo ./install.sh
-            # cd "$WORKING_DIR"
-            # rm -rf ~/linux-vm-tools
+    # sudo apt install -y xrdp
+    # git clone https://github.com/Microsoft/linux-vm-tools.git ~/linux-vm-tools
+    # cd ~/linux-vm-tools/ubuntu/18.04/
+    # sudo chmod +x install.sh
+    # sudo ./install.sh
+    # cd "$WORKING_DIR"
+    # rm -rf ~/linux-vm-tools
     # fi
 fi
 
