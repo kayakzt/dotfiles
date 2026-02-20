@@ -806,8 +806,8 @@ if ! $FLG_R && ! $FLG_M; then
         fi
 
         # install latest python via mise
-        eval "$("$HOME"/dev/mise activate)"
-        eval "$("$HOME"/dev/mise use --global python)"
+        eval "$("$HOME"/dev/bin/mise activate)"
+        eval "$("$HOME"/dev/bin/mise use --global python)"
 
         # # install pyenv
         # git clone https://github.com/pyenv/pyenv.git ~/.pyenv
@@ -857,8 +857,8 @@ if ! $FLG_R && ! $FLG_M; then
     # go
     if $INSTALL_GO; then
         # install latest go via mise
-        eval "$("$HOME"/dev/mise activate)"
-        eval "$("$HOME"/dev/mise use --global go)"
+        eval "$("$HOME"/dev/bin/mise activate)"
+        eval "$("$HOME"/dev/bin/mise use --global go)"
 
         # # goenv & setup
         # echo "$password" | sudo -S echo ""
@@ -900,8 +900,8 @@ if ! $FLG_R && ! $FLG_M; then
     fi
 
     # install latest LTS nodejs via mise
-    eval "$("$HOME"/dev/mise activate)"
-    eval "$("$HOME"/dev/mise use --global node@lts)"
+    eval "$("$HOME"/dev/bin/mise activate)"
+    eval "$("$HOME"/dev/bin/mise use --global node@lts)"
 
     # # nvm setup
     # export NVM_DIR="$HOME/.nvm"
