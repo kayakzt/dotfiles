@@ -7,7 +7,9 @@ window-padding-balance = true
 window-theme = dark
 background-opacity = 0.95
 background-blur-radius = 16
+
 macos-titlebar-style = transparent
+macos-option-as-alt = true
 
 keybind = ctrl+shift+c=copy_to_clipboard
 keybind = ctrl+shift+v=paste_from_clipboard
