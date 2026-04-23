@@ -200,6 +200,7 @@ return {
         "taplo",
         "typos_lsp",
         "lua_ls",
+        "marksman",
       }
 
       mason.setup({
@@ -235,7 +236,6 @@ return {
           "impl",
           "gomodifytags",
           "stylua",
-          "markdownlint",
           "prettier",
           "textlint",
           "shfmt",
