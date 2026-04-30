@@ -177,7 +177,7 @@ return {
     "mason-org/mason.nvim",
     version = "v2.*",
     -- event = "VimEnter",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "VeryLazy",
     dependencies = { "mason-org/mason-lspconfig.nvim", "neovim/nvim-lspconfig", "hrsh7th/cmp-nvim-lsp" },
     cmd = { "Mason", "MasonUpdate", "MasonLog", "MasonInstall", "MasonUninstall", "MasonUninstallAll" },
     config = function()
@@ -226,7 +226,7 @@ return {
 
   {
     "jay-babu/mason-null-ls.nvim",
-    event = "BufReadPre",
+    event = "VeryLazy",
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-null-ls").setup({
@@ -247,7 +247,7 @@ return {
 
   {
     "nvimtools/none-ls.nvim",
-    event = "BufReadPost",
+    event = "VeryLazy",
     dependencies = { "nvim-lua/plenary.nvim", "jay-babu/mason-null-ls.nvim" },
     config = function()
       local null_ls = require("null-ls")

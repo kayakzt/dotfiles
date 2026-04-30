@@ -608,7 +608,7 @@ return {
   },
   {
     "nvimdev/lspsaga.nvim",
-    event = "BufReadPost",
+    event = "VeryLazy",
     dependencies = { "nvim-treesitter", "nvim-web-devicons" },
     config = function()
       require("lspsaga").setup({
