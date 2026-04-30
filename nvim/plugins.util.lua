@@ -221,10 +221,25 @@ return {
 
   -- Markdown preview
   {
-    "iamcco/markdown-preview.nvim",
-    event = "BufReadPost",
-    ft = { "markdown", "pandoc.markdown", "rmd" },
-    build = "cd app && npx --yes yarn install",
+    "selimacerbas/markdown-preview.nvim",
+    event = "VeryLazy",
+    ft = { "markdown", "pandoc.markdown", "rmd", "quarto" },
+    dependencies = { "selimacerbas/live-server.nvim" },
+    config = function()
+      require("markdown_preview").setup()
+    end,
+  },
+
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    event = "VeryLazy",
+    ft = { "markdown", "pandoc.markdown", "rmd", "quarto" },
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {
+      enabled = false,
+    },
   },
 
   -- Table mode for Markdown
