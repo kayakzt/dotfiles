@@ -58,7 +58,7 @@ fi
 if [ ! -e "$HOME/.config/nvim" ]; then
         run mkdir -p "$HOME/.config/nvim"
         run mkdir -p "$HOME/.config/nvim/lua"
-        run mkdir -p "$HOME/.config/nvim/after/lsp"
+        run mkdir -p "$HOME/.config/nvim/after"
         run mkdir -p "$HOME/.config/nvim/lua/plugins"
 fi
 
