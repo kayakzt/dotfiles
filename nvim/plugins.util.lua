@@ -14,7 +14,7 @@ return {
   },
   {
     "rhysd/git-messenger.vim",
-    event = "BufReadPost",
+    event = "VeryLazy",
     config = function()
       vim.g.git_messenger_no_default_mappings = true
       vim.api.nvim_set_keymap("n", "[git]gm", ":GitMessenger<CR>", { noremap = true, silent = true })
@@ -23,7 +23,7 @@ return {
   {
     "sindrets/diffview.nvim",
     dependencies = { "nvim-web-devicons" },
-    event = "BufReadPost",
+    event = "VeryLazy",
     config = function()
       require("diffview").setup({ use_icons = false })
       vim.api.nvim_set_keymap("n", "[git]d", ":DiffviewOpen<CR>", { noremap = true, silent = true })
@@ -31,7 +31,7 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
-    event = "VimEnter",
+    event = "VeryLazy",
     config = function()
       require("gitsigns").setup({
         on_attach = function(bufnr)
@@ -82,7 +82,7 @@ return {
   },
   {
     "rlane/pounce.nvim",
-    event = "BufReadPost",
+    event = "VeryLazy",
     config = function()
       require("pounce").setup({
         accept_keys = "JFKDLSAHGNUVRBYTMICEOXWPQZ",
@@ -126,7 +126,7 @@ return {
   -- },
   {
     "tpope/vim-surround",
-    event = "BufReadPost",
+    event = "VeryLazy",
   },
 
   {
@@ -145,7 +145,7 @@ return {
 
   {
     "h1mesuke/vim-alignta",
-    event = "BufEnter",
+    event = "VeryLazy",
     cmd = "Alignta",
   },
 
@@ -155,7 +155,7 @@ return {
 
   {
     "mattn/gist-vim",
-    event = "BufEnter",
+    event = "VeryLazy",
     cmd = "Gist",
     dependencies = { "mattn/webapi-vim" },
   },
@@ -187,7 +187,7 @@ return {
   -- Commenting plugin
   {
     "numToStr/Comment.nvim",
-    event = "BufReadPre",
+    event = "VimEnter",
     config = function()
       require("Comment").setup({
         mappings = {
@@ -211,7 +211,7 @@ return {
   -- Open URLs in a browser
   {
     "tyru/open-browser.vim",
-    event = "BufEnter",
+    event = "VeryLazy",
     keys = { "<Plug>(openbrowser-smart-search)" },
     config = function()
       vim.api.nvim_set_keymap("n", "gs", "<Plug>(openbrowser-smart-search)", {})
@@ -245,14 +245,14 @@ return {
   -- Table mode for Markdown
   {
     "dhruvasagar/vim-table-mode",
-    event = "BufReadPost",
-    ft = { "markdown", "pandoc.markdown", "rmd" },
+    event = "VeryLazy",
+    ft = { "markdown", "pandoc.markdown", "rmd", "quarto" },
   },
 
   -- Session manager
   {
     "Shatur/neovim-session-manager",
-    event = "VimEnter",
+    event = "VeryLazy",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       -- local Path = require("plenary.path")
@@ -270,13 +270,14 @@ return {
   -- File type templates
   {
     "mattn/sonictemplate-vim",
+    event = "VeryLazy",
     cmd = "Template",
   },
 
   -- Auto ambiwidth
   {
     "delphinus/cellwidths.nvim",
-    event = "BufReadPre",
+    event = "VeryLazy",
     config = function()
       require("cellwidths").setup({
         name = "default",
@@ -285,11 +286,11 @@ return {
   },
   {
     "editorconfig/editorconfig-vim",
-    event = "BufReadPre",
+    event = "VeryLazy",
   },
   {
     "pseewald/vim-anyfold",
-    event = "BufEnter",
+    event = "VeryLazy",
     config = function()
       vim.cmd([[
                 filetype plugin indent on
@@ -323,7 +324,7 @@ return {
   },
   {
     "yorickpeterse/nvim-pqf",
-    event = "BufEnter",
+    event = "VeryLazy",
     config = function()
       require("pqf").setup()
     end,
@@ -429,7 +430,7 @@ return {
   },
   {
     "t9md/vim-quickhl",
-    event = "BufReadPre",
+    event = "VeryLazy",
     config = function()
       vim.api.nvim_set_keymap("n", "<Leader>hl", "<Plug>(quickhl-manual-this)", {})
       vim.api.nvim_set_keymap("x", "<Leader>hl", "<Plug>(quickhl-manual-this)", {})
@@ -441,7 +442,7 @@ return {
     "folke/todo-comments.nvim",
     version = "v1.*",
     dependencies = { "nvim-lua/plenary.nvim" },
-    event = "VimEnter",
+    event = "VeryLazy",
     config = function()
       local c = require("onedark.colors")
       require("todo-comments").setup({
@@ -525,6 +526,6 @@ return {
   {
     "rcarriga/nvim-dap-ui",
     dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-    event = "BufReadPost",
+    event = "VeryLazy",
   },
 }
