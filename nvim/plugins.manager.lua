@@ -329,11 +329,13 @@ return {
     config = function()
       local langs = {
         "bash",
+        "bibtex",
         "c",
         "cmake",
         "comment",
         "cpp",
         "css",
+        "csv",
         "dart",
         "diff",
         "dockerfile",
@@ -359,6 +361,7 @@ return {
         "ruby",
         "rust",
         "scss",
+        "tmux",
         "toml",
         "tsx",
         "typescript",
@@ -366,6 +369,8 @@ return {
         "vimdoc",
         "vue",
         "yaml",
+        "xml",
+        "zsh",
       }
 
       require("nvim-treesitter").install(langs)
