@@ -116,14 +116,6 @@ return {
       vim.api.nvim_set_keymap("x", "<Leader>r", ":<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>", { noremap = true })
     end,
   },
-  -- {
-  --   "Shougo/context_filetype.vim",
-  -- },
-  -- {
-  --   "osyo-manga/vim-precious",
-  --   event = "BufEnter",
-  --   dependencies = { "Shougo/context_filetype.vim" },
-  -- },
   {
     "tpope/vim-surround",
     event = "VeryLazy",
@@ -133,7 +125,7 @@ return {
     "bronson/vim-trailing-whitespace",
     event = "VimEnter",
     config = function()
-      vim.g.extra_whitespace_ignored_filetypes = { "help", "diff", "TelescopePrompt", "Telescope" }
+      vim.g.extra_whitespace_ignored_filetypes = { "dashboard", "help", "diff", "TelescopePrompt", "Telescope" }
       vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*",
         callback = function()
@@ -402,11 +394,10 @@ return {
     end,
   },
   {
-    "akinsho/git-conflict.nvim",
-    version = "*",
+    "niekdomi/conflict.nvim",
     event = "VimEnter",
     config = function()
-      require("git-conflict").setup()
+      require("conflict").setup()
     end,
   },
   {
@@ -456,60 +447,6 @@ return {
       vim.keymap.set("n", "[t", require("todo-comments").jump_prev, { desc = "Previous todo comment" })
     end,
   },
-  -- {
-  --   "jackMort/ChatGPT.nvim",
-  --   dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim", "MunifTanjim/nui.nvim" },
-  --   event = "VimEnter",
-  --   config = function()
-  --     require("chatgpt").setup({
-  --       openai_params = {
-  --         model = "gpt-3.5-turbo",
-  --         max_tokens = 350,
-  --       },
-  --     })
-  --   end,
-  -- },
-  -- {
-  --   "frankroeder/parrot.nvim",
-  --   dependencies = { "ibhagwan/fzf-lua", "nvim-lua/plenary.nvim" },
-  --   event = "VimEnter",
-  --   config = function()
-  --     require("parrot").setup({
-  --       -- Providers must be explicitly added to make them available.
-  --       providers = {
-  --         anthropic = {
-  --           api_key = os.getenv("ANTHROPIC_API_KEY"),
-  --         },
-  --         gemini = {
-  --           api_key = os.getenv("GEMINI_API_KEY"),
-  --         },
-  --         -- groq = {
-  --         --   api_key = os.getenv("GROQ_API_KEY"),
-  --         -- },
-  --         -- mistral = {
-  --         --   api_key = os.getenv("MISTRAL_API_KEY"),
-  --         -- },
-  --         pplx = {
-  --           api_key = os.getenv("PERPLEXITY_API_KEY"),
-  --         },
-  --         -- provide an empty list to make provider available (no API key required)
-  --         -- ollama = {},
-  --         openai = {
-  --           api_key = os.getenv("OPENAI_API_KEY"),
-  --         },
-  --         github = {
-  --           api_key = os.getenv("GITHUB_TOKEN"),
-  --         },
-  --         -- nvidia = {
-  --         --   api_key = os.getenv("NVIDIA_API_KEY"),
-  --         -- },
-  --         -- xai = {
-  --         --   api_key = os.getenv("XAI_API_KEY"),
-  --         -- },
-  --       },
-  --     })
-  --   end,
-  -- },
   {
     "dstein64/vim-startuptime",
     event = "VimEnter",

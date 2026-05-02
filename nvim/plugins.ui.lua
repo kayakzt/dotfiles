@@ -271,7 +271,7 @@ return {
   -- Telescope.nvim
   {
     "nvim-telescope/telescope.nvim",
-    version = "v0.1.*",
+    version = "v0.2.*",
     event = "VimEnter",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -519,15 +519,6 @@ return {
                 ["<M-p>"] = fb_actions.change_cwd,
               },
             },
-          },
-          coc = {
-            -- theme = 'ivy',
-            prefer_locations = true,
-          },
-          frecency = {
-            show_scores = false,
-            show_unindexed = true,
-            db_safe_mode = false,
           },
         },
       })
