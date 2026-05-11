@@ -125,7 +125,8 @@ return {
     "bronson/vim-trailing-whitespace",
     event = "VimEnter",
     config = function()
-      vim.g.extra_whitespace_ignored_filetypes = { "dashboard", "help", "diff", "TelescopePrompt", "Telescope" }
+      vim.g.extra_whitespace_ignored_filetypes =
+        { "dashboard", "help", "diff", "TelescopePrompt", "Telescope", "mason" }
       vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*",
         callback = function()
