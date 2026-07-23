@@ -361,7 +361,6 @@ return {
         "ruby",
         "rust",
         "scss",
-        "tmux",
         "toml",
         "tsx",
         "typescript",
