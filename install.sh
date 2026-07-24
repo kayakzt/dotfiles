@@ -26,14 +26,16 @@ echo "--- Install Script Start! ---"
 red=31
 green=32
 yellow=33
+# shellcheck disable=SC2034 # kept for a complete ANSI color palette, may be used in the future
 blue=34
+# shellcheck disable=SC2034 # kept for a complete ANSI color palette, may be used in the future
 maganta=35
 cyan=36
 
 colored() {
     color=$1
     shift
-    echo -e "\033[1;${color}m$@\033[0m"
+    echo -e "\033[1;${color}m$*\033[0m"
 }
 
 run() {
@@ -41,9 +43,9 @@ run() {
     result=$?
 
     if [ $result -ne 0 ]; then
-        echo -n $(colored $red "Failed: ")
-        echo -n $(colored $cyan "$@")
-        echo $(colored $yellow " [$PWD]")
+        echo -n "$(colored "$red" "Failed: ")"
+        echo -n "$(colored "$cyan" "$@")"
+        colored "$yellow" " [$PWD]"
         exit $result
     fi
 
@@ -53,7 +55,7 @@ run() {
 get_password() {
     if ! ${password+:} false; then
         printf "plz input password: "
-        read -s password
+        read -rs password
         echo ""
     fi
 }
@@ -93,7 +95,7 @@ prepare_path() {
     fi
     DOT_PATH="${CONF_PATH}/dotfiles"
     WORKING_DIR=$(
-        cd $(dirname $0)
+        cd "$(dirname "$0")"
         pwd
     )
     DOT_REPO="https://github.com/kayakzt/dotfiles"
@@ -128,7 +130,7 @@ usage_exit() {
 function yes_or_no() {
     PS3="Answer? "
     while true; do
-        echo $(colored $cyan "$1")
+        colored "$cyan" "$1"
         select answer in yes no; do
             case $answer in
             yes)
@@ -153,9 +155,6 @@ while getopts mrc OPT; do
     m) FLG_M=true ;;
     r) FLG_R=true ;;
     c) FLG_C=true ;;
-    d) FLG_D=true ;;
-    v) FLG_V=true ;;
-    h) FLG_H=true ;;
 
     : | \?) usage_exit ;;
     esac
@@ -176,47 +175,47 @@ fi
 yes_or_no "Is this VM?" && FLG_V=true && yes_or_no "Use xrdp for remote connection on Hyper-V?" && FLG_H=true
 
 echo -n "* OSNAME: "
-echo $(colored $yellow "$OSNAME")
+colored "$yellow" "$OSNAME"
 
 echo -n "* ARCH_TYPE: "
 echo "${ARCH_TYPE}"
 
 echo -n "* RUNTYPE: "
 if $FLG_M; then
-    echo -n $(colored $yellow "minimum, ")
+    echo -n "$(colored "$yellow" "minimum, ")"
 fi
 if $FLG_R; then
-    echo -n $(colored $yellow "rootless, ")
+    echo -n "$(colored "$yellow" "rootless, ")"
 fi
 if $FLG_C; then
-    echo -n $(colored $yellow "cui, ")
+    echo -n "$(colored "$yellow" "cui, ")"
 fi
 if $FLG_V; then
-    echo -n $(colored $yellow "VM, ")
+    echo -n "$(colored "$yellow" "VM, ")"
 fi
 if $FLG_H; then
-    echo -n $(colored $yellow "hyper-v, ")
+    echo -n "$(colored "$yellow" "hyper-v, ")"
 fi
 if $USE_REPO_JAPAN; then
-    echo -n $(colored $yellow "japan-repo, ")
+    echo -n "$(colored "$yellow" "japan-repo, ")"
 fi
 if $FLG_D; then
-    echo -n $(colored $green "install_dev-tools( install_cpp ")
+    echo -n "$(colored "$green" "install_dev-tools( install_cpp ")"
 fi
 if $INSTALL_PYTHON; then
-    echo -n $(colored $green "install_python ")
+    echo -n "$(colored "$green" "install_python ")"
 fi
 if $INSTALL_GO; then
-    echo -n $(colored $green "install_go ")
+    echo -n "$(colored "$green" "install_go ")"
 fi
 if $INSTALL_RUST; then
-    echo -n $(colored $green "install_rust ")
+    echo -n "$(colored "$green" "install_rust ")"
 fi
 if $INSTALL_DOCKER; then
-    echo -n $(colored $green "install_docker ")
+    echo -n "$(colored "$green" "install_docker ")"
 fi
 if $FLG_D; then
-    echo -n $(colored $green "), ")
+    echo -n "$(colored "$green" "), ")"
 fi
 echo " "
 
@@ -232,13 +231,13 @@ if [ ! -e "$DOT_PATH" ]; then
     run mkdir -p "$DOT_PATH"
 fi
 
-git clone ${DOT_REPO} ${DOT_PATH}
+git clone ${DOT_REPO} "${DOT_PATH}"
 
 #
 # Add Repositories
 #
 
-if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+if { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; } && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
 
     if $USE_REPO_JAPAN; then
@@ -255,7 +254,7 @@ if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
     # sudo -E add-apt-repository -y ppa:neovim-ppa/stable
 fi
 
-if ([ $OSNAME = "centos" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
+if { [ $OSNAME = "centos" ] || [ $OSNAME = "redhat" ]; } && ! $FLG_R; then
     yum localinstall http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
     yum localinstall http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-11.ius.centos6.noarch.rpm
 fi
@@ -264,7 +263,7 @@ fi
 # Repository Updates + Upgrade
 #
 
-if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+if { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; } && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
     sudo apt-get update
     sudo apt-get upgrade -y
@@ -273,7 +272,7 @@ if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
     sudo apt-get -y autoclean
 fi
 
-if ([ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
+if { [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]; } && ! $FLG_R; then
     yum check-update
     yum updade -y
     yum upgrade -y
@@ -292,6 +291,7 @@ if [ $OSNAME = "ubuntu" ] && ! $FLG_R && ! $FLG_C; then
     fi
     sudo sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/g' /etc/systemd/system.conf
 
+    # shellcheck disable=SC2046 # intentional word splitting to expand the package list
     sudo apt-get install -y $(check-language-support -l ja)
     # install fcitx if you need
     # sudo apt-get install -y fcitx fcitx-mozc
@@ -322,7 +322,7 @@ run mkdir -p "$HOME"/dev/src
 run mkdir -p "$HOME"/.local
 run mkdir -p "$HOME"/.local/share
 
-if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+if { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; } && ! $FLG_R; then
     echo "$password" | sudo -S echo ""
     sudo apt install -y build-essential \
         bison \
@@ -356,7 +356,7 @@ if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
         sudo apt install libfuse2t64
     fi
 
-elif ([ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
+elif { [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]; } && ! $FLG_R; then
     sudo yum install -y wget \
         git \
         zsh \
@@ -380,32 +380,32 @@ fi
 
 install_fzf() {
     FZF_ROOT="${HOME}/.fzf"
-    git clone --depth 1 https://github.com/junegunn/fzf.git ${FZF_ROOT}
-    ${FZF_ROOT}/install --bin
+    git clone --depth 1 https://github.com/junegunn/fzf.git "${FZF_ROOT}"
+    "${FZF_ROOT}"/install --bin
 }
 
 install_nvim() {
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+    if { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; } && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     fi
     LATEST=$(curl -sSL --retry 3 "https://api.github.com/repos/neovim/neovim/releases/latest" | jq --raw-output .tag_name)
     REPO="https://github.com/neovim/neovim/releases/download/${LATEST}/"
     RELEASE="nvim.appimage"
 
-    run curl -OL ${REPO}${RELEASE}
+    run curl -OL "${REPO}"${RELEASE}
 
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+    if { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; } && ! $FLG_R; then
         sudo mv ${RELEASE} /usr/local/bin/nvim
         sudo chmod ugo+x /usr/local/bin/nvim
         sudo chmod g-w /usr/local/bin/nvim
     else
-        mv ${RELEASE} ${HOME}/dev/bin/nvim
-        chmod u+x ${HOME}/dev/bin/nvim
+        mv ${RELEASE} "${HOME}"/dev/bin/nvim
+        chmod u+x "${HOME}"/dev/bin/nvim
     fi
 }
 
 install_sheldon() {
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+    if { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; } && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     fi
     run mkdir sheldon && cd sheldon
@@ -414,24 +414,24 @@ install_sheldon() {
     FILENAME="sheldon-${LATEST}-${ARCH_TYPE}-unknown-linux-musl"
     RELEASE="${FILENAME}.tar.gz"
 
-    run curl -OL ${REPO}${RELEASE}
+    run curl -OL "${REPO}""${RELEASE}"
 
-    tar -zxvf ${RELEASE}
+    tar -zxvf "${RELEASE}"
 
-    mv sheldon $HOME/dev/bin/sheldon
-    chmod u+x ${HOME}/dev/bin/sheldon
+    mv sheldon "$HOME"/dev/bin/sheldon
+    chmod u+x "${HOME}"/dev/bin/sheldon
 
-    run cd $WORKING_DIR
+    run cd "$WORKING_DIR"
 
     run rm -rf sheldon
 }
 
 # tmux install
 install_tmux() {
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+    if { [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; } && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
         sudo apt-get install -y automake build-essential libevent-dev libncurses5-dev pkg-config
-    elif ([ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]) && ! $FLG_R; then
+    elif { [ $OSNAME = "oracle" ] || [ $OSNAME = "redhat" ]; } && ! $FLG_R; then
         yum install -y automake libevent-devel ncurses-devel
     fi
 
@@ -439,7 +439,7 @@ install_tmux() {
         git clone https://github.com/tmux/tmux.git
     fi
 
-    cd ${WORKING_DIR}/tmux
+    cd "${WORKING_DIR}"/tmux
     LATEST_TAG=$(curl -sSL --retry 3 "https://api.github.com/repos/tmux/tmux/releases/latest" | jq --raw-output .tag_name)
 
     git checkout "$LATEST_TAG"
@@ -449,23 +449,24 @@ install_tmux() {
     echo "$password" | sudo -S echo ""
     sudo make install
 
-    cd $WORKING_DIR
+    cd "$WORKING_DIR"
     rm -rf tmux
 
     # Install Tmux Package Manager
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+    git clone https://github.com/tmux-plugins/tpm "$HOME"/.tmux/plugins/tpm
 
     # add execute previledges to tmux scripts
-    chmod u+x $DOT_PATH/tmux.memory
-    chmod u+x $DOT_PATH/tmux.loadaverage
+    chmod u+x "$DOT_PATH"/tmux.memory
+    chmod u+x "$DOT_PATH"/tmux.loadaverage
 }
 
 # zsh install
+# shellcheck disable=SC2329 # currently unused (see commented-out call below); kept for future use
 install_zsh() {
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]) && ! $FLG_R; then
+    if { [ "$OSNAME" = "debian" ] || [ "$OSNAME" = "ubuntu" ]; } && ! $FLG_R; then
         echo "$password" | sudo -S echo ""
     else
-        mkdir $HOME/.local
+        mkdir "$HOME"/.local
     fi
 
     curl -OL "https://sourceforge.net/projects/zsh/files/zsh/5.9/zsh-5.9.tar.xz/download"
@@ -481,12 +482,12 @@ install_zsh() {
         "/usr/local/bin/zsh" | sudo tee -a /etc/shells
         sudo chsh -s "/usr/local/bin/zsh" "${USER}"
     else
-        ./configure --prefix=${HOME}/.local --enable-multibyte --enable-locale
+        ./configure --prefix="${HOME}"/.local --enable-multibyte --enable-locale
         make
         make install
     fi
 
-    cd $WORKING_DIR
+    cd "$WORKING_DIR"
     run rm -rf zsh-5.9
     run rm download
 }
@@ -503,8 +504,8 @@ install_rg() {
     fi
 
     TMPDIR=$(mktemp -d)
-    cd $TMPDIR
-    wget -O - ${REPO}${RELEASE} | tar zxf - --strip-component=1
+    cd "$TMPDIR"
+    wget -O - ${REPO}"${RELEASE}" | tar zxf - --strip-component=1
     sudo mv rg /usr/local/bin/
     sudo mv doc/rg.1 /usr/local/share/man/man1/
 
@@ -513,8 +514,8 @@ install_rg() {
     fi
 
     # sudo mv complete/rg.bash-completion /usr/share/bash-completion/completions/rg
-    cd $WORKING_DIR
-    run rm -rf $TMPDIR
+    cd "$WORKING_DIR"
+    run rm -rf "$TMPDIR"
 }
 
 # gh install (using .deb file)
@@ -528,18 +529,18 @@ install_gh() {
         RELEASE="gh_${LATEST:1}_linux_arm64.tar.gz"
     fi
 
-    run curl -OL ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+    run curl -OL "${REPO}""${RELEASE}"
+    tar -zxvf "${RELEASE}"
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
-        mv gh_${LATEST:1}_linux_amd64/bin/gh $HOME/dev/bin/gh
+        mv gh_"${LATEST:1}"_linux_amd64/bin/gh "$HOME"/dev/bin/gh
     else
-        mv gh_${LATEST:1}_linux_arm64/bin/gh $HOME/dev/bin/gh
+        mv gh_"${LATEST:1}"_linux_arm64/bin/gh "$HOME"/dev/bin/gh
     fi
-    chmod u+x $HOME/dev/bin/gh
+    chmod u+x "$HOME"/dev/bin/gh
 
-    run rm ${RELEASE}
-    run rm -rf gh_${LATEST:1}_linux_*
+    run rm "${RELEASE}"
+    run rm -rf gh_"${LATEST:1}"_linux_*
 }
 
 install_ghq() {
@@ -552,15 +553,15 @@ install_ghq() {
         RELEASE="ghq_linux_arm64.zip"
     fi
 
-    run curl -OL ${REPO}${RELEASE}
+    run curl -OL "${REPO}"${RELEASE}
     unzip ${RELEASE}
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
-        mv ghq_linux_amd64/ghq $HOME/dev/bin/ghq
+        mv ghq_linux_amd64/ghq "$HOME"/dev/bin/ghq
     else
-        mv ghq_linux_arm64/ghq $HOME/dev/bin/ghq
+        mv ghq_linux_arm64/ghq "$HOME"/dev/bin/ghq
     fi
-    chmod u+x $HOME/dev/bin/ghq
+    chmod u+x "$HOME"/dev/bin/ghq
 
     run rm ${RELEASE}
     run rm -rf ghq_linux_*
@@ -571,14 +572,14 @@ install_lsd() {
     REPO="https://github.com/lsd-rs/lsd/releases/download/${LATEST}/"
     RELEASE="lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run curl -OL ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+    run curl -OL "${REPO}""${RELEASE}"
+    tar -zxvf "${RELEASE}"
 
-    mv lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/lsd $HOME/dev/bin/lsd
-    chmod u+x $HOME/dev/bin/lsd
+    mv lsd-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu/lsd "$HOME"/dev/bin/lsd
+    chmod u+x "$HOME"/dev/bin/lsd
 
-    run rm ${RELEASE}
-    run rm -rf lsd-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
+    run rm "${RELEASE}"
+    run rm -rf lsd-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu
 }
 
 install_dust() {
@@ -586,14 +587,14 @@ install_dust() {
     REPO="https://github.com/bootandy/dust/releases/download/${LATEST}/"
     RELEASE="dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run curl -OL ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+    run curl -OL "${REPO}""${RELEASE}"
+    tar -zxvf "${RELEASE}"
 
-    mv dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/dust $HOME/dev/bin/dust
-    chmod u+x $HOME/dev/bin/dust
+    mv dust-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu/dust "$HOME"/dev/bin/dust
+    chmod u+x "$HOME"/dev/bin/dust
 
-    run rm ${RELEASE}
-    run rm -rf dust-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
+    run rm "${RELEASE}"
+    run rm -rf dust-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu
 }
 
 install_bat() {
@@ -601,14 +602,14 @@ install_bat() {
     REPO="https://github.com/sharkdp/bat/releases/download/${LATEST}/"
     RELEASE="bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run curl -OL ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+    run curl -OL "${REPO}""${RELEASE}"
+    tar -zxvf "${RELEASE}"
 
-    mv bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/bat $HOME/dev/bin/bat
-    chmod u+x $HOME/dev/bin/bat
+    mv bat-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu/bat "$HOME"/dev/bin/bat
+    chmod u+x "$HOME"/dev/bin/bat
 
-    run rm ${RELEASE}
-    run rm -rf bat-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
+    run rm "${RELEASE}"
+    run rm -rf bat-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu
 }
 
 install_delta() {
@@ -616,14 +617,14 @@ install_delta() {
     REPO="https://github.com/dandavison/delta/releases/download/${LATEST}/"
     RELEASE="delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu.tar.gz"
 
-    run curl -OL ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+    run curl -OL "${REPO}""${RELEASE}"
+    tar -zxvf "${RELEASE}"
 
-    mv delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu/delta $HOME/dev/bin/delta
-    chmod u+x $HOME/dev/bin/delta
+    mv delta-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu/delta "$HOME"/dev/bin/delta
+    chmod u+x "$HOME"/dev/bin/delta
 
-    run rm ${RELEASE}
-    run rm -rf delta-${LATEST}-${ARCH_TYPE}-unknown-linux-gnu
+    run rm "${RELEASE}"
+    run rm -rf delta-"${LATEST}"-"${ARCH_TYPE}"-unknown-linux-gnu
 }
 
 install_efm-langserver() {
@@ -636,18 +637,18 @@ install_efm-langserver() {
         RELEASE="efm-langserver_${LATEST}_linux_arm64.tar.gz"
     fi
 
-    run curl -OL ${REPO}${RELEASE}
-    tar -zxvf ${RELEASE}
+    run curl -OL "${REPO}""${RELEASE}"
+    tar -zxvf "${RELEASE}"
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
-        mv efm-langserver_${LATEST}_linux_amd64/efm-langserver $HOME/dev/bin/efm-langserver
+        mv efm-langserver_"${LATEST}"_linux_amd64/efm-langserver "$HOME"/dev/bin/efm-langserver
     else
-        mv efm-langserver_${LATEST}_linux_arm64/efm-langserver $HOME/dev/bin/efm-langserver
+        mv efm-langserver_"${LATEST}"_linux_arm64/efm-langserver "$HOME"/dev/bin/efm-langserver
     fi
-    chmod u+x $HOME/dev/bin/efm-langserver
+    chmod u+x "$HOME"/dev/bin/efm-langserver
 
-    run rm ${RELEASE}
-    run rm -rf efm-langserver_${LATEST}_linux_*
+    run rm "${RELEASE}"
+    run rm -rf efm-langserver_"${LATEST}"_linux_*
 }
 
 install_treesitter() {
@@ -659,16 +660,16 @@ install_treesitter() {
         RELEASE="tree-sitter-linux-arm64.gz"
     fi
 
-    run curl -OL ${REPO}${RELEASE}
+    run curl -OL "${REPO}"${RELEASE}
     gunzip -d ${RELEASE}
 
     if [ "$ARCH_TYPE" = "x86_64" ]; then
-        run mv tree-sitter-linux-x64 $HOME/dev/bin/tree-sitter
+        run mv tree-sitter-linux-x64 "$HOME"/dev/bin/tree-sitter
     else
-        run mv tree-sitter-linux-arm64 $HOME/dev/bin/tree-sitter
+        run mv tree-sitter-linux-arm64 "$HOME"/dev/bin/tree-sitter
     fi
 
-    chmod u+x $HOME/dev/bin/tree-sitter
+    chmod u+x "$HOME"/dev/bin/tree-sitter
 }
 
 install_mise() {
@@ -749,7 +750,7 @@ if [ ! -e "$CONF_PATH/alacritty" ]; then
     run mkdir "$CONF_PATH/alacritty"
     run mkdir "$CONF_PATH/alacritty/themes"
     # set alacritty themes
-    git clone https://github.com/alacritty/alacritty-theme $CONF_PATH/alacritty/themes
+    git clone https://github.com/alacritty/alacritty-theme "$CONF_PATH"/alacritty/themes
 fi
 
 if [ ! -e "$CONF_PATH/ghostty" ]; then
@@ -955,7 +956,7 @@ if ! $FLG_R && ! $FLG_M; then
         echo "$password" | sudo -S echo ""
         curl -fsSL get.docker.com -o install-docker.sh &&
             sh install-docker.sh --channel=stable &&
-            sudo gpasswd -a $USER docker &&
+            sudo gpasswd -a "$USER" docker &&
             sudo docker run hello-world &&
             rm install-docker.sh
     fi
@@ -980,7 +981,7 @@ if ! $FLG_R && ! $FLG_C; then
     # Paper-Icon & Adapta-Gtk-Theme
 
     # install GUI apps
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]); then
+    if [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; then
         sudo apt install -y \
             gufw \
             gnome-shell-extensions
@@ -1004,7 +1005,7 @@ if ! $FLG_R && ! $FLG_C; then
     # run mv fonts.conf ~/.config/fontconfig/
 
     # install fonts
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]); then
+    if [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; then
         sudo apt-get install -y fonts-noto-cjk \
             fonts-noto-color-emoji \
             fonts-roboto
@@ -1067,7 +1068,7 @@ fi
 #
 
 if $FLG_V; then
-    if ([ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]); then
+    if [ $OSNAME = "debian" ] || [ $OSNAME = "ubuntu" ]; then
         sudo apt install -y linux-cloud-tools-common \
             linux-cloud-tools-generic \
             linux-cloud-tools-virtual \
