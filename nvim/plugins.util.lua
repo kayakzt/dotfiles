@@ -214,12 +214,12 @@ return {
 
   -- Markdown preview
   {
-    "selimacerbas/markdown-preview.nvim",
+    "selimacerbas/mdkite.nvim",
     event = "VeryLazy",
     ft = { "markdown", "pandoc.markdown", "rmd", "quarto" },
     dependencies = { "selimacerbas/live-server.nvim" },
     config = function()
-      require("markdown_preview").setup()
+      require("mdkite").setup()
     end,
   },
 
